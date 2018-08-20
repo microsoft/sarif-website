@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "SARIF Home Page";
+}
+
+<div class="jumbotron">
+    <h1>SARIF</h1>
+    <p class="lead">The Static Analysis Results Interchange Format (SARIF) defines a standard format
+    for the output of static analysis tools.</p>
+    <p><a class="btn btn-primary btn-lg" target="_blank" href="https://github.com/oasis-tcs/sarif-spec/tree/master/Documents/CommitteeSpecificationDrafts/CSD.1">Read the specification &raquo;</a></p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Implement it with the SDK</h2>
+        <p>
+            Two NuGet packages are available to facilitate your use of SARIF with the .NET Framework:
+        </p>
+        <ul>
+            <li>
+                <p>The SARIF SDK for .NET offers facilities for producing, consuming, and validating files in the SARIF format.</p>
+                <p><a class="btn btn-default" target="_blank" href="https://www.nuget.org/packages/Sarif.Sdk">Get the SDK &raquo;</a></p>
+            </li>
+            <li>
+                <p>The Microsoft SARIF Driver Framework for .NET provides a framework for developing static analysis tools that produce output in the SARIF format.
+                It includes the .NET SARIF SDK.</p>
+                <p><a class="btn btn-default" target="_blank" href="https://www.nuget.org/packages/Sarif.Driver">Get the driver framework &raquo;</a></p>
+            </li>
+        </ul>
+        <p>
+            The source code for these packages is in the <a target="_blank" href="https://github.com/Microsoft/sarif-sdk">SARIF SDK GitHub repo</a>. We welcome your contributions!
+        </p>
+    </div>
+
+    <div class="col-md-4">
+        <h2>Implement it yourself</h2>
+        <p>If you want to implement the SARIF specification yourself, there's more information available, including a JSON schema and
+        guidance for implementers.</p>
+        <p><a class="btn btn-default" target="_blank" href="http://json.schemastore.org/sarif">Get the SARIF JSON schema &raquo;</a></p>
+    </div>
+
+    <div class="col-md-4">
+        <h2>Get more information</h2>
+        <p>To ask a question about SARIF, create a new issue on the <a target="_blank" href="https://github.com/oasis-tcs/sarif-spec">OASIS SARIF Technical Committee GitHub repo</a>.
+        Add the "question" label to your issue.</p>
+        <p><a class="btn btn-default" target="_blank" href="https://github.com/oasis-tcs/sarif-spec/issues/new">Ask a question &raquo;</a></p>
+    </div>
+</div>
