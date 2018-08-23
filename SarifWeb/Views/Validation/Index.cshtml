@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "SARIF Log File Validation";
+}
+<h2>@ViewBag.Title</h2>
+
+<p>This page is under construction. When it is working, you'll be able to upload a SARIF log file, and the page will validate it and inform you of any issues it finds in your file.</p>
+
+<div id="dropArea">
+    Drag the SARIF log file you want to validate and drop it here.
+</div>
+<h4>Uploaded files:</h4>
+<ul class="list-group" id="uploadList">
+
+</ul>
+
+<style>
+    #dropArea {
+        background: #b5b5b5;
+        border: black dashed 1px;
+        height: 50px;
+        text-align:center;
+        color: #fff
+    }
+    .active-drop {
+        background: #77bafa !important;
+        border: blue solid 2px !important;
+        opacity: 0.5;
+        color: black !important;
+    }
+</style>
+
+@section Scripts {
+    <script src="~/Scripts/jquery.filedrop.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#dropArea').filedrop({
+                url: '@Url.Action("UploadFiles")',
+                allowedfileextensions: ['.sarif', '.json'],
+                paramname: 'files',
+                maxfiles: 1,
+                dragOver: function () {
+                    $('#dropArea').addClass('active-drop');
+                },
+                dragLeave: function () {
+                    $('#dropArea').removeClass('active-drop');
+                },
+                drop: function () {
+                    $('#dropArea').removeClass('active-drop');
+                },
+                afterAll: function (e) {
+                    $('#dropArea').html('File');
+                },
+                uploadFinished: function (i, file, response, time) {
+                    $('#uploadList').append('<li class="list-group-item">' + file.name + '</li>');
+                }
+            });
+        });
+    </script>
+}
