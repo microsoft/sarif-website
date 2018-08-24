@@ -3,10 +3,10 @@
 }
 <h2>@ViewBag.Title</h2>
 
-<p>This page is under construction. When it is working, you'll be able to upload a SARIF log file, and the page will validate it and inform you of any issues it finds in your file.</p>
+<p>This page is under construction. When it is working, you'll be able to upload a SARIF log file, and the SARIF validator will report any issues it finds.</p>
 
 <div id="dropArea">
-    Drag the SARIF log file you want to validate and drop it here.
+    Drop your SARIF log file here to validate it.
 </div>
 <h4>Uploaded files:</h4>
 <ul class="list-group" id="uploadList">
@@ -34,7 +34,7 @@
     <script type="text/javascript">
         $(function () {
             $('#dropArea').filedrop({
-                url: '@Url.Action("UploadFiles")',
+                url: '@Url.Action("ValidateFiles")',
                 allowedfileextensions: ['.sarif', '.json'],
                 paramname: 'files',
                 maxfiles: 1,
