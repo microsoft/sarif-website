@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
@@ -15,9 +16,10 @@ namespace SarifWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult ValidateFiles(IEnumerable<HttpPostedFileBase> uploadedFiles)
+        public void ValidateFiles(IEnumerable<HttpPostedFileBase> uploadedFiles)
         {
-            foreach (var uploadedFile in uploadedFiles)
+            HttpPostedFileBase uploadedFile = uploadedFiles.FirstOrDefault();
+            if (uploadedFile != null)
             {
                 string uploadedFileName = Guid.NewGuid() + Path.GetExtension(uploadedFile.FileName);
                 string uploadedFilePath = Path.Combine(Server.MapPath("~/UploadedFiles"), uploadedFileName);
@@ -34,8 +36,6 @@ namespace SarifWeb.Controllers
                     }
                 }
             }
-
-            return Json("File successfully uploaded for validation.");
         }
     }
 }
