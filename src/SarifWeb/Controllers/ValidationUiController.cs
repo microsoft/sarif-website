@@ -15,12 +15,12 @@ namespace SarifWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult ValidateFiles(IEnumerable<HttpPostedFileBase> files)
+        public ActionResult ValidateFiles(IEnumerable<HttpPostedFileBase> uploadedFiles)
         {
-            foreach (var file in files)
+            foreach (var uploadedFile in uploadedFiles)
             {
-                string filePath = Guid.NewGuid() + Path.GetExtension(file.FileName);
-                //file.SaveAs(Path.Combine(Server.MapPath("~/UploadedFiles"), filePath));
+                string uploadedFileName = Guid.NewGuid() + Path.GetExtension(uploadedFile.FileName);
+                //uploadedFile.SaveAs(Path.Combine(Server.MapPath("~/UploadedFiles"), uploadedFileName));
             }
 
             return Json("File successfully uploaded for validation.");
