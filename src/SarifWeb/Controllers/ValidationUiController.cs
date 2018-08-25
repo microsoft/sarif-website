@@ -20,7 +20,19 @@ namespace SarifWeb.Controllers
             foreach (var uploadedFile in uploadedFiles)
             {
                 string uploadedFileName = Guid.NewGuid() + Path.GetExtension(uploadedFile.FileName);
-                //uploadedFile.SaveAs(Path.Combine(Server.MapPath("~/UploadedFiles"), uploadedFileName));
+                string uploadedFilePath = Path.Combine(Server.MapPath("~/UploadedFiles"), uploadedFileName);
+
+                try
+                {
+                    uploadedFile.SaveAs(uploadedFilePath);
+                }
+                finally
+                {
+                    if (System.IO.File.Exists(uploadedFilePath))
+                    {
+                        System.IO.File.Delete(uploadedFilePath);
+                    }
+                }
             }
 
             return Json("File successfully uploaded for validation.");
