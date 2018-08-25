@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace SarifWeb.Controllers
 {
-    public class ValidationController : Controller
+    public class ValidationUiController : Controller
     {
         // GET: Validation
         public ActionResult Index()
