@@ -1,23 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
+﻿using System.Web.Http;
+using SarifWeb.Models;
 
 namespace SarifWeb.Controllers
 {
     public class ValidationController : ApiController
     {
-        // GET: api/Validation
-        public IEnumerable<string> Get()
+        public ValidationResponseModel Post([FromBody] ValidationRequestModel model)
         {
-            return new string[] { "SARIF Validation API is online" };
-        }
-
-        // POST: api/Validation
-        public void Post([FromBody]string value)
-        {
+            return new ValidationResponseModel { Message = $"The SARIF validation service received a request to validate {model.UploadedFileName}" };
         }
     }
 }

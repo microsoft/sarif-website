@@ -34,7 +34,7 @@
     <script type="text/javascript">
         $(function () {
             $('#dropArea').filedrop({
-                url: '@Url.Action("ValidateFiles")',
+                url: '@Url.Action("ValidateFilesAsync")',
                 allowedfileextensions: ['.sarif', '.json'],
                 paramname: 'uploadedFiles',
                 maxfiles: 1,
