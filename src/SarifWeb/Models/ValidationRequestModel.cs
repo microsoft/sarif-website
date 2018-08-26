@@ -2,7 +2,7 @@
 {
     public class ValidationRequestModel
     {
-        public string UploadedFileName { get; set; }
+        public string PostedFileName { get; set; }
         public string SavedFileName { get; set; }
     }
 }

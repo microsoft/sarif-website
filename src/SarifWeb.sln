@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SarifWeb", "SarifWeb\SarifWeb.csproj", "{EE1253EB-ECBD-487D-BB64-C508CF482476}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SarifWeb.UnitTests", "SarifWeb.UnitTests\SarifWeb.UnitTests.csproj", "{942FF331-7219-4697-999C-1F32B9CC0597}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +17,15 @@ Global
 		{EE1253EB-ECBD-487D-BB64-C508CF482476}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE1253EB-ECBD-487D-BB64-C508CF482476}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE1253EB-ECBD-487D-BB64-C508CF482476}.Release|Any CPU.Build.0 = Release|Any CPU
+		{942FF331-7219-4697-999C-1F32B9CC0597}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{942FF331-7219-4697-999C-1F32B9CC0597}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{942FF331-7219-4697-999C-1F32B9CC0597}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{942FF331-7219-4697-999C-1F32B9CC0597}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CFB1E71D-161A-4697-ACFA-E40634823C50}
 	EndGlobalSection
 EndGlobal

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -13,6 +11,17 @@ using SarifWeb.Utilities;
 
 namespace SarifWeb.Services
 {
+    /// <summary>
+    /// This class processes requests from the Web UI to validate SARIF files.
+    /// It synthesized a request to the Validation Web API, sends the request,
+    /// and passes the response back to the ValidationUiController, which in
+    /// turns presents it in the UI.
+    /// </summary>
+    /// <remarks>
+    /// This class is factored out from the ValidationUiController so that as
+    /// much of the code as possible is unit testable. ValidationUiController
+    /// contains the minimal remaining code that is difficult to unit test.
+    /// </remarks>
     public class ValidationUiService
     {
         private readonly IFileSystem _fileSystem;
@@ -26,24 +35,23 @@ namespace SarifWeb.Services
             _httpClientProxy = httpClientProxy;
         }
 
-        public async Task<string> ValidateFileAsync(
-            IEnumerable<HttpPostedFileBase> uploadedFiles,
+        public async Task<ValidationResponseModel> ValidateFileAsync(
+            HttpPostedFileBase postedFile,
             HttpRequestBase request,
-            string uploadedFilesPath,
+            string postedFilesPath,
             string baseAddress)
         {
-            string responseContent = string.Empty;
+            ValidationResponseModel responseModel = null;
 
-            HttpPostedFileBase uploadedFile = uploadedFiles.FirstOrDefault();
-            if (uploadedFile != null)
+            if (postedFile != null)
             {
-                string uploadedFileName = uploadedFile.FileName;
-                string savedFileName = Guid.NewGuid() + Path.GetExtension(uploadedFileName);
-                string savedFilePath = Path.Combine(uploadedFilesPath, savedFileName);
+                string postedFileName = postedFile.FileName;
+                string savedFileName = Guid.NewGuid() + Path.GetExtension(postedFileName);
+                string savedFilePath = Path.Combine(postedFilesPath, savedFileName);
 
                 try
                 {
-                    uploadedFile.SaveAs(savedFilePath);
+                    postedFile.SaveAs(savedFilePath);
 
                     using (var client = new HttpClient())
                     {
@@ -55,7 +63,7 @@ namespace SarifWeb.Services
                         // Send request to Validation service
                         ValidationRequestModel model = new ValidationRequestModel
                         {
-                            UploadedFileName = uploadedFileName,
+                            PostedFileName = postedFileName,
                             SavedFileName = savedFileName
                         };
 
@@ -63,7 +71,9 @@ namespace SarifWeb.Services
                         HttpContent requestContent = new StringContent(requestBody, Encoding.UTF8, "application/json");
 
                         HttpResponseMessage response = await _httpClientProxy.PostAsync(client, "api/Validation", requestContent);
-                        responseContent = response.Content.ReadAsStringAsync().Result;
+                        string responseContent = response.Content.ReadAsStringAsync().Result;
+                        responseModel = JsonConvert.DeserializeObject<ValidationResponseModel>(responseContent);
+
                     }
                 }
                 finally
@@ -75,7 +85,7 @@ namespace SarifWeb.Services
                 }
             }
 
-            return responseContent;
+            return responseModel;
         }
     }
 }
