@@ -10,11 +10,14 @@ using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using SarifWeb.Models;
+using SarifWeb.Utilities;
 
 namespace SarifWeb.Controllers
 {
     public class ValidationUiController : Controller
     {
+        private readonly IFileSystem _fileSystem = new FileSystem();
+
         // GET: Validation
         public ActionResult Index()
         {
@@ -60,9 +63,9 @@ namespace SarifWeb.Controllers
                 }
                 finally
                 {
-                    if (System.IO.File.Exists(savedFilePath))
+                    if (_fileSystem.FileExists(savedFilePath))
                     {
-                        System.IO.File.Delete(savedFilePath);
+                        _fileSystem.DeleteFile(savedFilePath);
                     }
                 }
             }
