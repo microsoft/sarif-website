@@ -1,22 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Newtonsoft.Json;
-using SarifWeb.Models;
 using SarifWeb.Utilities;
+using SarifWeb.Services;
+using SarifWeb.Models;
+using Newtonsoft.Json;
 
 namespace SarifWeb.Controllers
 {
     public class ValidationUiController : Controller
     {
-        private readonly IFileSystem _fileSystem = new FileSystem();
+        private readonly ValidationUiService _validationUiService;
+
+        public ValidationUiController()
+        {
+            IFileSystem fileSystem = new FileSystem();
+            IHttpClientProxy httpClientProxy = new HttpClientProxy();
+
+            _validationUiService = new ValidationUiService(fileSystem, httpClientProxy);
+        }
 
         // GET: Validation
         public ActionResult Index()
@@ -25,50 +28,14 @@ namespace SarifWeb.Controllers
         }
 
         [HttpPost]
-        public async Task ValidateFilesAsync(IEnumerable<HttpPostedFileBase> uploadedFiles)
+        public async Task<ValidationResponseModel> ValidateFilesAsync(IEnumerable<HttpPostedFileBase> uploadedFiles)
         {
-            HttpPostedFileBase uploadedFile = uploadedFiles.FirstOrDefault();
-            if (uploadedFile != null)
-            {
-                string uploadedFileName = uploadedFile.FileName;
-                string savedFileName = Guid.NewGuid() + Path.GetExtension(uploadedFileName);
-                string savedFilePath = Path.Combine(Server.MapPath("~/UploadedFiles"), savedFileName);
+            HttpRequestBase request = ControllerContext.RequestContext.HttpContext.Request;
+            string uploadedFilesPath = Server.MapPath("~/UploadedFiles");
+            string baseAddress = string.Format("{0}://{1}{2}", request.Url.Scheme, request.Url.Authority, Url.Content("~"));
 
-                try
-                {
-                    uploadedFile.SaveAs(savedFilePath);
-
-                    using (var client = new HttpClient())
-                    {
-                        HttpRequestBase request = ControllerContext.RequestContext.HttpContext.Request;
-                        request.ContentType = "application/json";
-                        string baseAddress = string.Format("{0}://{1}{2}", request.Url.Scheme, request.Url.Authority, Url.Content("~"));
-                        client.BaseAddress = new Uri(baseAddress, UriKind.Absolute);
-                        client.DefaultRequestHeaders.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                        // Send request to Validation service
-                        ValidationRequestModel model = new ValidationRequestModel
-                        {
-                            UploadedFileName = uploadedFileName,
-                            SavedFileName = savedFileName
-                        };
-
-                        string requestBody = JsonConvert.SerializeObject(model);
-                        HttpContent requestContent = new StringContent(requestBody, Encoding.UTF8, "application/json");
-
-                        HttpResponseMessage response = await client.PostAsync("api/Validation", requestContent);
-                        string responseContent = response.Content.ReadAsStringAsync().Result;
-                    }
-                }
-                finally
-                {
-                    if (_fileSystem.FileExists(savedFilePath))
-                    {
-                        _fileSystem.DeleteFile(savedFilePath);
-                    }
-                }
-            }
+            string responseContent = await _validationUiService.ValidateFileAsync(uploadedFiles, request, uploadedFilesPath, baseAddress);
+            return JsonConvert.DeserializeObject<ValidationResponseModel>(responseContent);
         }
     }
 }
