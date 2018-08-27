@@ -36,7 +36,7 @@
             $('#dropArea').filedrop({
                 url: '@Url.Action("ValidateFilesAsync")',
                 allowedfileextensions: ['.sarif', '.json'],
-                paramname: 'uploadedFiles',
+                paramname: 'postedFiles',
                 maxfiles: 1,
                 dragOver: function () {
                     $('#dropArea').addClass('active-drop');

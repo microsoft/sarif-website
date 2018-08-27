@@ -52,10 +52,10 @@ namespace SarifWeb.UnitTests.Services
             var mockRequest = new Mock<HttpRequestBase>();
 
             // Act.
-            ValidationResponseModel responseModel = await service.ValidateFileAsync(mockPostedFile.Object, mockRequest.Object, "PostedFilesPath", WebSiteBaseAddress);
+            ValidationResponse response = await service.ValidateFileAsync(mockPostedFile.Object, mockRequest.Object, "PostedFilesPath", WebSiteBaseAddress);
 
             // Assert.
-            responseModel.Message.Should().Be(ValidationApiResponseMessage);
+            response.Message.Should().Be(ValidationApiResponseMessage);
         }
     }
 }

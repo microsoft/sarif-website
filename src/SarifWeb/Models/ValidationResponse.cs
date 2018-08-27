@@ -1,6 +1,6 @@
 ﻿namespace SarifWeb.Models
 {
-    public class ValidationResponseModel
+    public class ValidationResponse
     {
         public string Message { get; set; }
     }

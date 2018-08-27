@@ -35,13 +35,13 @@ namespace SarifWeb.Services
             _httpClientProxy = httpClientProxy;
         }
 
-        public async Task<ValidationResponseModel> ValidateFileAsync(
+        public async Task<ValidationResponse> ValidateFileAsync(
             HttpPostedFileBase postedFile,
             HttpRequestBase request,
             string postedFilesPath,
             string baseAddress)
         {
-            ValidationResponseModel responseModel = null;
+            ValidationResponse responseModel = null;
 
             if (postedFile != null)
             {
@@ -61,7 +61,7 @@ namespace SarifWeb.Services
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                         // Send request to Validation service
-                        ValidationRequestModel model = new ValidationRequestModel
+                        ValidationRequest model = new ValidationRequest
                         {
                             PostedFileName = postedFileName,
                             SavedFileName = savedFileName
@@ -72,7 +72,7 @@ namespace SarifWeb.Services
 
                         HttpResponseMessage response = await _httpClientProxy.PostAsync(client, "api/Validation", requestContent);
                         string responseContent = response.Content.ReadAsStringAsync().Result;
-                        responseModel = JsonConvert.DeserializeObject<ValidationResponseModel>(responseContent);
+                        responseModel = JsonConvert.DeserializeObject<ValidationResponse>(responseContent);
 
                     }
                 }

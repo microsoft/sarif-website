@@ -53,7 +53,7 @@ namespace SarifWeb.Controllers
         /// Views/ValidationUi/Index.cshtml.
         /// </remarks>
         [HttpPost]
-        public async Task<ValidationResponseModel> ValidateFilesAsync(IEnumerable<HttpPostedFileBase> postedFiles)
+        public async Task<ValidationResponse> ValidateFilesAsync(IEnumerable<HttpPostedFileBase> postedFiles)
         {
             // Extract information from the parts of the Controller object that are hard to mock.
             HttpRequestBase request = ControllerContext.RequestContext.HttpContext.Request;
