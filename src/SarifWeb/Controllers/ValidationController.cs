@@ -11,9 +11,9 @@ namespace SarifWeb.Controllers
     /// </summary>
     public class ValidationController : ApiController
     {
-        public ValidationResponse Post([FromBody] ValidationRequest model)
+        public ValidationResponse Post([FromBody] ValidationRequest validationRequest)
         {
-            return new ValidationResponse { Message = $"The SARIF validation service received a request to validate {model.PostedFileName}" };
+            return new ValidationResponse { Message = $"The SARIF validation service received a request to validate {validationRequest.PostedFileName}" };
         }
     }
 }
