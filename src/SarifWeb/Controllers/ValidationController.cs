@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using SarifWeb.Models;
+using SarifWeb.Services;
 
 namespace SarifWeb.Controllers
 {
@@ -8,12 +9,23 @@ namespace SarifWeb.Controllers
     /// describes the results of the validation. The bulk of the JSON will be a SARIF
     /// log file, but we introduce a wrapper class <see cref="ValidationResponse">
     /// to accommodate additional information about the request itself.
+    ///
+    /// This class delegates most of the work to the <see cref="ValidationService" />,
+    /// which is unit testable.. 
+    /// </summary>
     /// </summary>
     public class ValidationController : ApiController
     {
+        private readonly ValidationService _validationService;
+
+        public ValidationController()
+        {
+            _validationService = new ValidationService();
+        }
+
         public ValidationResponse Post([FromBody] ValidationRequest validationRequest)
         {
-            return new ValidationResponse { Message = $"The SARIF validation service received a request to validate {validationRequest.PostedFileName}" };
+            return _validationService.Validate(validationRequest);
         }
     }
 }

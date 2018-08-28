@@ -169,6 +169,7 @@
     <Compile Include="Models\ValidationRequest.cs" />
     <Compile Include="Models\ValidationResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ValidationService.cs" />
     <Compile Include="Services\ValidationUiService.cs" />
     <Compile Include="Utilities\FileSystem.cs" />
     <Compile Include="Utilities\HttpClientProxy.cs" />
@@ -280,7 +281,6 @@
       <MultitoolFiles Include="$(MSBuildThisFileDirectory)..\packages\Sarif.Multitool.2.0.0-csd.1\tools\net461\*" />
     </ItemGroup>
     <MakeDir Condition="!Exists('$(MultitoolDirectory)')" Directories="MultitoolDirectory" />
-    <Copy SourceFiles="@(MultitoolFiles)"
-           DestinationFolder="$(MultitoolDirectory)" />
+    <Copy SourceFiles="@(MultitoolFiles)" DestinationFolder="$(MultitoolDirectory)" />
   </Target>
 </Project>
