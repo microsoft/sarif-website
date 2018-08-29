@@ -190,6 +190,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="BuildScripts\Copy-Multitool.ps1" />
     <None Include="Properties\PublishProfiles\SarifWeb - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -223,6 +224,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Multitool\" />
     <Folder Include="UploadedFiles\" />
   </ItemGroup>
   <ItemGroup>
@@ -274,13 +276,6 @@
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
   <Target Name="AfterBuild">
-    <PropertyGroup>
-      <MultitoolDirectory>$(OutputPath)Sarif.Multitool</MultitoolDirectory>
-    </PropertyGroup>
-    <ItemGroup>
-      <MultitoolFiles Include="$(MSBuildThisFileDirectory)..\packages\Sarif.Multitool.2.0.0-csd.1\tools\net461\*" />
-    </ItemGroup>
-    <MakeDir Condition="!Exists('$(MultitoolDirectory)')" Directories="MultitoolDirectory" />
-    <Copy SourceFiles="@(MultitoolFiles)" DestinationFolder="$(MultitoolDirectory)" />
+    <Exec Command="powershell -ExecutionPolicy RemoteSigned $(MSBuildThisFileDirectory)BuildScripts\Copy-Multitool.ps1" />
   </Target>
 </Project>

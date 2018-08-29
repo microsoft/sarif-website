@@ -1,4 +1,5 @@
 ﻿using SarifWeb.Models;
+using SarifWeb.Utilities;
 
 namespace SarifWeb.Services
 {
@@ -15,6 +16,15 @@ namespace SarifWeb.Services
     /// </remarks>
     public class ValidationService
     {
+        private readonly string _multitoolDirectory;
+        private readonly IFileSystem _fileSystem;
+
+        public ValidationService(string multitoolDirectory, IFileSystem fileSystem)
+        {
+            _multitoolDirectory = multitoolDirectory;
+            _fileSystem = fileSystem;
+        }
+
         public ValidationResponse Validate(ValidationRequest validationRequest)
         {
             return new ValidationResponse { Message = $"The SARIF validation service received a request to validate \"{validationRequest.PostedFileName}\"." };
