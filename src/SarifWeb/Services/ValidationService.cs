@@ -23,11 +23,13 @@ namespace SarifWeb.Services
 
         private readonly string _multitoolDirectory;
         private readonly IFileSystem _fileSystem;
+        private readonly IProcessRunner _processRunner;
 
-        public ValidationService(string multitoolDirectory, IFileSystem fileSystem)
+        public ValidationService(string multitoolDirectory, IFileSystem fileSystem, IProcessRunner processRunner)
         {
             _multitoolDirectory = multitoolDirectory;
             _fileSystem = fileSystem;
+            _processRunner = processRunner;
         }
 
         public async Task<ValidationResponse> Validate(ValidationRequest validationRequest)
