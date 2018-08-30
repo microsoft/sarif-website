@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using SarifWeb.Models;
 using SarifWeb.Utilities;
@@ -19,20 +20,33 @@ namespace SarifWeb.Services
     public class ValidationService
     {
         private const string ToolExeName = "Sarif.Multitool.exe";
+        private const string ValidationLogSuffix = ".validation.sarif";
 
+        private readonly string _postedFilesDirectory;
         private readonly string _multitoolExePath;
+        private readonly IFileSystem _fileSystem;
         private readonly IProcessRunner _processRunner;
 
-        public ValidationService(string multitoolDirectory, IProcessRunner processRunner)
+        public ValidationService(
+            string postedFilesDirectory,
+            string multitoolDirectory,
+            IFileSystem fileSystem,
+            IProcessRunner processRunner)
         {
+            _postedFilesDirectory = postedFilesDirectory;
             _multitoolExePath = Path.Combine(multitoolDirectory, ToolExeName);
             _processRunner = processRunner;
         }
 
         public async Task<ValidationResponse> Validate(ValidationRequest validationRequest)
         {
-            string arguments = "validate --help";
-            ProcessResult processResult = await _processRunner.RunProcess(_multitoolExePath, arguments);
+            StringBuilder argumentsBuilder = new StringBuilder("validate");
+
+            string outputFileName = Path.GetFileNameWithoutExtension(validationRequest.PostedFileName) + ValidationLogSuffix;
+            string outputFilePath = Path.Combine(_postedFilesDirectory, outputFileName);
+            argumentsBuilder.Append(" --output " + outputFilePath);
+
+            ProcessResult processResult = await _processRunner.RunProcess(_multitoolExePath, argumentsBuilder.ToString());
 
             return new ValidationResponse
             {
