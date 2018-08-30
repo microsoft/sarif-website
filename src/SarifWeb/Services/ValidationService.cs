@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using SarifWeb.Models;
 using SarifWeb.Utilities;
@@ -22,21 +21,16 @@ namespace SarifWeb.Services
         private const string ToolExeName = "Sarif.Multitool.exe";
 
         private readonly string _multitoolExePath;
-        private readonly IFileSystem _fileSystem;
         private readonly IProcessRunner _processRunner;
 
-        public ValidationService(string multitoolDirectory, IFileSystem fileSystem, IProcessRunner processRunner)
+        public ValidationService(string multitoolDirectory, IProcessRunner processRunner)
         {
             _multitoolExePath = Path.Combine(multitoolDirectory, ToolExeName);
-            _fileSystem = fileSystem;
             _processRunner = processRunner;
         }
 
         public async Task<ValidationResponse> Validate(ValidationRequest validationRequest)
         {
-            string stdout = string.Empty;
-            string stderr = string.Empty;
-
             string arguments = "validate --help";
             ProcessResult processResult = await _processRunner.RunProcess(_multitoolExePath, arguments);
 

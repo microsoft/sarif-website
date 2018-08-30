@@ -24,10 +24,9 @@ namespace SarifWeb.Controllers
         public ValidationController()
         {
             string multitoolDirectory = HostingEnvironment.MapPath("~/bin/Sarif.Multitool");
-            IFileSystem fileSystem = new FileSystem();
             IProcessRunner processRunner = new ProcessRunner();
 
-            _validationService = new ValidationService(multitoolDirectory, fileSystem, processRunner);
+            _validationService = new ValidationService(multitoolDirectory, processRunner);
         }
 
         public async Task<ValidationResponse> Post([FromBody] ValidationRequest validationRequest)
