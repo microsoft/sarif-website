@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Threading.Tasks;
 
 namespace SarifWeb.Utilities
 {
-    public class IProcessRunner
+    public interface IProcessRunner
     {
+        Task<ProcessResult> RunProcess(string exePath, string arguments);
     }
 }

@@ -37,41 +37,15 @@ namespace SarifWeb.Services
             string stdout = string.Empty;
             string stderr = string.Empty;
 
-            var tcs = new TaskCompletionSource<int>();
-
-            var process = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = _multitoolExePath,
-                    Arguments = "validate --help",
-                    CreateNoWindow = true,
-                    RedirectStandardError = true,
-                    RedirectStandardOutput = true,
-                    UseShellExecute = false
-                },
-                EnableRaisingEvents = true
-            };
-
-            process.Exited += (sender, args) =>
-            {
-                tcs.SetResult(process.ExitCode);
-                stdout = process.StandardOutput.ReadToEnd();
-                stderr = process.StandardError.ReadToEnd();
-
-                process.Dispose();
-            };
-
-            process.Start();
-
-            int exitCode = await tcs.Task; 
+            string arguments = "validate --help";
+            ProcessResult processResult = await _processRunner.RunProcess(_multitoolExePath, arguments);
 
             return new ValidationResponse
             {
                 Message = $"The SARIF validation service received a request to validate \"{validationRequest.PostedFileName}\".",
-                ExitCode = exitCode,
-                StdErr = stderr,
-                StdOut = stdout
+                ExitCode = processResult.ExitCode,
+                StdErr = processResult.StdErr,
+                StdOut = processResult.StdOut
             };
         }
     }
