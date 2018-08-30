@@ -1,4 +1,5 @@
-﻿using System.Web.Hosting;
+﻿using System.Threading.Tasks;
+using System.Web.Hosting;
 using System.Web.Http;
 using SarifWeb.Models;
 using SarifWeb.Services;
@@ -22,15 +23,15 @@ namespace SarifWeb.Controllers
 
         public ValidationController()
         {
-            string multitoolDirectory = HostingEnvironment.MapPath("~/Multitool");
+            string multitoolDirectory = HostingEnvironment.MapPath("~/bin/Sarif.Multitool");
             IFileSystem fileSystem = new FileSystem();
 
             _validationService = new ValidationService(multitoolDirectory, fileSystem);
         }
 
-        public ValidationResponse Post([FromBody] ValidationRequest validationRequest)
+        public async Task<ValidationResponse> Post([FromBody] ValidationRequest validationRequest)
         {
-            return _validationService.Validate(validationRequest);
+            return await _validationService.Validate(validationRequest);
         }
     }
 }

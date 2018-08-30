@@ -1,4 +1,7 @@
-﻿using SarifWeb.Models;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
+using SarifWeb.Models;
 using SarifWeb.Utilities;
 
 namespace SarifWeb.Services
@@ -16,6 +19,8 @@ namespace SarifWeb.Services
     /// </remarks>
     public class ValidationService
     {
+        private const string ToolExeName = "Sarif.Multitool.exe";
+
         private readonly string _multitoolDirectory;
         private readonly IFileSystem _fileSystem;
 
@@ -25,9 +30,48 @@ namespace SarifWeb.Services
             _fileSystem = fileSystem;
         }
 
-        public ValidationResponse Validate(ValidationRequest validationRequest)
+        public async Task<ValidationResponse> Validate(ValidationRequest validationRequest)
         {
-            return new ValidationResponse { Message = $"The SARIF validation service received a request to validate \"{validationRequest.PostedFileName}\"." };
+            string stdout = string.Empty;
+            string stderr = string.Empty;
+
+            string multiToolPath = Path.Combine(_multitoolDirectory, ToolExeName);
+            var tcs = new TaskCompletionSource<int>();
+
+            var process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = multiToolPath,
+                    Arguments = "validate --help",
+                    CreateNoWindow = true,
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false
+                },
+                EnableRaisingEvents = true
+            };
+
+            process.Exited += (sender, args) =>
+            {
+                tcs.SetResult(process.ExitCode);
+                stdout = process.StandardOutput.ReadToEnd();
+                stderr = process.StandardError.ReadToEnd();
+
+                process.Dispose();
+            };
+
+            process.Start();
+
+            int exitCode = await tcs.Task; 
+
+            return new ValidationResponse
+            {
+                Message = $"The SARIF validation service received a request to validate \"{validationRequest.PostedFileName}\".",
+                ExitCode = exitCode,
+                StdErr = stderr,
+                StdOut = stdout
+            };
         }
     }
 }
