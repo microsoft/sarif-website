@@ -21,13 +21,13 @@ namespace SarifWeb.Services
     {
         private const string ToolExeName = "Sarif.Multitool.exe";
 
-        private readonly string _multitoolDirectory;
+        private readonly string _multitoolExePath;
         private readonly IFileSystem _fileSystem;
         private readonly IProcessRunner _processRunner;
 
         public ValidationService(string multitoolDirectory, IFileSystem fileSystem, IProcessRunner processRunner)
         {
-            _multitoolDirectory = multitoolDirectory;
+            _multitoolExePath = Path.Combine(multitoolDirectory, ToolExeName);
             _fileSystem = fileSystem;
             _processRunner = processRunner;
         }
@@ -37,14 +37,13 @@ namespace SarifWeb.Services
             string stdout = string.Empty;
             string stderr = string.Empty;
 
-            string multiToolPath = Path.Combine(_multitoolDirectory, ToolExeName);
             var tcs = new TaskCompletionSource<int>();
 
             var process = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    FileName = multiToolPath,
+                    FileName = _multitoolExePath,
                     Arguments = "validate --help",
                     CreateNoWindow = true,
                     RedirectStandardError = true,
