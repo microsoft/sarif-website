@@ -1,11 +1,12 @@
 ﻿<#
 .SYNOPSIS
-    Copy-Multitool
+    Copy-Sarif.Multitool
 
 .DESCRIPTION
     This description copies the Sarif.Multitool binaries from the NuGet package directory to
     the Multitool subdirectory of this project so they can be published to the Web server,
-    from where they can be accessed from the Web application.
+    from where they can be accessed from the Web application. It also copies the SARIF schema,
+    which will be specified on the Sarif.Multitool command line.
 #>
 
 [CmdletBinding()]
@@ -15,18 +16,32 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 $InformationPreference = "Continue"
 
-$ToolName = "Sarif.Multitool"
+$ToolPackageName = "Sarif.Multitool"
+$SdkPackageName = "Sarif.Sdk"
 
-$destinationPath = Join-Path (Split-Path -Parent $PSScriptRoot) $ToolName
-$packagesRoot = Join-Path -Resolve $PSScriptRoot ..\..\packages
+$PackagesRoot = Join-Path -Resolve $PSScriptRoot ..\..\packages
+if (-not (Test-Path $PackagesRoot)) {
+    Write-Error "The NuGet packages directory $PackagesRoot does not exist. Please perform a NuGet restore."
+}
 
-# Consult packages.config to determine which version of the package binaries we should
+$PackagesConfigFilePath = Join-Path -Resolve $PSScriptRoot ..\packages.config
+if (-not (Test-Path $PackagesConfigFilePath)) {
+    Write-Error "The NuGet package configuration file $PackagesConfigFilePath does not exist."
+}
+
+$DestinationPath = Join-Path (Split-Path -Parent $PSScriptRoot) $ToolPackageName
+if (Test-Path $DestinationPath) {
+    Remove-Item -Recurse -Force $DestinationPath
+}
+
+New-Item -Type Directory $DestinationPath | Out-Null
+
+# Consult packages.config to determine which version of the specified package we should
 # copy. This is necessary because the packages directory might contain more than one
 # version of the package.
-function Get-MultitoolPackageVersion {
-    $xPath = "/packages/package[@id='$ToolName']"
-    $packagesConfigFilePath = Join-Path -Resolve $PSScriptRoot ..\packages.config
-    $xml = Select-Xml -Path $packagesConfigFilePath -XPath $xPath
+function Get-PackageVersion($packageName) {
+    $xPath = "/packages/package[@id='$packageName']"
+    $xml = Select-Xml -Path $PackagesConfigFilePath -XPath $xPath
     if ($xml) {
         $xml.Node.version
     } else {
@@ -34,26 +49,25 @@ function Get-MultitoolPackageVersion {
     }
 }
 
-$version = Get-MultitoolPackageVersion
-if ($version -eq $null) {
-    Write-Error "packages.config does not mention the $ToolName package!"
+function Get-PackagePath($packageName) {
+    $version = Get-PackageVersion $packageName
+    if ($version -eq $null) {
+        Write-Error "packages.config does not mention the $packageName package!"
+    }
+
+    "$PackagesRoot\${packageName}.$version"
 }
 
-$toolPackageDirectoryName = "${ToolName}.$version"
-$toolPackagePath = "$packagesRoot\$toolPackageDirectoryName"
+$toolPackagePath = Get-PackagePath $ToolPackageName
+$toolBinariesSourcePath = "$toolPackagePath\tools\net461\*"
 
-if (-not (Test-Path $packagesRoot)) {
-    Write-Error "Directory $toolPackagePath does not exist. Please perform a NuGet restore."
-}
+Write-Information "Copying $ToolPackageName binaries from $toolBinariesSourcePath to ${DestinationPath}..."
+Copy-Item -Recurse -Path $toolBinariesSourcePath -Destination $DestinationPath
 
-if (Test-Path $destinationPath) {
-    Remove-Item -Recurse -Force $destinationPath
-}
+$sdkPackagePath = Get-PackagePath $SdkPackageName
+$sarifSchemaPath = "$sdkPackagePath\Schemata\Sarif.schema.json"
 
-New-Item -Type Directory $destinationPath | Out-Null
+Write-Information "Copying SARIF schema file from $sarifSchemaPath to ${DestinationPath}..."
+Copy-Item -Path $sarifSchemaPath -Destination $DestinationPath
 
-$sourceFilePath = "$toolPackagePath\tools\net461\*"
-
-Write-Information "Copying $sourceFilePath to ${destinationPath}..."
-Copy-Item -Recurse -Path $sourceFilePath -Destination $destinationPath
 Write-Information "Done."

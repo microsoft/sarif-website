@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using SarifWeb.Models;
 using SarifWeb.Utilities;
@@ -22,9 +21,11 @@ namespace SarifWeb.Services
     {
         private const string ToolExeName = "Sarif.Multitool.exe";
         private const string ValidationLogSuffix = ".validation.sarif";
+        private const string SchemaFileName = "Sarif.schema.json";
 
         private readonly string _postedFilesDirectory;
         private readonly string _multitoolExePath;
+        private readonly string _schemaFilePath;
         private readonly IFileSystem _fileSystem;
         private readonly IProcessRunner _processRunner;
 
@@ -36,29 +37,32 @@ namespace SarifWeb.Services
         {
             _postedFilesDirectory = postedFilesDirectory;
             _multitoolExePath = Path.Combine(multitoolDirectory, ToolExeName);
+            _schemaFilePath = Path.Combine(multitoolDirectory, SchemaFileName);
             _fileSystem = fileSystem;
             _processRunner = processRunner;
         }
 
         public async Task<ValidationResponse> Validate(ValidationRequest validationRequest)
         {
-            StringBuilder argumentsBuilder = new StringBuilder("validate");
-
+            string inputFilePath = Path.Combine(_postedFilesDirectory, validationRequest.SavedFileName);
             string outputFileName = Path.GetFileNameWithoutExtension(validationRequest.PostedFileName) + ValidationLogSuffix;
             string outputFilePath = Path.Combine(_postedFilesDirectory, outputFileName);
-            argumentsBuilder.Append(" --output " + outputFilePath);
+
+            string arguments = $"validate --output \"{outputFilePath}\" --json-schema \"{_schemaFilePath}\" --force --pretty-print --rich-return-code \"{inputFilePath}\"";
 
             ValidationResponse validationResponse;
             try
             {
-                ProcessResult processResult = await _processRunner.RunProcess(_multitoolExePath, argumentsBuilder.ToString());
+                ProcessResult processResult = await _processRunner.RunProcess(_multitoolExePath, arguments);
 
                 validationResponse = new ValidationResponse
                 {
                     Message = $"The SARIF validation service received a request to validate \"{validationRequest.PostedFileName}\".",
+                    Arguments = arguments,
                     ExitCode = processResult.ExitCode,
                     StdErr = processResult.StdErr,
-                    StdOut = processResult.StdOut
+                    StdOut = processResult.StdOut,
+                    LogContents = _fileSystem.ReadAllText(outputFilePath)
                 };
             }
             catch (Exception ex)
