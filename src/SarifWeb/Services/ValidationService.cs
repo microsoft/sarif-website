@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using SarifWeb.Models;
@@ -35,6 +36,7 @@ namespace SarifWeb.Services
         {
             _postedFilesDirectory = postedFilesDirectory;
             _multitoolExePath = Path.Combine(multitoolDirectory, ToolExeName);
+            _fileSystem = fileSystem;
             _processRunner = processRunner;
         }
 
@@ -46,15 +48,35 @@ namespace SarifWeb.Services
             string outputFilePath = Path.Combine(_postedFilesDirectory, outputFileName);
             argumentsBuilder.Append(" --output " + outputFilePath);
 
-            ProcessResult processResult = await _processRunner.RunProcess(_multitoolExePath, argumentsBuilder.ToString());
-
-            return new ValidationResponse
+            ValidationResponse validationResponse;
+            try
             {
-                Message = $"The SARIF validation service received a request to validate \"{validationRequest.PostedFileName}\".",
-                ExitCode = processResult.ExitCode,
-                StdErr = processResult.StdErr,
-                StdOut = processResult.StdOut
-            };
+                ProcessResult processResult = await _processRunner.RunProcess(_multitoolExePath, argumentsBuilder.ToString());
+
+                validationResponse = new ValidationResponse
+                {
+                    Message = $"The SARIF validation service received a request to validate \"{validationRequest.PostedFileName}\".",
+                    ExitCode = processResult.ExitCode,
+                    StdErr = processResult.StdErr,
+                    StdOut = processResult.StdOut
+                };
+            }
+            catch (Exception ex)
+            {
+                validationResponse = new ValidationResponse
+                {
+                    Message = $"Validation of file {validationRequest.PostedFileName} failed: {ex.Message}"
+                };
+            }
+            finally
+            {
+                if (_fileSystem.FileExists(outputFilePath))
+                {
+                    _fileSystem.DeleteFile(outputFilePath);
+                }
+            }
+
+            return validationResponse;
         }
     }
 }
