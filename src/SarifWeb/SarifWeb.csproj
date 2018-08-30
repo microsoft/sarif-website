@@ -172,6 +172,7 @@
     <Compile Include="Services\ValidationService.cs" />
     <Compile Include="Services\ValidationUiService.cs" />
     <Compile Include="Utilities\FileSystem.cs" />
+    <Compile Include="Utilities\HostingHelper.cs" />
     <Compile Include="Utilities\HttpClientProxy.cs" />
     <Compile Include="Utilities\IFileSystem.cs" />
     <Compile Include="Utilities\IHttpClientProxy.cs" />
