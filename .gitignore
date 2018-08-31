@@ -211,5 +211,6 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 
-# Sarif.Multitool binaries
+# We copy the Sarif.Multitool's binaries and the SARIF schema from their NuGet packages to this
+# location, so that they can be published. But we don't want to commit them.
 Sarif.Multitool/
