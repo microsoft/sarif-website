@@ -57,7 +57,7 @@ namespace SarifWeb.Controllers
         {
             // Extract information from the parts of the Controller object that are hard to mock.
             HttpRequestBase request = ControllerContext.RequestContext.HttpContext.Request;
-            string postedFilesPath = Server.MapPath("~/UploadedFiles");
+            string postedFilesDirectory = HostingHelper.PostedFilesDirectory;
             string baseAddress = string.Format(
                 CultureInfo.InvariantCulture,
                 "{0}://{1}{2}",
@@ -68,7 +68,7 @@ namespace SarifWeb.Controllers
             // at a time (it does this by setting maxfiles to 1 in the handler for the filedrop event).
             HttpPostedFileBase postedFile = postedFiles.FirstOrDefault();
 
-            return await _validationUiService.ValidateFileAsync(postedFile, request, postedFilesPath, baseAddress);
+            return await _validationUiService.ValidateFileAsync(postedFile, request, postedFilesDirectory, baseAddress);
         }
     }
 }

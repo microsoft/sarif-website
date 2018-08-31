@@ -7,5 +7,6 @@
     {
         void DeleteFile(string path);
         bool FileExists(string path);
+        string ReadAllText(string path);
     }
 }
