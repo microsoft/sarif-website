@@ -122,20 +122,20 @@
             text-align: right;
         }
 
-            #hero_logo img {
-                border-radius: 5px;
-                height: 100px;
-                width: 100px;
-            }
+        #hero_logo img {
+            border-radius: 5px;
+            height: 100px;
+            width: 100px;
+        }
 
-            #hero_title {
-                font-family: 'Roboto', sans-serif;
-                font-size: 50px;
-                grid-column: 2;
-                grid-row: 1;
-                line-height: 59px;
-                text-align: left;
-            }
+        #hero_title {
+            font-family: 'Roboto', sans-serif;
+            font-size: 50px;
+            grid-column: 2;
+            grid-row: 1;
+            line-height: 59px;
+            text-align: left;
+        }
 
         #hero_tagline {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -226,6 +226,21 @@
             font-size: 10px;
         }
 
+        #collab_section_buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 29px;
+        }
+
+        #collab_section_buttons img {
+            border: 2px solid #D2D2D2;
+            border-radius: 5px;
+            height: 100px;
+            margin: 8px 10px;
+            width: 100px;
+        }
+
         footer {
             align-items: center;
             background-color: #4D4D4D;
@@ -270,12 +285,12 @@
                     <div id="header_menu_tools">
                         <a href="#ToolsLibraries">Tools &amp; Libraries</a>
                     </div>
-                    <div id="header_menu_viewers">                        
+                    <div id="header_menu_viewers">
                         <a href="#Viewers">Viewers</a>
                     </div>
                 </div>
             </div>
-            <div id="header_menu_validator" class="header-menu-item">                
+            <div id="header_menu_validator" class="header-menu-item">
                 <a href="./ValidationUi/Index.cshtml">Validator</a>
             </div>
         </header>
@@ -291,7 +306,7 @@
                 </div>
             </div>
         </section>
-        
+
         <section class="content-section white-section">
             <a name="Specification"></a>
             <div class="content-section-title">Specification</div>
@@ -312,13 +327,36 @@
                             Upload and explore your SARIF file or
                             <br />
                             browse one of the samples.
-                            </p>
+                        </p>
                     </button>
                 </div>
             </div>
             <div class="content-section-text">This site is for SARIF version 2. For version 1, see the <a href="http://sarif.azurewebsites.net">legacy site</a>.</div>
         </section>
-        
+
+        <section class="content-section gray-section">
+            <a name="Collaborators"></a>
+            <div class="content-section-title">Collaborators</div>
+            <div class="content-section-text content-section-description">
+                The SARIF project is supported by a large group of industry contributors, including quick brown foxes and lazy dogs.
+            </div>
+            <div id="collab_section_buttons">
+                <img src="../Images/Logos/3M.png" alt="3M" />
+                <img src="../Images/Logos/Adobe.png" alt="Adobe" />
+                <img src="../Images/Logos/Amazon.png" alt="Amazon" />
+                <img src="../Images/Logos/AT&T.png" alt="AT&T" />
+                <img src="../Images/Logos/BMW.png" alt="BMW" />
+                <img src="../Images/Logos/Dell.png" alt="Dell" />
+                <img src="../Images/Logos/EMC2.png" alt="EMC2" />
+                <img src="../Images/Logos/Energizer.png" alt="Energizer" />
+                <img src="../Images/Logos/Expedia.png" alt="Expedia" />
+                <img src="../Images/Logos/Microsoft.png" alt="Microsoft" />
+                <img src="../Images/Logos/NFL.png" alt="NFL" />
+                <img src="../Images/Logos/Visa.png" alt="Visa" />
+                <img src="../Images/Logos/Zillow.png" alt="Zillow" />
+            </div>
+        </section>
+
         <footer>
             <p>Copyright &copy; Microsoft Corporation. All rights reserved.</p>
         </footer>
