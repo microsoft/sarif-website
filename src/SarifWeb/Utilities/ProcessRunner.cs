@@ -28,8 +28,8 @@ namespace SarifWeb.Utilities
             process.Exited += (sender, args) =>
             {
                 tcs.SetResult(process.ExitCode);
-                processResult.StdOut = process.StandardOutput.ReadToEnd();
-                processResult.StdErr = process.StandardError.ReadToEnd();
+                processResult.StandardOutput = process.StandardOutput.ReadToEnd();
+                processResult.StandardError = process.StandardError.ReadToEnd();
 
                 process.Dispose();
             };

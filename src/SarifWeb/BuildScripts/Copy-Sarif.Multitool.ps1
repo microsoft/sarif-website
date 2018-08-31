@@ -3,7 +3,7 @@
     Copy-Sarif.Multitool
 
 .DESCRIPTION
-    This description copies the Sarif.Multitool binaries from the NuGet package directory to
+    This script copies the Sarif.Multitool binaries from the NuGet package directory to
     the Multitool subdirectory of this project so they can be published to the Web server,
     from where they can be accessed from the Web application. It also copies the SARIF schema,
     which will be specified on the Sarif.Multitool command line.
@@ -14,7 +14,6 @@ param()
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
-$InformationPreference = "Continue"
 
 $ToolPackageName = "Sarif.Multitool"
 $SdkPackageName = "Sarif.Sdk"
@@ -61,13 +60,13 @@ function Get-PackagePath($packageName) {
 $toolPackagePath = Get-PackagePath $ToolPackageName
 $toolBinariesSourcePath = "$toolPackagePath\tools\net461\*"
 
-Write-Information "Copying $ToolPackageName binaries from $toolBinariesSourcePath to ${DestinationPath}..."
+Write-Verbose "Copying $ToolPackageName binaries from $toolBinariesSourcePath to ${DestinationPath}..."
 Copy-Item -Recurse -Path $toolBinariesSourcePath -Destination $DestinationPath
 
 $sdkPackagePath = Get-PackagePath $SdkPackageName
 $sarifSchemaPath = "$sdkPackagePath\Schemata\Sarif.schema.json"
 
-Write-Information "Copying SARIF schema file from $sarifSchemaPath to ${DestinationPath}..."
+Write-Verbose "Copying SARIF schema file from $sarifSchemaPath to ${DestinationPath}..."
 Copy-Item -Path $sarifSchemaPath -Destination $DestinationPath
 
-Write-Information "Done."
+Write-Verbose "Done."

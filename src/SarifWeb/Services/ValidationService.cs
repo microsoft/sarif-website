@@ -60,8 +60,8 @@ namespace SarifWeb.Services
                     Message = $"The SARIF validation service received a request to validate \"{validationRequest.PostedFileName}\".",
                     Arguments = arguments,
                     ExitCode = processResult.ExitCode,
-                    StdErr = processResult.StdErr,
-                    StdOut = processResult.StdOut,
+                    StandardError = processResult.StandardError,
+                    StandardOutput = processResult.StandardOutput,
                     LogContents = _fileSystem.ReadAllText(outputFilePath)
                 };
             }

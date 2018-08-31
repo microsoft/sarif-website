@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Hosting;
 using System.Web.Http;
 using SarifWeb.Models;
 using SarifWeb.Services;
@@ -14,7 +13,7 @@ namespace SarifWeb.Controllers
     /// to accommodate additional information about the request itself.
     ///
     /// This class delegates most of the work to the <see cref="ValidationService" />,
-    /// which is unit testable.. 
+    /// which is unit testable.
     /// </summary>
     /// </summary>
     public class ValidationController : ApiController

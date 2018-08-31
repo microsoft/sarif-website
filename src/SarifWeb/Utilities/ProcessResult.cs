@@ -2,8 +2,8 @@
 {
     public class ProcessResult
     {
-        public string StdOut { get; internal set; }
-        public string StdErr { get; internal set; }
+        public string StandardOutput { get; internal set; }
+        public string StandardError { get; internal set; }
         public int ExitCode { get; internal set; }
     }
 }
