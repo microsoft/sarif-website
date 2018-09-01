@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Web;
 using FluentAssertions;
 using Moq;
+using Newtonsoft.Json;
 using SarifWeb.Models;
 using SarifWeb.Services;
 using SarifWeb.Utilities;
@@ -52,7 +53,8 @@ namespace SarifWeb.UnitTests.Services
             var mockRequest = new Mock<HttpRequestBase>();
 
             // Act.
-            ValidationResponse response = await service.ValidateFileAsync(mockPostedFile.Object, mockRequest.Object, "PostedFilesPath", WebSiteBaseAddress);
+            string responseJson = await service.ValidateFileAsync(mockPostedFile.Object, mockRequest.Object, "PostedFilesPath", WebSiteBaseAddress);
+            ValidationResponse response = JsonConvert.DeserializeObject<ValidationResponse>(responseJson);
 
             // Assert.
             response.Message.Should().Be(ValidationApiResponseMessage);

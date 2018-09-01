@@ -3,29 +3,58 @@
 }
 <h2>@ViewBag.Title</h2>
 
-<p>This page is under construction. When it is working, you'll be able to upload a SARIF log file, and the SARIF validator will report any issues it finds.</p>
-
-<div id="dropArea">
-    Drop your SARIF log file here to validate it.
+<div id="dropArea" class="drop-area">
+    <div id="dropAreaText" class="drop-area-text">Drop your SARIF log file here to validate it</div>
 </div>
-<h4>Uploaded files:</h4>
-<ul class="list-group" id="uploadList">
 
-</ul>
+<section id="resultsSection">
+    <h4>Uploaded files:</h4>
+    <ul class="list-group" id="uploadList"></ul>
+
+    <h4>Response message:</h4>
+    <pre id="responseText"></pre>
+</section>
 
 <style>
-    #dropArea {
-        background: #b5b5b5;
+    .drop-area {
+        background-color: #b5b5b5;
         border: black dashed 1px;
+        color: #fff;
+        display: table;
         height: 50px;
-        text-align:center;
-        color: #fff
+        text-align: center;
+        text-shadow: 0 0 1px #000;
+        width: 100%;
     }
+
+    .drop-area-text {
+        display: table-cell;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 16px;
+        vertical-align: middle;
+    }
+
+    .drop-area-text-busy {
+        color: #000;
+        font-weight: bold;
+        text-shadow: 0 0 1px #fff;
+    }
+
+    .drop-area-text-complete {
+        color: #0e0;
+        font-weight: bold;
+        text-shadow: 0 0 1px #000;
+    }
+
     .active-drop {
-        background: #77bafa !important;
-        border: blue solid 2px !important;
+        background-color: #77bafa;
+        border: solid 2px #000;
+        color: #000;
         opacity: 0.5;
-        color: black !important;
+    }
+
+    #resultsSection {
+        display: none;
     }
 </style>
 
@@ -46,12 +75,15 @@
                 },
                 drop: function () {
                     $('#dropArea').removeClass('active-drop');
-                },
-                afterAll: function (e) {
-                    $('#dropArea').html('File');
+                    $('#dropAreaText').addClass('drop-area-text-busy');
+                    $('#dropAreaText').text('Validating file...');
                 },
                 uploadFinished: function (i, file, response, time) {
                     $('#uploadList').append('<li class="list-group-item">' + file.name + '</li>');
+                    $('#responseText').text(response.LogContents);
+                    $('#resultsSection').show();
+                    $('#dropAreaText').addClass('drop-area-text-complete');
+                    $('#dropAreaText').text('Validation complete!');
                 }
             });
         });
