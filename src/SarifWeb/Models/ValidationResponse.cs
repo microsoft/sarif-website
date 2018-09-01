@@ -6,7 +6,7 @@
         public int ExitCode { get; set; }
         public string StandardOutput { get; set; }
         public string StandardError { get; set; }
-        public string Arguments { get; internal set; }
-        public object LogContents { get; internal set; }
+        public string Arguments { get; set; }
+        public string LogContents { get; set; }
     }
 }

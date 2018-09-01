@@ -15,7 +15,7 @@ namespace SarifWeb.Services
     /// This class processes requests from the Web UI to validate SARIF files.
     /// It synthesized a request to the Validation Web API, sends the request,
     /// and passes the response back to the ValidationUiController, which in
-    /// turns presents it in the UI.
+    /// turn presents it in the UI.
     /// </summary>
     /// <remarks>
     /// This class is factored out from the ValidationUiController so that as
@@ -73,7 +73,6 @@ namespace SarifWeb.Services
                         HttpResponseMessage response = await _httpClientProxy.PostAsync(client, "api/Validation", requestContent);
                         string responseContent = response.Content.ReadAsStringAsync().Result;
                         validationResponse = JsonConvert.DeserializeObject<ValidationResponse>(responseContent);
-
                     }
                 }
                 finally

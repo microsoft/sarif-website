@@ -28,13 +28,13 @@ namespace SarifWeb.Utilities
             process.Exited += (sender, args) =>
             {
                 tcs.SetResult(process.ExitCode);
-                processResult.StandardOutput = process.StandardOutput.ReadToEnd();
-                processResult.StandardError = process.StandardError.ReadToEnd();
 
                 process.Dispose();
             };
 
             process.Start();
+            processResult.StandardOutput = process.StandardOutput.ReadToEnd();
+            processResult.StandardError = process.StandardError.ReadToEnd();
 
             processResult.ExitCode = await tcs.Task;
 
