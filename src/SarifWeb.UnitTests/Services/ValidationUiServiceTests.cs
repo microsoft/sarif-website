@@ -53,8 +53,7 @@ namespace SarifWeb.UnitTests.Services
             var mockRequest = new Mock<HttpRequestBase>();
 
             // Act.
-            string responseJson = await service.ValidateFileAsync(mockPostedFile.Object, mockRequest.Object, "PostedFilesPath", WebSiteBaseAddress);
-            ValidationResponse response = JsonConvert.DeserializeObject<ValidationResponse>(responseJson);
+            ValidationResponse response = await service.ValidateFileAsync(mockPostedFile.Object, mockRequest.Object, "PostedFilesPath", WebSiteBaseAddress);
 
             // Assert.
             response.Message.Should().Be(ValidationApiResponseMessage);
