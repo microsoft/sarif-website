@@ -51,7 +51,9 @@ namespace SarifWeb.Controllers
         /// </returns>
         /// <remarks>
         /// This method is invoked from Javascript by the JQuery filedrop API. See
-        /// Views/ValidationUi/Index.cshtml.
+        /// Views/ValidationUi/Index.cshtml. For this reason, we must return the
+        /// JSON serialization of the <see cref="ValidationResponse"/> object,
+        /// rather than returning the object itself.
         /// </remarks>
         [HttpPost]
         public async Task<string> ValidateFilesAsync(IEnumerable<HttpPostedFileBase> postedFiles)

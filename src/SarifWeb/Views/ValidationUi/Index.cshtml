@@ -8,11 +8,11 @@
 </div>
 
 <section id="resultsSection">
-    <h4>Uploaded files:</h4>
-    <ul class="list-group" id="uploadList"></ul>
-
     <h4>Response message:</h4>
-    <pre id="responseText"></pre>
+    <p id="responseMessage"></p>
+
+    <h4>SARIF log file contents:</h4>
+    <pre id="sarifLogFileContents"></pre>
 </section>
 
 <style>
@@ -75,13 +75,16 @@
                 },
                 drop: function () {
                     $('#dropArea').removeClass('active-drop');
+                    $('#dropAreaText').removeClass('drop-area-text-complete');
                     $('#dropAreaText').addClass('drop-area-text-busy');
                     $('#dropAreaText').text('Validating file...');
                 },
                 uploadFinished: function (i, file, response, time) {
                     $('#uploadList').append('<li class="list-group-item">' + file.name + '</li>');
-                    $('#responseText').text(response.LogContents);
+                    $('#responseMessage').text(response.Message);
+                    $('#sarifLogFileContents').text(response.LogContents);
                     $('#resultsSection').show();
+                    $('#dropAreaText').removeClass('drop-area-text-busy');
                     $('#dropAreaText').addClass('drop-area-text-complete');
                     $('#dropAreaText').text('Validation complete!');
                 }

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System.Web;
 using FluentAssertions;
 using Moq;
-using Newtonsoft.Json;
 using SarifWeb.Models;
 using SarifWeb.Services;
 using SarifWeb.Utilities;
