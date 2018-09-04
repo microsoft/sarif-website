@@ -29,7 +29,8 @@
         }
 
         button:hover, button:active {
-            background-color: #E6EDF3;
+            border: solid 2px #008AFF !important;
+            background-color: #E6EDF3 !important;
         }
 
         #page_container {
@@ -67,30 +68,30 @@
             text-wrap: none;
         }
 
-        .header-menu-strip {
+        .header-nav-strip {
             align-items: center;
             display: flex;
             flex-grow: 1;
             justify-content: center;
         }
 
-        #header_menu_items {
+        #header_nav_items {
             justify-content: center;
             display: flex;
             flex: 1;
             flex-grow: 1;
         }
 
-        #header_menu_items div {
+        #header_nav_items a {
             margin: 0px 25px;
         }
 
-        .header-menu-item {
+        .header-nav-item {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             font-size: 14px;
         }
 
-        #header_menu_validator {
+        #header_nav_validator {
             margin-right: 58px;
             text-align: right;
         }
@@ -230,7 +231,7 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            margin-bottom: 29px;
+            margin-bottom: 14px;
         }
 
         #collab_section_buttons img {
@@ -239,6 +240,51 @@
             height: 100px;
             margin: 8px 10px;
             width: 100px;
+        }
+
+        #viewers_section_content {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .viewer-card {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 27px;
+            margin-right: 40px;
+            width: 360px;
+        }
+
+        .viewer-title {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .viewer-description {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 12px;
+            height: 100%;
+            margin-bottom: 19px;
+        }
+
+        .viewer-screenshot img {
+            border-radius: 5px;
+            height: 240px;
+            margin-bottom: 12px;
+            width: 360px;
+        }
+
+        .viewer-buttons button {
+            background-color: #FFFFFF;
+            border: 2px solid #D2D2D2;
+            border-radius: 5px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            height: 32px;
+            margin-right: 4px;
+            width: 120px;
         }
 
         footer {
@@ -277,22 +323,16 @@
         <header>
             <div class="header-site-title">SARIF</div>
             <div class="header-version-badge">WEB BETA</div>
-            <div class="header-menu-strip">
-                <div id="header_menu_items" class="header-menu-item">
-                    <div id="header_menu_spec">
-                        <a href="#Specification">Specification</a>
-                    </div>
-                    <div id="header_menu_tools">
-                        <a href="#ToolsLibraries">Tools &amp; Libraries</a>
-                    </div>
-                    <div id="header_menu_viewers">
-                        <a href="#Viewers">Viewers</a>
-                    </div>
+            <nav class="header-nav-strip">
+                <div id="header_nav_items" class="header-nav-item">
+                    <a href="#Specification">Specification</a>
+                    <a href="#ToolsLibraries">Tools &amp; Libraries</a>
+                    <a href="#Viewers">Viewers</a>
                 </div>
-            </div>
-            <div id="header_menu_validator" class="header-menu-item">
+            </nav>
+            <nav id="header_nav_validator" class="header-nav-item">
                 <a href="./ValidationUi/Index.cshtml">Validator</a>
-            </div>
+            </nav>
         </header>
 
         <section id="hero">
@@ -354,6 +394,79 @@
                 <img src="../Images/Logos/NFL.png" alt="NFL" />
                 <img src="../Images/Logos/Visa.png" alt="Visa" />
                 <img src="../Images/Logos/Zillow.png" alt="Zillow" />
+            </div>
+        </section>
+
+        <section class="content-section gray-section">
+            <a name="Viewers"></a>
+            <div class="content-section-title">Viewers</div>
+            <div class="content-section-text content-section-description">
+                SARIF is based on JSON and can be viewed in any text editor. For a richer experience the following open-source viewers are provided.
+            </div>
+            <div id="viewers_section_content">
+                <div class="viewer-card">
+                    <div class="viewer-title">
+                        Visual Studio extension
+                    </div>
+                    <div class="viewer-description">
+                        For viewing and taking-action-on SARIF files within Visual Studio. Analysis results show up in the Error List, result details in a dockable tool window, and the results locations are overlayed on the original code (when available).
+                    </div>
+                    <div class="viewer-screenshot">
+                        <img src="../Images/Screenshots/MiddleEast.png" alt="Visual Studio extension" />
+                    </div>
+                    <div class="viewer-buttons">
+                        <button href="https://marketplace.visualstudio.com/items?itemName=WDGIS.MicrosoftSarifViewer" target="_blank">Install</button>
+                        <button href="https://github.com/Microsoft/sarif-visualstudio-extension/" target="_blank">Source</button>
+                    </div>
+                </div>
+
+                <div class="viewer-card">
+                    <div class="viewer-title">
+                        VS Code extension
+                    </div>
+                    <div class="viewer-description">
+                        Same experience as the Visual Studio extension, but for those using Visual Studio Code.
+                    </div>
+                    <div class="viewer-screenshot">
+                        <img src="../Images/Screenshots/Elisabeth-and-the-Tornado.jpg" alt="VS Code extension" />
+                    </div>
+                    <div class="viewer-buttons">
+                        <button href="https://marketplace.visualstudio.com/items?itemName=MS-SarifVSCode.sarif-viewer" target="_blank">Install</button>
+                        <button href="https://github.com/Microsoft/sarif-vscode-extension/" target="_blank">Source</button>
+                    </div>
+                </div>
+
+                <div class="viewer-card">
+                    <div class="viewer-title">
+                        Web Viewer &quot;A&quot;
+                    </div>
+                    <div class="viewer-description">
+                        An online viewer good for quickly browsing of SARIF files as well as triaging analysis results. Also available as a component to integrate into your own site or app.
+                    </div>
+                    <div class="viewer-screenshot">
+                        <img src="../Images/Screenshots/FutureExplorer.jpg" alt="Web Viewer A" />
+                    </div>
+                    <div class="viewer-buttons">
+                        <button href="https://sarifview/disco/" target="_blank">Try</button>
+                        <button disabled>Source</button>
+                    </div>
+                </div>
+
+                <div class="viewer-card">
+                    <div class="viewer-title">
+                        Web Viewer &quot;B&quot;
+                    </div>
+                    <div class="viewer-description">
+                        Another online viewer with an alternate viewing experience.
+                    </div>
+                    <div class="viewer-screenshot">
+                        <img src="../Images/Screenshots/PoisonDartFrog.jpg" alt="Web Viewer B" />
+                    </div>
+                    <div class="viewer-buttons">
+                        <button href="https://sarifview/" formtarget="_blank">Try</button>
+                        <button disabled>Source</button>
+                    </div>
+                </div>
             </div>
         </section>
 
