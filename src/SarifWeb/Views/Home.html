@@ -33,7 +33,7 @@
             background-color: #E6EDF3 !important;
         }
 
-        #page_container {
+        #pageContainer {
             margin: auto;
             max-width: 1200px;
         }
@@ -75,14 +75,14 @@
             justify-content: center;
         }
 
-        #header_nav_items {
+        #heroNavItems {
             justify-content: center;
             display: flex;
             flex: 1;
             flex-grow: 1;
         }
 
-        #header_nav_items a {
+        #heroNavItems a {
             margin: 0px 25px;
         }
 
@@ -91,7 +91,7 @@
             font-size: 14px;
         }
 
-        #header_nav_validator {
+        #headerNavValidator {
             margin-right: 58px;
             text-align: right;
         }
@@ -103,7 +103,7 @@
             height: 280px;
         }
 
-        #hero_content_grid {
+        #heroContentGrid {
             align-content: center;
             color: #FFFFFF;
             display: grid;
@@ -113,23 +113,23 @@
             grid-template-rows: auto auto;
         }
 
-        #hero_content_grid > div {
+        #heroContentGrid > div {
             align-self: center;
         }
 
-        #hero_logo {
+        #heroLogo {
             grid-column: 1;
             grid-row: 1;
             text-align: right;
         }
 
-        #hero_logo img {
+        #heroLogo img {
             border-radius: 5px;
             height: 100px;
             width: 100px;
         }
 
-        #hero_title {
+        #heroTitle {
             font-family: 'Roboto', sans-serif;
             font-size: 50px;
             grid-column: 2;
@@ -138,7 +138,7 @@
             text-align: left;
         }
 
-        #hero_tagline {
+        #heroTagline {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             font-size: 14px;
             grid-column: span 2;
@@ -185,7 +185,7 @@
             font-size: 14px;
         }
 
-        #spec_section_buttons {
+        #specSectionButtons {
             display: flex;
             flex-wrap: wrap;
             font-weight: bold;
@@ -193,31 +193,31 @@
             margin-bottom: 29px;
         }
 
-        #spec_section_buttons1 {
+        #specSectionButtons1 {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             margin-right: 28px;
         }
 
-        #spec_section_buttons2 {
+        #specSectionButtons2 {
             display: flex;
             flex: 1;
             flex-direction: column;
             justify-content: space-between;
         }
 
-        #spec_section_button_read {
+        #specSectionButtonRead {
             height: 120px;
             width: 300px;
         }
 
-        #spec_section_button_ask {
+        #specSectionButtonAsk {
             height: 58px;
             width: 300px;
         }
 
-        #spec_section_button_view {
+        #specSectionButtonView {
             height: 182px;
             width: 400px;
         }
@@ -227,14 +227,14 @@
             font-size: 10px;
         }
 
-        #collab_section_buttons {
+        #collabSectionButons {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             margin-bottom: 14px;
         }
 
-        #collab_section_buttons img {
+        #collabSectionButons img {
             border: 2px solid #D2D2D2;
             border-radius: 5px;
             height: 100px;
@@ -242,7 +242,124 @@
             width: 100px;
         }
 
-        #viewers_section_content {
+        #toolsSection {
+            padding-bottom: 0px;
+        }
+
+        #toolsSectionContent {
+            align-items: center;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        #toolsSectionContent > div {
+            flex: 1 410px;
+            margin-bottom: 50px;
+            margin-right: 50px;
+            width: 410px;
+        }
+
+        #toolsSectionContentCsharp {
+            align-items: center;
+            display: flex;
+        }
+
+        .tools-section-content-label-large {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .tools-section-content-label-small {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .path-line-container {
+            align-self: stretch;
+            flex: 1 24px;
+            margin-left: 20px;
+            margin-right: 20px;
+            min-width: 24px;
+            width: 100%;
+        }
+
+        .path-line-container svg {
+            stroke: #9F9F9F;
+        }
+
+        .path-line-container svg.stretch-horizonal {
+            height: 20px;
+            width: 100%;
+        }
+
+        .path-line-container svg.stretch-vertical {
+            height: 100%;
+            width: 24px;
+        }
+
+        line.stroke-1x {
+            stroke-width: 1px;
+        }
+
+        line.stroke-2x {
+            stroke-width: 2px;
+        }
+
+        .tools-item-list > div {
+            display: flex;
+            margin-top: 25px;
+        }
+
+        #toolsSectionContentOther > div {
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        .tools-item-list > div:first-child,
+        #toolsSectionContentOther > div:first-child{
+            margin-top: 0px;
+        }
+
+        .tools-item-other-label {
+            flex: 0 120px;
+            display: flex;
+            margin-right: 20px;
+        }
+
+        .tools-item-other-label .path-line-container {
+            margin-right: 0px;
+        }
+
+        .tools-item-description {
+            flex: 1 220px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 13px;
+            line-height: 17px;
+        }
+
+        .tools-item-button {
+            background-color: #F2F2F2;
+            border: 2px solid #D2D2D2;
+            border-radius: 5px;
+            color: #262626;
+            display: flex;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 8px;
+            height: 40px;
+            margin-left: 20px;
+            padding: 8px 9px;
+            text-align: left;
+            width: 80px;
+        }
+
+        .tools-item-button-icon
+        {
+            margin-right: 8px;
+        }
+
+        #viewerSectionContent {
             display: flex;
             flex-wrap: wrap;
         }
@@ -319,27 +436,27 @@
     </script>
 </head>
 <body>
-    <div id="page_container">
+    <div id="pageContainer">
         <header>
             <div class="header-site-title">SARIF</div>
             <div class="header-version-badge">WEB BETA</div>
             <nav class="header-nav-strip">
-                <div id="header_nav_items" class="header-nav-item">
+                <div id="heroNavItems" class="header-nav-item">
                     <a href="#Specification">Specification</a>
                     <a href="#ToolsLibraries">Tools &amp; Libraries</a>
                     <a href="#Viewers">Viewers</a>
                 </div>
             </nav>
-            <nav id="header_nav_validator" class="header-nav-item">
+            <nav id="headerNavValidator" class="header-nav-item">
                 <a href="./ValidationUi/Index.cshtml">Validator</a>
             </nav>
         </header>
 
         <section id="hero">
-            <div id="hero_content_grid">
-                <div id="hero_logo"><img src="../Images/triskelion.png" /></div>
-                <div id="hero_title">SARIF</div>
-                <div id="hero_tagline">
+            <div id="heroContentGrid">
+                <div id="heroLogo"><img src="../Images/triskelion.png" /></div>
+                <div id="heroTitle">SARIF</div>
+                <div id="heroTagline">
                     The Static Analysis Results Interchange Format (SARIF)
                     <br />
                     defines a standard format for the output of static analysis tools.
@@ -355,13 +472,13 @@
                 standardized by <b>OASIS</b> in the <b>OASIS SARIF Technical Committee</b>. The information and tools
                 on this web site track the standard as it evolves to its final form.
             </div>
-            <div id="spec_section_buttons">
-                <div id="spec_section_buttons1">
-                    <button id="spec_section_button_read" href="https://github.com/oasis-tcs/sarif-spec/tree/master/Documents/CommitteeSpecificationDrafts/CSD.1" target="_blank" class="content-button gray-section">Read the specification</button>
-                    <button id="spec_section_button_ask" href="https://github.com/oasis-tcs/sarif-spec/issues/new" target="_blank" class="content-button gray-section">Ask a question</button>
+            <div id="specSectionButtons">
+                <div id="specSectionButtons1">
+                    <button id="specSectionButtonRead" href="https://github.com/oasis-tcs/sarif-spec/tree/master/Documents/CommitteeSpecificationDrafts/CSD.1" target="_blank" class="content-button gray-section">Read the specification</button>
+                    <button id="specSectionButtonAsk" href="https://github.com/oasis-tcs/sarif-spec/issues/new" target="_blank" class="content-button gray-section">Ask a question</button>
                 </div>
-                <div id="spec_section_buttons2">
-                    <button id="spec_section_button_view" href="#Viewers" target="_blank" class="content-button gray-section">
+                <div id="specSectionButtons2">
+                    <button id="specSectionButtonView" href="#Viewers" target="_blank" class="content-button gray-section">
                         View and validate your SARIF files
                         <p class="button-subtitle">
                             Upload and explore your SARIF file or
@@ -380,7 +497,7 @@
             <div class="content-section-text content-section-description">
                 The SARIF project is supported by a large group of industry contributors, including quick brown foxes and lazy dogs.
             </div>
-            <div id="collab_section_buttons">
+            <div id="collabSectionButons">
                 <img src="../Images/Logos/3M.png" alt="3M" />
                 <img src="../Images/Logos/Adobe.png" alt="Adobe" />
                 <img src="../Images/Logos/Amazon.png" alt="Amazon" />
@@ -397,13 +514,129 @@
             </div>
         </section>
 
+        <section id="toolsSection" class="content-section white-section">
+            <a name="ToolsLibraries"></a>
+            <div class="content-section-title">Tools &amp; Libraries</div>
+            <div class="content-section-text content-section-description">
+                A collection of tools offering facilities for producing, consuming, and validating files in the SARIF format.
+                <br />
+                The source code is in the <b>SARIF SDK GitHub repo</b>. We welcome your contributions!
+            </div>
+            <div id="toolsSectionContent">
+                <div id="toolsSectionContentCsharp">
+                    <div class="tools-section-content-label-large">
+                        C#
+                    </div>
+                    <div class="path-line-container">
+                        <svg class="stretch-vertical">
+                            <line x1="50%" x2="50%" y1="0" y2="100%" class="stroke-1x" />
+                            <line x1="0" x2="50%" y1="50%" y2="50%" class="stroke-1x" />
+                            <line x1="50%" x2="100%" y1="0" y2="0" class="stroke-2x" />
+                            <line x1="50%" x2="100%" y1="100%" y2="100%" class="stroke-2x" />
+                        </svg>
+                    </div>
+                    <div class="tools-item-list">
+                        <div>
+                            <div id="toolsItemSdk" class="tools-item-description"><b>SDK</b> - Object model and utilities for reading and writing files in the SARIF format.</div>
+                            <button id="toolsItemSdkLink" href="https://www.nuget.org/packages/Sarif.Sdk/2.0.0-csd.1.0.2" target="_blank" class="tools-item-button">
+                                <div class="tools-item-button-icon">
+                                    <img src="../Images/Nuget.png" />
+                                </div>
+                                <div>View Package</div>                                 
+                            </button>
+                        </div>
+                        <div>
+                            <div id="toolsItemSdk" class="tools-item-description"><b>Driver</b> - Framework for creating a command line analysis tool which produces files in the SARIF format.</div>
+                            <button id="toolsItemSdkLink" href="https://www.nuget.org/packages/Sarif.Driver/2.0.0-csd.1.0.2" target="_blank" class="tools-item-button">
+                                <div class="tools-item-button-icon">
+                                    <img src="../Images/Nuget.png" />
+                                </div>
+                                <div>View Package</div>
+                            </button>
+                        </div>
+                        <div>
+                            <div id="toolsItemSdk" class="tools-item-description"><b>Converters</b> - classes for converting the output of various static analysis tools to the SARIF format.</div>
+                            <button id="toolsItemSdkLink" href="https://www.nuget.org/packages/Sarif.Converters/2.0.0-csd.1.0.2" target="_blank" class="tools-item-button">
+                                <div class="tools-item-button-icon">
+                                    <img src="../Images/Nuget.png" />
+                                </div>
+                                <div>View Package</div>
+                            </button>
+                        </div>
+                        <div>
+                            <div id="toolsItemSdk" class="tools-item-description"><b>Multitool</b> - Multi-purpose command line tool for analyzing and manipulating SARIF files.</div>
+                            <button id="toolsItemSdkLink" href="https://www.nuget.org/packages/Sarif.Multitool/2.0.0-csd.1.0.2" target="_blank" class="tools-item-button">
+                                <div class="tools-item-button-icon">
+                                    <img src="../Images/Nuget.png" />
+                                </div>
+                                <div>View Package</div>
+                            </button>
+                        </div>
+                        <div>
+                            <div id="toolsItemSdk" class="tools-item-description"><b>Interop</b> - Library that enables Visual Studio extensions to easily consume services exposed by the SARIF Viewer for VS.</div>
+                            <button id="toolsItemSdkLink" href="https://www.nuget.org/packages/Sarif.Viewer.Interop/2.0.0-csd.1.0.2" target="_blank" class="tools-item-button">
+                                <div class="tools-item-button-icon">
+                                    <img src="../Images/Nuget.png" />
+                                </div>
+                                <div>View Package</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="toolsSectionContentOther" class="tools-item-list">
+                    <div>
+                        <div class="tools-item-other-label">
+                            <div class="tools-section-content-label-small">
+                                TypeScript
+                            </div>
+                            <div class="path-line-container">
+                                <svg class="stretch-horizonal">
+                                    <line x1="0" x2="100%" y1="50%" y2="50%" class="stroke-1x" />
+                                    <line x1="100%" x2="100%" y1="0" y2="100%" class="stroke-2x" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="tools-item-description tools-other-item-description"><b>Object Model</b> - Lorem ipsum dolor bacon nachos.</div>
+                    </div>
+                    <div>
+                        <div class="tools-item-other-label">
+                            <div class="tools-section-content-label-small">
+                                Java
+                            </div>
+                            <div class="path-line-container">
+                                <svg class="stretch-horizonal">
+                                    <line x1="0" x2="100%" y1="50%" y2="50%" class="stroke-1x" />
+                                    <line x1="100%" x2="100%" y1="0" y2="100%" class="stroke-2x" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="tools-item-description tools-other-item-description">Coming soon.</div>
+                    </div>
+                    <div>
+                        <div class="tools-item-other-label">
+                            <div class="tools-section-content-label-small">
+                                Python
+                            </div>
+                            <div class="path-line-container">
+                                <svg class="stretch-horizonal">
+                                    <line x1="0" x2="100%" y1="50%" y2="50%" class="stroke-1x" />
+                                    <line x1="100%" x2="100%" y1="0" y2="100%" class="stroke-2x" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="tools-item-description tools-other-item-description">Coming soon.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="content-section gray-section">
             <a name="Viewers"></a>
             <div class="content-section-title">Viewers</div>
             <div class="content-section-text content-section-description">
                 SARIF is based on JSON and can be viewed in any text editor. For a richer experience the following open-source viewers are provided.
             </div>
-            <div id="viewers_section_content">
+            <div id="viewerSectionContent">
                 <div class="viewer-card">
                     <div class="viewer-title">
                         Visual Studio extension
