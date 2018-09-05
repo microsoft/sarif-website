@@ -5,6 +5,11 @@
     <title>SARIF Home Page</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"/>
     <style>
+        :root {
+            --main-border-radius: 5px;
+            --content-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
         body {
             background-color: #E5E5E5;
         }
@@ -19,18 +24,15 @@
             text-decoration: underline;
         }
 
-        button:hover, button:active {
-            color: #008AFF;
-        }
-
         button {
-            border: none;
+            border: 2px solid #D2D2D2;
             cursor: pointer;
         }
 
-        button:hover, button:active {
+        button:not([disabled]):hover, button:active {
             border: solid 2px #008AFF !important;
             background-color: #E6EDF3 !important;
+            color: #008AFF;
         }
 
         #pageContainer {
@@ -60,7 +62,7 @@
         }
 
         .header-version-badge {
-            background-color: #E5E5E5;
+            background-color: #FFCC00;
             border-radius: 3px;
             font-family: 'Roboto', sans-serif;
             font-size: 10px;
@@ -87,7 +89,7 @@
         }
 
         .header-nav-item {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: var(--content-font-family);
             font-size: 14px;
         }
 
@@ -124,7 +126,7 @@
         }
 
         #heroLogo img {
-            border-radius: 5px;
+            border-radius: var(--main-border-radius);
             height: 100px;
             width: 100px;
         }
@@ -139,7 +141,7 @@
         }
 
         #heroTagline {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: var(--content-font-family);
             font-size: 14px;
             grid-column: span 2;
             grid-row: 2;
@@ -148,18 +150,18 @@
         }
 
         .content-section {
-            padding: 50px 70px;
+            padding: 80px 70px 0px 70px;
         }
 
         .content-section-title {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: var(--content-font-family);
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 32px;
         }
 
         .content-section-text {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: var(--content-font-family);
             font-size: 14px;
         }
 
@@ -176,13 +178,17 @@
         }
 
         .content-item {
-            border-radius: 5px;
+            border-radius: var(--main-border-radius);
         }
 
         .content-button {
-            border-radius: 5px;
+            border-radius: var(--main-border-radius);
             font-family: 'Segoe UI Semibold', Tahoma, Geneva, Verdana, sans-serif;
             font-size: 14px;
+        }
+
+        #specSection {
+            padding-bottom: 80px;
         }
 
         #specSectionButtons {
@@ -190,13 +196,16 @@
             flex-wrap: wrap;
             font-weight: bold;
             justify-content: flex-start;
-            margin-bottom: 29px;
+            margin-bottom: 25px;
+        }
+
+        #specSectionButtons button {
+            margin-bottom: 4px;
         }
 
         #specSectionButtons1 {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             margin-right: 28px;
         }
 
@@ -227,16 +236,19 @@
             font-size: 10px;
         }
 
-        #collabSectionButons {
+        #collabSection {
+            padding-bottom: 72px;
+        }
+
+        #collabSectionButtons {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            margin-bottom: 14px;
         }
 
-        #collabSectionButons img {
+        #collabSectionButtons img {
             border: 2px solid #D2D2D2;
-            border-radius: 5px;
+            border-radius: var(--main-border-radius);
             height: 100px;
             margin: 8px 10px;
             width: 100px;
@@ -254,7 +266,7 @@
 
         #toolsSectionContent > div {
             flex: 1 410px;
-            margin-bottom: 50px;
+            margin-bottom: 80px;
             margin-right: 50px;
             width: 410px;
         }
@@ -265,13 +277,13 @@
         }
 
         .tools-section-content-label-large {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: var(--content-font-family);
             font-size: 24px;
             font-weight: bold;
         }
 
         .tools-section-content-label-small {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: var(--content-font-family);
             font-size: 16px;
             font-weight: bold;
         }
@@ -334,18 +346,17 @@
 
         .tools-item-description {
             flex: 1 220px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: var(--content-font-family);
             font-size: 13px;
             line-height: 17px;
         }
 
         .tools-item-button {
             background-color: #F2F2F2;
-            border: 2px solid #D2D2D2;
-            border-radius: 5px;
+            border-radius: var(--main-border-radius);
             color: #262626;
             display: flex;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: var(--content-font-family);
             font-size: 8px;
             height: 40px;
             margin-left: 20px;
@@ -357,6 +368,10 @@
         .tools-item-button-icon
         {
             margin-right: 8px;
+        }
+
+        #viewerSection {
+            padding-bottom: 53px;
         }
 
         #viewerSectionContent {
@@ -373,21 +388,21 @@
         }
 
         .viewer-title {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: var(--content-font-family);
             font-size: 14px;
             font-weight: bold;
             margin-bottom: 6px;
         }
 
         .viewer-description {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: var(--content-font-family);
             font-size: 12px;
             height: 100%;
             margin-bottom: 19px;
         }
 
         .viewer-screenshot img {
-            border-radius: 5px;
+            border-radius: var(--main-border-radius);
             height: 240px;
             margin-bottom: 12px;
             width: 360px;
@@ -395,9 +410,8 @@
 
         .viewer-buttons button {
             background-color: #FFFFFF;
-            border: 2px solid #D2D2D2;
-            border-radius: 5px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            border-radius: var(--main-border-radius);
+            font-family: var(--content-font-family);
             font-size: 14px;
             height: 32px;
             margin-right: 4px;
@@ -411,7 +425,7 @@
             border-bottom-right-radius: 7px;
             color: #FFFFFF;
             display: flex;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: var(--content-font-family);
             font-size: 12px;
             justify-content: center;
             height: 145px;
@@ -464,7 +478,7 @@
             </div>
         </section>
 
-        <section class="content-section white-section">
+        <section id="specSection" class="content-section white-section">
             <a name="Specification"></a>
             <div class="content-section-title">Specification</div>
             <div class="content-section-text content-section-description">
@@ -491,13 +505,13 @@
             <div class="content-section-text">This site is for SARIF version 2. For version 1, see the <a href="http://sarif.azurewebsites.net">legacy site</a>.</div>
         </section>
 
-        <section class="content-section gray-section">
+        <section id="collabSection" class="content-section gray-section">
             <a name="Collaborators"></a>
             <div class="content-section-title">Collaborators</div>
             <div class="content-section-text content-section-description">
                 The SARIF project is supported by a large group of industry contributors, including quick brown foxes and lazy dogs.
             </div>
-            <div id="collabSectionButons">
+            <div id="collabSectionButtons">
                 <img src="../Images/Logos/3M.png" alt="3M" />
                 <img src="../Images/Logos/Adobe.png" alt="Adobe" />
                 <img src="../Images/Logos/Amazon.png" alt="Amazon" />
@@ -630,7 +644,7 @@
             </div>
         </section>
 
-        <section class="content-section gray-section">
+        <section id="viewerSection" class="content-section gray-section">
             <a name="Viewers"></a>
             <div class="content-section-title">Viewers</div>
             <div class="content-section-text content-section-description">
