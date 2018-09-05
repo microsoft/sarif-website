@@ -210,3 +210,11 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+
+# We copy the Sarif.Multitool's binaries and the SARIF schema from their NuGet packages to this
+# location, so that they can be published, but we don't want to commit them.
+Sarif.Multitool/
+
+# When we test the Web app on our local machine, files that are uploaded for validation appear
+# in this directory, but we don't want to commit them.
+UploadedFiles/

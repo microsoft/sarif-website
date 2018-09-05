@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 using SarifWeb.Utilities;
 using SarifWeb.Services;
 using SarifWeb.Models;
@@ -46,18 +47,20 @@ namespace SarifWeb.Controllers
         /// The files that the user dropped onto the drag-and-drop UI.
         /// </param>
         /// <returns>
-        /// An object that describes the results of the validation.
+        /// An serialized object that describes the results of the validation.
         /// </returns>
         /// <remarks>
         /// This method is invoked from Javascript by the JQuery filedrop API. See
-        /// Views/ValidationUi/Index.cshtml.
+        /// Views/ValidationUi/Index.cshtml. For this reason, we must return the
+        /// JSON serialization of the <see cref="ValidationResponse"/> object,
+        /// rather than returning the object itself.
         /// </remarks>
         [HttpPost]
-        public async Task<ValidationResponse> ValidateFilesAsync(IEnumerable<HttpPostedFileBase> postedFiles)
+        public async Task<string> ValidateFilesAsync(IEnumerable<HttpPostedFileBase> postedFiles)
         {
             // Extract information from the parts of the Controller object that are hard to mock.
             HttpRequestBase request = ControllerContext.RequestContext.HttpContext.Request;
-            string postedFilesPath = Server.MapPath("~/UploadedFiles");
+            string postedFilesDirectory = HostingHelper.PostedFilesDirectory;
             string baseAddress = string.Format(
                 CultureInfo.InvariantCulture,
                 "{0}://{1}{2}",
@@ -68,7 +71,8 @@ namespace SarifWeb.Controllers
             // at a time (it does this by setting maxfiles to 1 in the handler for the filedrop event).
             HttpPostedFileBase postedFile = postedFiles.FirstOrDefault();
 
-            return await _validationUiService.ValidateFileAsync(postedFile, request, postedFilesPath, baseAddress);
+            ValidationResponse response = await _validationUiService.ValidateFileAsync(postedFile, request, postedFilesDirectory, baseAddress);
+            return JsonConvert.SerializeObject(response);
         }
     }
 }

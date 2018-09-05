@@ -15,7 +15,7 @@ namespace SarifWeb.Services
     /// This class processes requests from the Web UI to validate SARIF files.
     /// It synthesized a request to the Validation Web API, sends the request,
     /// and passes the response back to the ValidationUiController, which in
-    /// turns presents it in the UI.
+    /// turn presents it in the UI.
     /// </summary>
     /// <remarks>
     /// This class is factored out from the ValidationUiController so that as
@@ -41,7 +41,7 @@ namespace SarifWeb.Services
             string postedFilesPath,
             string baseAddress)
         {
-            ValidationResponse responseModel = null;
+            ValidationResponse validationResponse = null;
 
             if (postedFile != null)
             {
@@ -61,19 +61,18 @@ namespace SarifWeb.Services
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                         // Send request to Validation service
-                        ValidationRequest model = new ValidationRequest
+                        ValidationRequest validationRequest = new ValidationRequest
                         {
                             PostedFileName = postedFileName,
                             SavedFileName = savedFileName
                         };
 
-                        string requestBody = JsonConvert.SerializeObject(model);
+                        string requestBody = JsonConvert.SerializeObject(validationRequest);
                         HttpContent requestContent = new StringContent(requestBody, Encoding.UTF8, "application/json");
 
                         HttpResponseMessage response = await _httpClientProxy.PostAsync(client, "api/Validation", requestContent);
                         string responseContent = response.Content.ReadAsStringAsync().Result;
-                        responseModel = JsonConvert.DeserializeObject<ValidationResponse>(responseContent);
-
+                        validationResponse = JsonConvert.DeserializeObject<ValidationResponse>(responseContent);
                     }
                 }
                 finally
@@ -85,7 +84,7 @@ namespace SarifWeb.Services
                 }
             }
 
-            return responseModel;
+            return validationResponse;
         }
     }
 }

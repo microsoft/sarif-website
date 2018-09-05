@@ -16,5 +16,10 @@ namespace SarifWeb.Utilities
         {
             return File.Exists(path);
         }
+
+        public string ReadAllText(string path)
+        {
+            return File.ReadAllText(path);
+        }
     }
 }
