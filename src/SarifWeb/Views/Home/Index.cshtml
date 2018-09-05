@@ -1,48 +1,254 @@
 ﻿@{
-    ViewBag.Title = "SARIF Home Page";
+    ViewBag.Title = "SARIF Home";
 }
 
-<div class="jumbotron">
-    <h1>SARIF</h1>
-    <p class="lead">The Static Analysis Results Interchange Format (SARIF) defines a standard format
-    for the output of static analysis tools.</p>
-    <p><a class="btn btn-primary btn-lg" target="_blank" href="https://github.com/oasis-tcs/sarif-spec/tree/master/Documents/CommitteeSpecificationDrafts/CSD.1">Read the specification &raquo;</a></p>
-    <p>The SARIF specification is currently being standardized by <a href="https://www.oasis-open.org/">OASIS</a> in the <a href="https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=sarif">OASIS SARIF Technical Committee</a>. This information and tools on this web site track the standard as it evolves to its final form.</p>
-</div>
-
-<div class="row">
-    <div class="col-md-4">
-        <h2>Implement it with the SDK</h2>
-        <p>
-            Two NuGet packages are available to facilitate your use of SARIF with the .NET Framework:
-        </p>
-        <ul>
-            <li>
-                <p>The SARIF SDK for .NET offers facilities for producing, consuming, and validating files in the SARIF format.</p>
-                <p><a class="btn btn-default" target="_blank" href="https://www.nuget.org/packages/Sarif.Sdk">Get the SDK &raquo;</a></p>
-            </li>
-            <li>
-                <p>The Microsoft SARIF Driver Framework for .NET provides a framework for developing static analysis tools that produce output in the SARIF format.
-                It includes the .NET SARIF SDK.</p>
-                <p><a class="btn btn-default" target="_blank" href="https://www.nuget.org/packages/Sarif.Driver">Get the driver framework &raquo;</a></p>
-            </li>
-        </ul>
-        <p>
-            The source code for these packages is in the <a target="_blank" href="https://github.com/Microsoft/sarif-sdk">SARIF SDK GitHub repo</a>. We welcome your contributions!
-        </p>
+<section id="hero">
+    <div id="heroContentGrid">
+        <div id="heroLogo"><img src="../Images/triskelion.png" /></div>
+        <div id="heroTitle">SARIF</div>
+        <div id="heroTagline">
+            The Static Analysis Results Interchange Format (SARIF)
+            <br />
+            defines a standard format for the output of static analysis tools.
+        </div>
     </div>
+</section>
 
-    <div class="col-md-4">
-        <h2>Implement it yourself</h2>
-        <p>If you want to implement the SARIF specification yourself, there's more information available, including a JSON schema and
-        guidance for implementers.</p>
-        <p><a class="btn btn-default" target="_blank" href="http://json.schemastore.org/sarif">Get the SARIF JSON schema &raquo;</a></p>
+<section id="specSection" class="content-section white-section">
+    <a name="Specification"></a>
+    <div class="content-section-title">Specification</div>
+    <div class="content-section-text content-section-description">
+        The <b>Static Analysis Results Interchange Format (SARIF)</b> specification is currently being
+        standardized by <b>OASIS</b> in the <b>OASIS SARIF Technical Committee</b>. The information and tools
+        on this web site track the standard as it evolves to its final form.
     </div>
+    <div id="specSectionButtons">
+        <div id="specSectionButtons1">
+            <button id="specSectionButtonRead" href="https://github.com/oasis-tcs/sarif-spec/tree/master/Documents/CommitteeSpecificationDrafts/CSD.1" target="_blank" class="content-button gray-section">Read the specification</button>
+            <button id="specSectionButtonAsk" href="https://github.com/oasis-tcs/sarif-spec/issues/new" target="_blank" class="content-button gray-section">Ask a question</button>
+        </div>
+        <div id="specSectionButtons2">
+            <button id="specSectionButtonView" href="#Viewers" target="_blank" class="content-button gray-section">
+                View and validate your SARIF files
+                <p class="button-subtitle">
+                    Upload and explore your SARIF file or
+                    <br />
+                    browse one of the samples.
+                </p>
+            </button>
+        </div>
+    </div>
+    <div class="content-section-text">This site is for SARIF version 2. For version 1, see the <a href="http://sarif.azurewebsites.net">legacy site</a>.</div>
+</section>
 
-    <div class="col-md-4">
-        <h2>Get more information</h2>
-        <p>To ask a question about SARIF, create a new issue on the <a target="_blank" href="https://github.com/oasis-tcs/sarif-spec">OASIS SARIF Technical Committee GitHub repo</a>.
-        Add the "question" label to your issue.</p>
-        <p><a class="btn btn-default" target="_blank" href="https://github.com/oasis-tcs/sarif-spec/issues/new">Ask a question &raquo;</a></p>
+<section id="collabSection" class="content-section gray-section">
+    <a name="Collaborators"></a>
+    <div class="content-section-title">Collaborators</div>
+    <div class="content-section-text content-section-description">
+        The SARIF project is supported by a large group of industry contributors, including quick brown foxes and lazy dogs.
     </div>
-</div>
+    <div id="collabSectionButtons">
+        <img src="../Images/Logos/3M.png" alt="3M" />
+        <img src="../Images/Logos/Adobe.png" alt="Adobe" />
+        <img src="../Images/Logos/Amazon.png" alt="Amazon" />
+        <img src="../Images/Logos/AT&T.png" alt="AT&T" />
+        <img src="../Images/Logos/BMW.png" alt="BMW" />
+        <img src="../Images/Logos/Dell.png" alt="Dell" />
+        <img src="../Images/Logos/EMC2.png" alt="EMC2" />
+        <img src="../Images/Logos/Energizer.png" alt="Energizer" />
+        <img src="../Images/Logos/Expedia.png" alt="Expedia" />
+        <img src="../Images/Logos/Microsoft.png" alt="Microsoft" />
+        <img src="../Images/Logos/NFL.png" alt="NFL" />
+        <img src="../Images/Logos/Visa.png" alt="Visa" />
+        <img src="../Images/Logos/Zillow.png" alt="Zillow" />
+    </div>
+</section>
+
+<section id="toolsSection" class="content-section white-section">
+    <a name="ToolsLibraries"></a>
+    <div class="content-section-title">Tools &amp; Libraries</div>
+    <div class="content-section-text content-section-description">
+        A collection of tools offering facilities for producing, consuming, and validating files in the SARIF format.
+        <br />
+        The source code is in the <b>SARIF SDK GitHub repo</b>. We welcome your contributions!
+    </div>
+    <div id="toolsSectionContent">
+        <div id="toolsSectionContentCsharp">
+            <div class="tools-section-content-label-large">
+                C#
+            </div>
+            <div class="path-line-container">
+                <svg class="stretch-vertical">
+                    <line x1="50%" x2="50%" y1="0" y2="100%" class="stroke-1x" />
+                    <line x1="0" x2="50%" y1="50%" y2="50%" class="stroke-1x" />
+                    <line x1="50%" x2="100%" y1="0" y2="0" class="stroke-2x" />
+                    <line x1="50%" x2="100%" y1="100%" y2="100%" class="stroke-2x" />
+                </svg>
+            </div>
+            <div class="tools-item-list">
+                <div>
+                    <div id="toolsItemSdk" class="tools-item-description"><b>SDK</b> - Object model and utilities for reading and writing files in the SARIF format.</div>
+                    <button id="toolsItemSdkLink" href="https://www.nuget.org/packages/Sarif.Sdk/2.0.0-csd.1.0.2" target="_blank" class="tools-item-button">
+                        <div class="tools-item-button-icon">
+                            <img src="../Images/Nuget.png" />
+                        </div>
+                        <div>View Package</div>
+                    </button>
+                </div>
+                <div>
+                    <div id="toolsItemSdk" class="tools-item-description"><b>Driver</b> - Framework for creating a command line analysis tool which produces files in the SARIF format.</div>
+                    <button id="toolsItemSdkLink" href="https://www.nuget.org/packages/Sarif.Driver/2.0.0-csd.1.0.2" target="_blank" class="tools-item-button">
+                        <div class="tools-item-button-icon">
+                            <img src="../Images/Nuget.png" />
+                        </div>
+                        <div>View Package</div>
+                    </button>
+                </div>
+                <div>
+                    <div id="toolsItemSdk" class="tools-item-description"><b>Converters</b> - classes for converting the output of various static analysis tools to the SARIF format.</div>
+                    <button id="toolsItemSdkLink" href="https://www.nuget.org/packages/Sarif.Converters/2.0.0-csd.1.0.2" target="_blank" class="tools-item-button">
+                        <div class="tools-item-button-icon">
+                            <img src="../Images/Nuget.png" />
+                        </div>
+                        <div>View Package</div>
+                    </button>
+                </div>
+                <div>
+                    <div id="toolsItemSdk" class="tools-item-description"><b>Multitool</b> - Multi-purpose command line tool for analyzing and manipulating SARIF files.</div>
+                    <button id="toolsItemSdkLink" href="https://www.nuget.org/packages/Sarif.Multitool/2.0.0-csd.1.0.2" target="_blank" class="tools-item-button">
+                        <div class="tools-item-button-icon">
+                            <img src="../Images/Nuget.png" />
+                        </div>
+                        <div>View Package</div>
+                    </button>
+                </div>
+                <div>
+                    <div id="toolsItemSdk" class="tools-item-description"><b>Interop</b> - Library that enables Visual Studio extensions to easily consume services exposed by the SARIF Viewer for VS.</div>
+                    <button id="toolsItemSdkLink" href="https://www.nuget.org/packages/Sarif.Viewer.Interop/2.0.0-csd.1.0.2" target="_blank" class="tools-item-button">
+                        <div class="tools-item-button-icon">
+                            <img src="../Images/Nuget.png" />
+                        </div>
+                        <div>View Package</div>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="toolsSectionContentOther" class="tools-item-list">
+            <div>
+                <div class="tools-item-other-label">
+                    <div class="tools-section-content-label-small">
+                        TypeScript
+                    </div>
+                    <div class="path-line-container">
+                        <svg class="stretch-horizonal">
+                            <line x1="0" x2="100%" y1="50%" y2="50%" class="stroke-1x" />
+                            <line x1="100%" x2="100%" y1="0" y2="100%" class="stroke-2x" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="tools-item-description tools-other-item-description"><b>Object Model</b> - Lorem ipsum dolor bacon nachos.</div>
+            </div>
+            <div>
+                <div class="tools-item-other-label">
+                    <div class="tools-section-content-label-small">
+                        Java
+                    </div>
+                    <div class="path-line-container">
+                        <svg class="stretch-horizonal">
+                            <line x1="0" x2="100%" y1="50%" y2="50%" class="stroke-1x" />
+                            <line x1="100%" x2="100%" y1="0" y2="100%" class="stroke-2x" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="tools-item-description tools-other-item-description">Coming soon.</div>
+            </div>
+            <div>
+                <div class="tools-item-other-label">
+                    <div class="tools-section-content-label-small">
+                        Python
+                    </div>
+                    <div class="path-line-container">
+                        <svg class="stretch-horizonal">
+                            <line x1="0" x2="100%" y1="50%" y2="50%" class="stroke-1x" />
+                            <line x1="100%" x2="100%" y1="0" y2="100%" class="stroke-2x" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="tools-item-description tools-other-item-description">Coming soon.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="viewerSection" class="content-section gray-section">
+    <a name="Viewers"></a>
+    <div class="content-section-title">Viewers</div>
+    <div class="content-section-text content-section-description">
+        SARIF is based on JSON and can be viewed in any text editor. For a richer experience the following open-source viewers are provided.
+    </div>
+    <div id="viewerSectionContent">
+        <div class="viewer-card">
+            <div class="viewer-title">
+                Visual Studio extension
+            </div>
+            <div class="viewer-description">
+                For viewing and taking-action-on SARIF files within Visual Studio. Analysis results show up in the Error List, result details in a dockable tool window, and the results locations are overlayed on the original code (when available).
+            </div>
+            <div class="viewer-screenshot">
+                <img src="../Images/Screenshots/MiddleEast.png" alt="Visual Studio extension" />
+            </div>
+            <div class="viewer-buttons">
+                <button href="https://marketplace.visualstudio.com/items?itemName=WDGIS.MicrosoftSarifViewer" target="_blank">Install</button>
+                <button href="https://github.com/Microsoft/sarif-visualstudio-extension/" target="_blank">Source</button>
+            </div>
+        </div>
+
+        <div class="viewer-card">
+            <div class="viewer-title">
+                VS Code extension
+            </div>
+            <div class="viewer-description">
+                Same experience as the Visual Studio extension, but for those using Visual Studio Code.
+            </div>
+            <div class="viewer-screenshot">
+                <img src="../Images/Screenshots/Elisabeth-and-the-Tornado.jpg" alt="VS Code extension" />
+            </div>
+            <div class="viewer-buttons">
+                <button href="https://marketplace.visualstudio.com/items?itemName=MS-SarifVSCode.sarif-viewer" target="_blank">Install</button>
+                <button href="https://github.com/Microsoft/sarif-vscode-extension/" target="_blank">Source</button>
+            </div>
+        </div>
+
+        <div class="viewer-card">
+            <div class="viewer-title">
+                Web Viewer &quot;A&quot;
+            </div>
+            <div class="viewer-description">
+                An online viewer good for quickly browsing of SARIF files as well as triaging analysis results. Also available as a component to integrate into your own site or app.
+            </div>
+            <div class="viewer-screenshot">
+                <img src="../Images/Screenshots/FutureExplorer.jpg" alt="Web Viewer A" />
+            </div>
+            <div class="viewer-buttons">
+                <button href="https://sarifview/disco/" target="_blank">Try</button>
+                <button disabled>Source</button>
+            </div>
+        </div>
+
+        <div class="viewer-card">
+            <div class="viewer-title">
+                Web Viewer &quot;B&quot;
+            </div>
+            <div class="viewer-description">
+                Another online viewer with an alternate viewing experience.
+            </div>
+            <div class="viewer-screenshot">
+                <img src="../Images/Screenshots/PoisonDartFrog.jpg" alt="Web Viewer B" />
+            </div>
+            <div class="viewer-buttons">
+                <button href="https://sarifview/" formtarget="_blank">Try</button>
+                <button disabled>Source</button>
+            </div>
+        </div>
+    </div>
+</section>
