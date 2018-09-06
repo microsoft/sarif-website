@@ -11,10 +11,10 @@
 </section>
 
 <section id="resultsSection" class="content-section gray-section">
-    <h4>Response message:</h4>
+    <div class="heading">Response message:</div>
     <p id="responseMessage"></p>
 
-    <h4>SARIF log file contents:</h4>
+    <div class="heading">SARIF log file contents:</div>
     <pre id="sarifLogFileContents"></pre>
 </section>
 
@@ -57,7 +57,7 @@
     }
 
     #dropSection {
-        padding-bottom: 20px;
+        padding-bottom: 30px;
         padding-top: 20px;
     }
 
@@ -72,9 +72,10 @@
         font-size: 12px;
     }
 
-    h4 {
+    .heading {
         font-family: var(--content-font-family);
         font-size: 16px;
+        font-weight: bold;
     }
 
     pre {
