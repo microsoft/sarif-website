@@ -1,13 +1,16 @@
 ﻿@{
-    ViewBag.Title = "SARIF Log File Validation";
+    ViewBag.Title = "SARIF Log File Validator";
 }
-<h2>@ViewBag.Title</h2>
 
-<div id="dropArea" class="drop-area">
-    <div id="dropAreaText" class="drop-area-text">Drop your SARIF log file here to validate it</div>
-</div>
+<section id="dropSection" class="content-section gray-section">
+    <div class="content-section-title">@ViewBag.Title</div>
 
-<section id="resultsSection">
+    <div id="dropArea" class="drop-area">
+        <div id="dropAreaText" class="drop-area-text">Drop your SARIF log file here to validate it</div>
+    </div>
+</section>
+
+<section id="resultsSection" class="content-section gray-section">
     <h4>Response message:</h4>
     <p id="responseMessage"></p>
 
@@ -53,8 +56,47 @@
         opacity: 0.5;
     }
 
+    #dropSection {
+        padding-bottom: 20px;
+        padding-top: 20px;
+    }
+
     #resultsSection {
         display: none;
+        padding-bottom: 50px;
+        padding-top: 0px;
+    }
+
+    #responseMessage {
+        font-family: var(--content-font-family);
+        font-size: 12px;
+    }
+
+    h4 {
+        font-family: var(--content-font-family);
+        font-size: 16px;
+    }
+
+    pre {
+        display: block;
+        padding: 9.5px;
+        margin: 0 0 10px;
+        font-size: 13px;
+        line-height: 1.428571429;
+        color: #333333;
+        word-break: break-all;
+        word-wrap: break-word;
+        background-color: #f5f5f5;
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+    }
+
+    code, pre {
+        font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+    }
+
+    pre {
+        white-space: pre-wrap;
     }
 </style>
 
@@ -63,6 +105,7 @@
     <script type="text/javascript">
         $(function () {
             $('#dropArea').filedrop({
+                fallback_dropzoneClick: false,
                 url: '@Url.Action("ValidateFilesAsync")',
                 allowedfileextensions: ['.sarif', '.json'],
                 paramname: 'postedFiles',

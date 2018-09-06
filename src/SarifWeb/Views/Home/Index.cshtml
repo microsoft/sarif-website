@@ -252,3 +252,15 @@
         </div>
     </div>
 </section>
+
+<script type="text/javascript">
+        $(function () {
+            $("button").on("click", function () {
+                var sender = $(this);
+                var url = sender.attr("href");
+                var target = sender.attr("target");
+
+                window.open(url, target);
+            });
+    });
+</script>

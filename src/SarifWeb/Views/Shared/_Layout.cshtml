@@ -7,18 +7,10 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
     <link href="~/Content/Main.css" rel="stylesheet" />
     @Scripts.Render("~/bundles/modernizr")
-    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
     <script type="text/javascript">
-        $(function () {
-            $("button").on("click", function () {
-                var sender = $(this);
-                var url = sender.attr("href");
-                var target = sender.attr("target");
-
-                window.open(url, target);
-            });
-        });
-
         var appInsights = window.appInsights || function (config) {
             function r(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } } var t = { config: config }, u = document, e = window, o = "script", s = u.createElement(o), i, f; for (s.src = config.url || "//az416426.vo.msecnd.net/scripts/a/ai.0.js", u.getElementsByTagName(o)[0].parentNode.appendChild(s), t.cookie = u.cookie, t.queue = [], i = ["Event", "Exception", "Metric", "PageView", "Trace"]; i.length;)r("track" + i.pop()); return r("setAuthenticatedUserContext"), r("clearAuthenticatedUserContext"), config.disableExceptionTracking || (i = "onerror", r("_" + i), f = e[i], e[i] = function (config, r, u, e, o) { var s = f && f(config, r, u, e, o); return s !== !0 && t["_" + i](config, r, u, e, o), s }), t
         }({
@@ -52,7 +44,5 @@
             <p>Copyright &copy; Microsoft Corporation. All rights reserved.</p>
         </footer>
     </div>
-
-    @RenderSection("scripts", required: false)
-</body>
-</html>
+</body >
+</html >
