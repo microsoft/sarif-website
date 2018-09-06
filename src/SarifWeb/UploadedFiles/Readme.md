@@ -1,0 +1,1 @@
+This file exists to ensure that the uploads directory is created on the server when the site is published.

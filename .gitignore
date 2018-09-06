@@ -216,5 +216,8 @@ ModelManifest.xml
 Sarif.Multitool/
 
 # When we test the Web app on our local machine, files that are uploaded for validation appear
-# in this directory, but we don't want to commit them.
+# in the UploadedFiles directory, but we don't want to commit them.
+# Placeholder file that ensures the upload folder gets created when we publish the app
+!UploadedFiles/Readme.md
+# Ignore everything else
 UploadedFiles/
