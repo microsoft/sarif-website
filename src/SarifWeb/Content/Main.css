@@ -19,14 +19,17 @@ a:hover, a:active {
 
 button {
     border: 2px solid #D2D2D2;
+}
+
+button:not([disabled]) {
     cursor: pointer;
 }
 
-    button:not([disabled]):hover, button:active {
-        border: solid 2px #008AFF !important;
-        background-color: #E6EDF3 !important;
-        color: #008AFF;
-    }
+button:not([disabled]):hover, button:active {
+    border: solid 2px #008AFF !important;
+    background-color: #E6EDF3 !important;
+    color: #008AFF;
+}
 
 #pageContainer {
     margin: auto;
@@ -42,9 +45,9 @@ header {
     height: 50px;
 }
 
-    header > div {
-        flex-grow: 0;
-    }
+header > div {
+    flex-grow: 0;
+}
 
 .header-site-title {
     font-family: 'Roboto', sans-serif;
@@ -77,9 +80,9 @@ header {
     flex-grow: 1;
 }
 
-    #heroNavItems a {
-        margin: 0px 25px;
-    }
+#heroNavItems a {
+    margin: 0px 25px;
+}
 
 .header-nav-item {
     font-family: var(--content-font-family);
@@ -108,9 +111,9 @@ header {
     grid-template-rows: auto auto;
 }
 
-    #heroContentGrid > div {
-        align-self: center;
-    }
+#heroContentGrid > div {
+    align-self: center;
+}
 
 #heroLogo {
     grid-column: 1;
@@ -118,11 +121,11 @@ header {
     text-align: right;
 }
 
-    #heroLogo img {
-        border-radius: var(--main-border-radius);
-        height: 100px;
-        width: 100px;
-    }
+#heroLogo img {
+    border-radius: var(--main-border-radius);
+    height: 100px;
+    width: 100px;
+}
 
 #heroTitle {
     font-family: 'Roboto', sans-serif;
@@ -192,9 +195,9 @@ header {
     margin-bottom: 25px;
 }
 
-    #specSectionButtons button {
-        margin-bottom: 4px;
-    }
+#specSectionButtons button {
+    margin-bottom: 4px;
+}
 
 #specSectionButtons1 {
     display: flex;
@@ -239,13 +242,13 @@ header {
     justify-content: center;
 }
 
-    #collabSectionButtons img {
-        border: 2px solid #D2D2D2;
-        border-radius: var(--main-border-radius);
-        height: 100px;
-        margin: 8px 10px;
-        width: 100px;
-    }
+#collabSectionButtons img {
+    border: 2px solid #D2D2D2;
+    border-radius: var(--main-border-radius);
+    height: 100px;
+    margin: 8px 10px;
+    width: 100px;
+}
 
 #toolsSection {
     padding-bottom: 0px;
@@ -257,12 +260,12 @@ header {
     flex-wrap: wrap;
 }
 
-    #toolsSectionContent > div {
-        flex: 1 410px;
-        margin-bottom: 80px;
-        margin-right: 50px;
-        width: 410px;
-    }
+#toolsSectionContent > div {
+    flex: 1 410px;
+    margin-bottom: 80px;
+    margin-right: 50px;
+    width: 410px;
+}
 
 #toolsSectionContentCsharp {
     align-items: center;
@@ -290,19 +293,19 @@ header {
     width: 100%;
 }
 
-    .path-line-container svg {
-        stroke: #9F9F9F;
-    }
+.path-line-container svg {
+    stroke: #9F9F9F;
+}
 
-        .path-line-container svg.stretch-horizonal {
-            height: 20px;
-            width: 100%;
-        }
+.path-line-container svg.stretch-horizonal {
+    height: 20px;
+    width: 100%;
+}
 
-        .path-line-container svg.stretch-vertical {
-            height: 100%;
-            width: 24px;
-        }
+.path-line-container svg.stretch-vertical {
+    height: 100%;
+    width: 24px;
+}
 
 line.stroke-1x {
     stroke-width: 1px;
@@ -322,10 +325,10 @@ line.stroke-2x {
     margin-top: 50px;
 }
 
-    .tools-item-list > div:first-child,
-    #toolsSectionContentOther > div:first-child {
-        margin-top: 0px;
-    }
+.tools-item-list > div:first-child,
+#toolsSectionContentOther > div:first-child {
+    margin-top: 0px;
+}
 
 .tools-item-other-label {
     flex: 0 120px;
@@ -333,9 +336,9 @@ line.stroke-2x {
     margin-right: 20px;
 }
 
-    .tools-item-other-label .path-line-container {
-        margin-right: 0px;
-    }
+.tools-item-other-label .path-line-container {
+    margin-right: 0px;
+}
 
 .tools-item-description {
     flex: 1 220px;
@@ -423,7 +426,7 @@ footer {
     height: 145px;
 }
 
-    footer p {
-        margin: 0;
-        text-align: center;
-    }
+footer p {
+    margin: 0;
+    text-align: center;
+}
