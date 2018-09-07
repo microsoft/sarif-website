@@ -2,10 +2,12 @@
     ViewBag.Title = "SARIF Home";
 }
 
-<section id="hero">
+<section id="hero" role="banner" aria-labelledby="heroTitle" aria-label="Hero">
     <div id="heroContentGrid">
-        <div id="heroLogo"><img src="~/Images/triskelion.png" /></div>
-        <div id="heroTitle">SARIF</div>
+        <div id="heroLogo">
+            <img src="~/Images/triskelion.png" role="img" aria-label="SARIF logo" />
+        </div>
+        <div id="heroTitle" role="heading">SARIF</div>
         <div id="heroTagline">
             The Static Analysis Results Interchange Format (SARIF)
             <br />
@@ -14,9 +16,9 @@
     </div>
 </section>
 
-<section id="specSection" class="content-section white-section">
+<section id="specSection" role="region" aria-labelledby="specSectionTitle" class="content-section white-section">
     <a name="Specification"></a>
-    <div class="content-section-title">Specification</div>
+    <div id="specSectionTitle" role="heading" class="content-section-title">Specification</div>
     <div class="content-section-text content-section-description">
         The <b>Static Analysis Results Interchange Format (SARIF)</b> specification is currently being
         standardized by <b>OASIS</b> in the <b>OASIS SARIF Technical Committee</b>. The information and tools
@@ -24,11 +26,11 @@
     </div>
     <div id="specSectionButtons">
         <div id="specSectionButtons1">
-            <button id="specSectionButtonRead" href="https://github.com/oasis-tcs/sarif-spec/tree/master/Documents/CommitteeSpecificationDrafts/CSD.1" target="_blank" class="content-button gray-section">Read the specification</button>
-            <button id="specSectionButtonAsk" href="https://github.com/oasis-tcs/sarif-spec/issues/new" target="_blank" class="content-button gray-section">Ask a question</button>
+            <button id="specSectionButtonRead" role="button" href="https://github.com/oasis-tcs/sarif-spec/tree/master/Documents/CommitteeSpecificationDrafts/CSD.1" target="_blank" class="content-button gray-section">Read the specification</button>
+            <button id="specSectionButtonAsk" role="button" href="https://github.com/oasis-tcs/sarif-spec/issues/new" target="_blank" class="content-button gray-section">Ask a question</button>
         </div>
         <div id="specSectionButtons2">
-            <button id="specSectionButtonView" href="#Viewers" target="_blank" class="content-button gray-section">
+            <button id="specSectionButtonView" role="button" href="#Viewers" target="_blank" class="content-button gray-section">
                 View and validate your SARIF files
                 <p class="button-subtitle">
                     Upload and explore your SARIF file or
@@ -41,32 +43,32 @@
     <div class="content-section-text">This site is for SARIF version 2. For version 1, see the <a href="http://sarif.azurewebsites.net">legacy site</a>.</div>
 </section>
 
-<section id="collabSection" class="content-section gray-section">
+<section id="collabSection" role="region" aria-labelledby="collabSectionTitle" class="content-section gray-section">
     <a name="Collaborators"></a>
-    <div class="content-section-title">Collaborators</div>
+    <div id="collabSectionTitle" role="heading" class="content-section-title">Collaborators</div>
     <div class="content-section-text content-section-description">
         The SARIF project is supported by a large group of industry contributors, including quick brown foxes and lazy dogs.
     </div>
-    <div id="collabSectionButtons">
-        <img src="~/Images/Logos/3M.png" alt="3M" />
-        <img src="~/Images/Logos/Adobe.png" alt="Adobe" />
-        <img src="~/Images/Logos/Amazon.png" alt="Amazon" />
-        <img src="~/Images/Logos/BMW.png" alt="BMW" />
-        <img src="~/Images/Logos/Dell.png" alt="Dell" />
-        <img src="~/Images/Logos/EMC2.png" alt="EMC2" />
-        <img src="~/Images/Logos/Expedia.png" alt="Expedia" />
-        <img src="~/Images/Logos/HPE.png" alt="Hewlett Packard Enterprise" />
-        <img src="~/Images/Logos/MicroFocus.png" alt="Micro Focus" />
-        <img src="~/Images/Logos/Microsoft.png" alt="Microsoft" />
-        <img src="~/Images/Logos/Semmle.png" alt="Semmle" />
-        <img src="~/Images/Logos/Visa.png" alt="Visa" />
-        <img src="~/Images/Logos/Zillow.png" alt="Zillow" />
+    <div id="collabSectionButtons" role="list" aria-labelledby="collabSectionTitle">
+        <img role="listitem" aria-label="3M" src="~/Images/Logos/3M.png" alt="3M" />
+        <img role="listitem" aria-label="Adobe Systems" src="~/Images/Logos/Adobe.png" alt="Adobe" />
+        <img role="listitem" aria-label="Amazon" src="~/Images/Logos/Amazon.png" alt="Amazon" />
+        <img role="listitem" aria-label="BMW" src="~/Images/Logos/BMW.png" alt="BMW" />
+        <img role="listitem" aria-label="Dell" src="~/Images/Logos/Dell.png" alt="Dell" />
+        <img role="listitem" aria-label="EMC2" src="~/Images/Logos/EMC2.png" alt="EMC2" />
+        <img role="listitem" aria-label="Expedia" src="~/Images/Logos/Expedia.png" alt="Expedia" />
+        <img role="listitem" aria-label="Hewlett Packard Enterprise" src="~/Images/Logos/HPE.png" alt="Hewlett Packard Enterprise" />
+        <img role="listitem" aria-label="Micro Focus" src="~/Images/Logos/MicroFocus.png" alt="Micro Focus" />
+        <img role="listitem" aria-label="Microsoft" src="~/Images/Logos/Microsoft.png" alt="Microsoft" />
+        <img role="listitem" aria-label="Semmle" src="~/Images/Logos/Semmle.png" alt="Semmle" />
+        <img role="listitem" aria-label="Visa" src="~/Images/Logos/Visa.png" alt="Visa" />
+        <img role="listitem" aria-label="Zillow" src="~/Images/Logos/Zillow.png" alt="Zillow" />
     </div>
 </section>
 
-<section id="toolsSection" class="content-section white-section">
+<section id="toolsSection" role="region" aria-labelledby="toolsSectionTitle" class="content-section white-section">
     <a name="ToolsLibraries"></a>
-    <div class="content-section-title">Tools &amp; Libraries</div>
+    <div id="toolsSectionTitle" role="heading" class="content-section-title">Tools &amp; Libraries</div>
     <div class="content-section-text content-section-description">
         A collection of tools offering facilities for producing, consuming, and validating files in the SARIF format.
         <br />
@@ -74,7 +76,7 @@
     </div>
     <div id="toolsSectionContent">
         <div id="toolsSectionContentCsharp">
-            <div class="tools-section-content-label-large">
+            <div id="toolsSectionPlatformLabelCSharp" class="tools-section-platform-label-large">
                 C#
             </div>
             <div class="path-line-container">
@@ -85,46 +87,46 @@
                     <line x1="50%" x2="100%" y1="100%" y2="100%" class="stroke-2x" />
                 </svg>
             </div>
-            <div class="tools-item-list">
-                <div>
-                    <div id="toolsItemSdk" class="tools-item-description"><b>SDK</b> - Object model and utilities for reading and writing files in the SARIF format.</div>
-                    <button id="toolsItemSdkLink" href="https://www.nuget.org/packages/Sarif.Sdk/2.0.0-csd.1.0.2" target="_blank" class="tools-item-button">
+            <div role="list" aria-labelledby="toolsSectionPlatformLabelCSharp" class="tools-item-list">
+                <div role="listitem">
+                    <div class="tools-item-description"><b>SDK</b> - Object model and utilities for reading and writing files in the SARIF format.</div>
+                    <button id="toolsItemSdkLink" role="button" aria-label="View SARIF SDK NuGet package" href="https://www.nuget.org/packages/Sarif.Sdk/2.0.0-csd.1.0.2" target="_blank" class="tools-item-button">
                         <div class="tools-item-button-icon">
                             <img src="~/Images/Nuget.png" />
                         </div>
                         <div>View Package</div>
                     </button>
                 </div>
-                <div>
-                    <div id="toolsItemSdk" class="tools-item-description"><b>Driver</b> - Framework for creating a command line analysis tool which produces files in the SARIF format.</div>
-                    <button id="toolsItemSdkLink" href="https://www.nuget.org/packages/Sarif.Driver/2.0.0-csd.1.0.2" target="_blank" class="tools-item-button">
+                <div role="listitem">
+                    <div class="tools-item-description"><b>Driver</b> - Framework for creating a command line analysis tool which produces files in the SARIF format.</div>
+                    <button id="toolsItemDriverLink" role="button" aria-label="View SARIF Driver NuGet package" href="https://www.nuget.org/packages/Sarif.Driver/2.0.0-csd.1.0.2" target="_blank" class="tools-item-button">
                         <div class="tools-item-button-icon">
                             <img src="~/Images/Nuget.png" />
                         </div>
                         <div>View Package</div>
                     </button>
                 </div>
-                <div>
-                    <div id="toolsItemSdk" class="tools-item-description"><b>Converters</b> - classes for converting the output of various static analysis tools to the SARIF format.</div>
-                    <button id="toolsItemSdkLink" href="https://www.nuget.org/packages/Sarif.Converters/2.0.0-csd.1.0.2" target="_blank" class="tools-item-button">
+                <div role="listitem">
+                    <div class="tools-item-description"><b>Converters</b> - classes for converting the output of various static analysis tools to the SARIF format.</div>
+                    <button id="toolsItemConvertersLink" role="button" aria-label="View SARIF Converters NuGet package" href="https://www.nuget.org/packages/Sarif.Converters/2.0.0-csd.1.0.2" target="_blank" class="tools-item-button">
                         <div class="tools-item-button-icon">
                             <img src="~/Images/Nuget.png" />
                         </div>
                         <div>View Package</div>
                     </button>
                 </div>
-                <div>
-                    <div id="toolsItemSdk" class="tools-item-description"><b>Multitool</b> - Multi-purpose command line tool for analyzing and manipulating SARIF files.</div>
-                    <button id="toolsItemSdkLink" href="https://www.nuget.org/packages/Sarif.Multitool/2.0.0-csd.1.0.2" target="_blank" class="tools-item-button">
+                <div role="listitem">
+                    <div class="tools-item-description"><b>Multitool</b> - Multi-purpose command line tool for analyzing and manipulating SARIF files.</div>
+                    <button id="toolsItemMultitoolLink" role="button" aria-label="View SARIF Multitool NuGet package" href="https://www.nuget.org/packages/Sarif.Multitool/2.0.0-csd.1.0.2" target="_blank" class="tools-item-button">
                         <div class="tools-item-button-icon">
                             <img src="~/Images/Nuget.png" />
                         </div>
                         <div>View Package</div>
                     </button>
                 </div>
-                <div>
-                    <div id="toolsItemSdk" class="tools-item-description"><b>Interop</b> - Library that enables Visual Studio extensions to easily consume services exposed by the SARIF Viewer for VS.</div>
-                    <button id="toolsItemSdkLink" href="https://www.nuget.org/packages/Sarif.Viewer.Interop/2.0.0-csd.1.0.2" target="_blank" class="tools-item-button">
+                <div role="listitem">
+                    <div class="tools-item-description"><b>Interop</b> - Library that enables Visual Studio extensions to easily consume services exposed by the SARIF Viewer for VS.</div>
+                    <button id="toolsItemInteropLink" role="button" aria-label="View SARIF Viewer interop library NuGet package" href="https://www.nuget.org/packages/Sarif.Viewer.Interop/2.0.0-csd.1.0.2" target="_blank" class="tools-item-button">
                         <div class="tools-item-button-icon">
                             <img src="~/Images/Nuget.png" />
                         </div>
@@ -133,10 +135,10 @@
                 </div>
             </div>
         </div>
-        <div id="toolsSectionContentOther" class="tools-item-list">
-            <div>
+        <div id="toolsSectionContentOther" role="list" aria-label="Tools and libraries written in other languages" class="tools-item-list">
+            <div role="listitem" aria-labelledby="toolsSectionPlatformLabelTypeScript">
                 <div class="tools-item-other-label">
-                    <div class="tools-section-content-label-small">
+                    <div id="toolsSectionPlatformLabelTypeScript" class="tools-section-platform-label-small">
                         TypeScript
                     </div>
                     <div class="path-line-container">
@@ -146,11 +148,11 @@
                         </svg>
                     </div>
                 </div>
-                <div class="tools-item-description tools-other-item-description"><b>Object Model</b> - Lorem ipsum dolor bacon nachos.</div>
+                <div class="tools-item-description tools-other-item-description">Coming soon.</div>
             </div>
-            <div>
+            <div role="listitem" aria-labelledby="toolsSectionPlatformLabelJava">
                 <div class="tools-item-other-label">
-                    <div class="tools-section-content-label-small">
+                    <div id="toolsSectionPlatformLabelJava" class="tools-section-platform-label-small">
                         Java
                     </div>
                     <div class="path-line-container">
@@ -162,9 +164,9 @@
                 </div>
                 <div class="tools-item-description tools-other-item-description">Coming soon.</div>
             </div>
-            <div>
+            <div role="listitem" aria-labelledby="toolsSectionPlatformLabelPython">
                 <div class="tools-item-other-label">
-                    <div class="tools-section-content-label-small">
+                    <div id="toolsSectionPlatformLabelPython" class="tools-section-platform-label-small">
                         Python
                     </div>
                     <div class="path-line-container">
@@ -180,74 +182,74 @@
     </div>
 </section>
 
-<section id="viewerSection" class="content-section gray-section">
+<section id="viewersSection" role="region" aria-labelledby="viewersSectionTitle" class="content-section gray-section">
     <a name="Viewers"></a>
-    <div class="content-section-title">Viewers</div>
+    <div id="viewersSectionTitle" role="heading" class="content-section-title">Viewers</div>
     <div class="content-section-text content-section-description">
         SARIF is based on JSON and can be viewed in any text editor. For a richer experience the following open-source viewers are provided.
     </div>
-    <div id="viewerSectionContent">
-        <div class="viewer-card">
-            <div class="viewer-title">
+    <div id="viewersSectionContent" role="list">
+        <div role="listitem" class="viewer-card">
+            <div id="vsViewerCardTitle" role="heading" class="viewer-title">
                 Visual Studio extension
             </div>
             <div class="viewer-description">
                 For viewing and taking-action-on SARIF files within Visual Studio. Analysis results show up in the Error List, result details in a dockable tool window, and the results locations are overlayed on the original code (when available).
             </div>
             <div class="viewer-screenshot">
-                <img src="~/Images/Screenshots/VSViewer.png" alt="Visual Studio extension" />
+                <img src="~/Images/Screenshots/VSViewer.png" role="img" aria-labelledby="vsViewerCardTitle" alt="Visual Studio extension" />
             </div>
             <div class="viewer-buttons">
-                <button href="https://marketplace.visualstudio.com/items?itemName=WDGIS.MicrosoftSarifViewer" target="_blank">Install</button>
-                <button href="https://github.com/Microsoft/sarif-visualstudio-extension/" target="_blank">Source</button>
+                <button role="button" aria-label="Install VS Viewer extension" href="https://marketplace.visualstudio.com/items?itemName=WDGIS.MicrosoftSarifViewer" target="_blank">Install</button>
+                <button role="button" aria-label="View VS Viewer extension source code" href="https://github.com/Microsoft/sarif-visualstudio-extension/" target="_blank">Source</button>
             </div>
         </div>
 
-        <div class="viewer-card">
-            <div class="viewer-title">
+        <div role="listitem" class="viewer-card">
+            <div id="vsCodeViewerCardTitle" role="heading" class="viewer-title">
                 VS Code extension
             </div>
             <div class="viewer-description">
                 Same experience as the Visual Studio extension, but for those using Visual Studio Code.
             </div>
             <div class="viewer-screenshot">
-                <img src="~/Images/Screenshots/VSCodeViewer.png" alt="VS Code extension" />
+                <img src="~/Images/Screenshots/VSCodeViewer.png" role="img" aria-labelledby="vsCodeViewerCardTitle" alt="VS Code extension" />
             </div>
             <div class="viewer-buttons">
-                <button href="https://marketplace.visualstudio.com/items?itemName=MS-SarifVSCode.sarif-viewer" target="_blank">Install</button>
-                <button href="https://github.com/Microsoft/sarif-vscode-extension/" target="_blank">Source</button>
+                <button role="button" aria-label="Install VS Code Viewer extension" href="https://marketplace.visualstudio.com/items?itemName=MS-SarifVSCode.sarif-viewer" target="_blank">Install</button>
+                <button role="button" aria-label="View VS Code Viewer extension source code" href="https://github.com/Microsoft/sarif-vscode-extension/" target="_blank">Source</button>
             </div>
         </div>
 
-        <div class="viewer-card">
-            <div class="viewer-title">
+        <div role="listitem" class="viewer-card">
+            <div id="webViewerACardTitle" role="heading" class="viewer-title">
                 Web Viewer &quot;A&quot;
             </div>
             <div class="viewer-description">
                 An online viewer good for quickly browsing of SARIF files as well as triaging analysis results. Also available as a component to integrate into your own site or app.
             </div>
             <div class="viewer-screenshot">
-                <img src="~/Images/Screenshots/WebViewerA.png" alt="Web Viewer A" />
+                <img src="~/Images/Screenshots/WebViewerA.png" role="img" aria-labelledby="webViewerACardTitle" alt="Web Viewer A" />
             </div>
             <div class="viewer-buttons">
-                <button href="https://sarifview/disco/" target="_blank">Try</button>
-                <button disabled>Source</button>
+                <button role="button" aria-label="Try Web Viewer A website" href="https://sarifview/disco/" target="_blank">Try</button>
+                <button role="button" aria-label="View Web Viewer A website source code" disabled>Source</button>
             </div>
         </div>
 
-        <div class="viewer-card">
-            <div class="viewer-title">
+        <div role="listitem" class="viewer-card">
+            <div id="webViewerBCardTitle" role="heading" class="viewer-title">
                 Web Viewer &quot;B&quot;
             </div>
             <div class="viewer-description">
                 Another online viewer with an alternate viewing experience.
             </div>
             <div class="viewer-screenshot">
-                <img src="~/Images/Screenshots/WebViewerB.png" alt="Web Viewer B" />
+                <img src="~/Images/Screenshots/WebViewerB.png" role="img" aria-labelledby="webViewerBCardTitle" alt="Web Viewer B" />
             </div>
             <div class="viewer-buttons">
-                <button href="https://sarifview/" formtarget="_blank">Try</button>
-                <button disabled>Source</button>
+                <button role="button" aria-label="Try Web Viewer B website" href="https://sarifview/" formtarget="_blank">Try</button>
+                <button role="button" aria-label="View Web Viewer B website source code" disabled>Source</button>
             </div>
         </div>
     </div>

@@ -57,6 +57,12 @@ header > div {
     margin-right: 9px;
 }
 
+#headerHomeLink:link, #headerHomeLink:visited,
+#headerHomeLink:hover, #headerHomeLink:active {
+    color: #000;
+    text-decoration: none;
+}
+
 .header-version-badge {
     background-color: #FFCC00;
     border-radius: 3px;
@@ -73,14 +79,14 @@ header > div {
     justify-content: center;
 }
 
-#heroNavItems {
-    justify-content: center;
+#headerNavItems {
     display: flex;
     flex: 1;
     flex-grow: 1;
+    justify-content: center;
 }
 
-#heroNavItems a {
+#headerNavItems a {
     margin: 0px 25px;
 }
 
@@ -272,13 +278,13 @@ header > div {
     display: flex;
 }
 
-.tools-section-content-label-large {
+.tools-section-platform-label-large {
     font-family: var(--content-font-family);
     font-size: 24px;
     font-weight: bold;
 }
 
-.tools-section-content-label-small {
+.tools-section-platform-label-small {
     font-family: var(--content-font-family);
     font-size: 16px;
     font-weight: bold;
@@ -365,11 +371,11 @@ line.stroke-2x {
     margin-right: 8px;
 }
 
-#viewerSection {
+#viewersSection {
     padding-bottom: 53px;
 }
 
-#viewerSectionContent {
+#viewersSectionContent {
     display: flex;
     flex-wrap: wrap;
 }

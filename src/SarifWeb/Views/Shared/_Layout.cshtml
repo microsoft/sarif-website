@@ -23,24 +23,26 @@
 </head>
 <body>
     <div id="pageContainer">
-        <header>
-            <div class="header-site-title">SARIF</div>
-            <div class="header-version-badge">WEB BETA</div>
-            <nav class="header-nav-strip">
-                <div id="heroNavItems" class="header-nav-item">
-                    <a href="/#Specification">Specification</a>
-                    <a href="/#ToolsLibraries">Tools &amp; Libraries</a>
-                    <a href="/#Viewers">Viewers</a>
+        <header role="banner" aria-label="Header">
+            <div role="heading" class="header-site-title">
+                <a id="headerHomeLink" href="~/">SARIF</a>
+            </div>
+            <div role="note" aria-label="Beta website" class="header-version-badge">WEB BETA</div>
+            <nav role="navigation" aria-label="Header navigation strip" class="header-nav-strip">
+                <div id="headerNavItems" class="header-nav-item">
+                    <a href="~/#Specification">Specification</a>
+                    <a href="~/#ToolsLibraries">Tools &amp; Libraries</a>
+                    <a href="~/#Viewers">Viewers</a>
                 </div>
             </nav>
-            <nav id="headerNavValidator" class="header-nav-item">
+            <nav role="navigation" id="headerNavValidator" class="header-nav-item">
                 @Html.ActionLink("Validator", "Index", "Validation")
             </nav>
         </header>
 
         @RenderBody()
 
-        <footer>
+        <footer role="contentinfo" aria-label="Footer copyright">
             <p>Copyright &copy; Microsoft Corporation. All rights reserved.</p>
         </footer>
     </div>
