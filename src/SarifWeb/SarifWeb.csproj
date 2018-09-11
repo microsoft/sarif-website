@@ -208,10 +208,13 @@
     <Content Include="Images\Logos\Dell.png" />
     <Content Include="Images\Logos\EMC2.png" />
     <Content Include="Images\Logos\Expedia.png" />
+    <Content Include="Images\Logos\GrammaTech.png" />
     <Content Include="Images\Logos\HPE.png" />
+    <Content Include="Images\Logos\KestrelTechnology.png" />
     <Content Include="Images\Logos\MicroFocus.png" />
     <Content Include="Images\Logos\Microsoft.png" />
     <Content Include="Images\Logos\Semmle.png" />
+    <Content Include="Images\Logos\SWAMP.png" />
     <Content Include="Images\Logos\Visa.png" />
     <Content Include="Images\Logos\Zillow.png" />
     <Content Include="Images\Nuget.png" />
