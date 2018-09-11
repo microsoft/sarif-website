@@ -5,14 +5,14 @@
     // Create the image viewer elements
     $(`
         <div id="imageViewer">
-            <div id="imageViewerDialog">
+            <div id="imageViewerDialog" role="dialog" aria-labelledby="imageViewerTitle">
                 <div id="imageViewerTitleBar">
                     <div id="imageViewerTitle" role="banner"></div>
-                    <div id="imageViewerCloseGlyph" role="button">close</div>
+                    <button id="imageViewerCloseButton" role="button" aria-label="Close image viewer" tabindex="3">close</button>
                 </div>
-                <img id="imageViewerImage" />
-                <div id="imageViewerPrev" role="button" aria-label="Previous image" class="image-viewer-button button-left">&#10094;</div>
-                <div id="imageViewerNext" role="button" aria-label="Next image" class="image-viewer-button button-right">&#10095;</div>
+                <img id="imageViewerImage" role="img" aria-labelledby="imageViewerTitle" />
+                <button id="imageViewerPrev" role="button" aria-label="Previous image" tabindex="2" class="image-viewer-button button-left">&#10094;</button>
+                <button id="imageViewerNext" role="button" aria-label="Next image" tabindex="1" class="image-viewer-button button-right">&#10095;</button>
             </div>
         </div>
         `).appendTo("body");
@@ -33,14 +33,14 @@
         });
     };
 
-    $(".viewer-screenshot").on("click", "img", function () {
+    $.fn.showImageViewer = function () {
         var sender = $(this)[0];
         var index = Number(sender.getAttribute("index"));
 
         $("#selector").disableScroll();
         $("#selector").loadImage(index)
         $("#imageViewer").css("display", "flex");
-    });
+    };
 
     $.fn.loadImage = function (index) {
         var $element = $("#" + imageGallery[index]);
@@ -78,9 +78,22 @@
 
     $("#imageViewer").on("click", function (event) {
         // Only dismiss if they've clicked outside the dialog area, or the X glyph
-        if (event.target.id == "imageViewer" || event.target.id == "imageViewerCloseGlyph") {
-            $("#selector").enableScroll();
-            $("#imageViewer").fadeOut(100);
+        if (event.target.id == "imageViewer" || event.target.id == "imageViewerCloseButton") {
+            $("#selector").closeViewer();
         }
     });
+
+    // This doesn't work
+    // Issue #38
+    $("#imageViewerDialog").keypress(function (event) {
+        // Dismiss if they've pressed Esc
+        if (event.key == "Escape") {
+            $("#selector").closeViewer();
+        }
+    });
+
+    $.fn.closeViewer = function () {
+        $("#selector").enableScroll();
+        $("#imageViewer").fadeOut(100);
+    };
 });

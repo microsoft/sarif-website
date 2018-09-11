@@ -21,7 +21,7 @@ a:hover, a:active {
     text-decoration: underline;
 }
 
-button {
+button.sarifweb-button {
     background: #DADADA;
     background: -moz-linear-gradient(top, #F2F2F2 0%, #F2F2F2 50%, #DADADA 100%);
     background: -webkit-linear-gradient(top, #F2F2F2 0%, #F2F2F2 50%, #DADADA 100%);
@@ -34,7 +34,11 @@ button:not([disabled]) {
     cursor: pointer;
 }
 
-button:not([disabled]):hover, button:active {
+button:disabled {
+    background-image: none;
+}
+
+button.sarifweb-button:not([disabled]):hover, button.sarifweb-button:active {
     border: solid 2px #008AFF !important;
     background-color: #E6EDF3 !important;
     color: #008AFF;
@@ -469,7 +473,7 @@ footer p {
     background-color: #DDD;
 }
 
-#imageViewerCloseGlyph {
+#imageViewerCloseButton {
     background-color: #FFCC00;
     color: #000;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
