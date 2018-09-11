@@ -3,6 +3,10 @@
     --content-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+html, body {
+    height: 100%;
+}
+
 body {
     background-color: #E5E5E5;
 }
@@ -65,6 +69,7 @@ header > div {
 
 .header-version-badge {
     background-color: #FFCC00;
+    border: solid 1px #000;
     border-radius: 3px;
     font-family: 'Roboto', sans-serif;
     font-size: 10px;
@@ -404,6 +409,7 @@ line.stroke-2x {
 
 .viewer-screenshot img {
     border-radius: var(--main-border-radius);
+    cursor: pointer;
     height: 240px;
     margin-bottom: 12px;
     width: 360px;

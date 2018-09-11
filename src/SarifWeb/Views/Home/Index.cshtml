@@ -197,7 +197,7 @@
                 For viewing and taking-action-on SARIF files within Visual Studio. Analysis results show up in the Error List, result details in a dockable tool window, and the results locations are overlayed on the original code (when available).
             </div>
             <div class="viewer-screenshot">
-                <img src="~/Images/Screenshots/VSViewer.png" role="img" aria-labelledby="vsViewerCardTitle" alt="Visual Studio extension" />
+                <img id="screenshot01" src="~/Images/Screenshots/VSViewer.thumbnail.png" index="0" coloration="dark" role="button" aria-labelledby="vsViewerCardTitle" alt="Visual Studio extension" />
             </div>
             <div class="viewer-buttons">
                 <button role="button" aria-label="Install VS Viewer extension" href="https://marketplace.visualstudio.com/items?itemName=WDGIS.MicrosoftSarifViewer" target="_blank">Install</button>
@@ -213,7 +213,7 @@
                 Same experience as the Visual Studio extension, but for those using Visual Studio Code.
             </div>
             <div class="viewer-screenshot">
-                <img src="~/Images/Screenshots/VSCodeViewer.png" role="img" aria-labelledby="vsCodeViewerCardTitle" alt="VS Code extension" />
+                <img id="screenshot02" src="~/Images/Screenshots/VSCodeViewer.thumbnail.png" index="1" coloration="dark" role="button" aria-labelledby="vsCodeViewerCardTitle" alt="VS Code extension" />
             </div>
             <div class="viewer-buttons">
                 <button role="button" aria-label="Install VS Code Viewer extension" href="https://marketplace.visualstudio.com/items?itemName=MS-SarifVSCode.sarif-viewer" target="_blank">Install</button>
@@ -229,7 +229,7 @@
                 An online viewer good for quickly browsing of SARIF files as well as triaging analysis results. Also available as a component to integrate into your own site or app.
             </div>
             <div class="viewer-screenshot">
-                <img src="~/Images/Screenshots/WebViewerA.png" role="img" aria-labelledby="webViewerACardTitle" alt="Web Viewer A" />
+                <img id="screenshot03" src="~/Images/Screenshots/WebViewerA.thumbnail.png" index="2" coloration="light" role="button" aria-labelledby="webViewerACardTitle" alt="Web Viewer A" />
             </div>
             <div class="viewer-buttons">
                 <button role="button" aria-label="Try Web Viewer A website" href="https://sarifview/disco/" target="_blank">Try</button>
@@ -245,7 +245,7 @@
                 Another online viewer with an alternate viewing experience.
             </div>
             <div class="viewer-screenshot">
-                <img src="~/Images/Screenshots/WebViewerB.png" role="img" aria-labelledby="webViewerBCardTitle" alt="Web Viewer B" />
+                <img id="screenshot04" src="~/Images/Screenshots/WebViewerB.thumbnail.png" index="3" coloration="light" role="button" aria-labelledby="webViewerBCardTitle" alt="Web Viewer B" />
             </div>
             <div class="viewer-buttons">
                 <button role="button" aria-label="Try Web Viewer B website" href="https://sarifview/" formtarget="_blank">Try</button>
@@ -255,8 +255,18 @@
     </div>
 </section>
 
+<script src="~/Scripts/ImageViewer.js"></script>
 <script type="text/javascript">
+    var imageGallery = null;
+
     $(function () {
+        imageGallery = [
+            "screenshot01",
+            "screenshot02",
+            "screenshot03",
+            "screenshot04"
+        ];
+
         $("button").on("click", function () {
             var sender = $(this);
             var url = sender.attr("href");
