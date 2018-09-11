@@ -18,7 +18,7 @@
         `).appendTo("body");
 
     // Add our style sheet
-    $("<link href='/Content/ImageViewer.css' rel='stylesheet' />").appendTo("head");
+    $("<link href='/Content/ImageViewer.css' rel='stylesheet' />").prependTo("head");
 
     $.fn.enableScroll = function () {
         $(window).off("scroll.scrolldisabler");
