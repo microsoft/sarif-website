@@ -96,6 +96,10 @@
     font-size: 14px;
 }
 
+.strong-link {
+    font-weight: bold;
+}
+
 #specSection {
     padding-bottom: 80px;
 }
