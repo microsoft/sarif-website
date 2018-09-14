@@ -1,0 +1,44 @@
+﻿:root {
+    --main-border-radius: 3px;
+}
+
+button.sarifweb-button {
+    background: #DADADA;
+    border: 1px solid #D2D2D2;
+}
+
+button.sarifweb-button:not([disabled]):hover, button.sarifweb-button:active {
+    border: solid 1px #008AFF !important;
+}
+
+header {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    height: 35px;
+}
+
+.header-site-title {
+    font-size: 14px;
+    margin-left: 15px;
+    margin-right: 9px;
+}
+
+.header-version-badge {
+    font-size: 7px;
+    padding: 2px 4px;
+}
+
+#headerNavItems {
+    display: none;
+}
+
+#headerNavValidator {
+    margin-right: 15px;
+}
+
+footer {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    font-size: 10px;
+    height: 50px;
+}

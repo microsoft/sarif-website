@@ -1,0 +1,169 @@
+﻿body {
+    content: unset;
+}
+
+#hero {
+    height: 200px;
+}
+
+#heroContentGrid {
+    grid-gap: 10px;
+}
+
+#heroLogo img {
+    height: 70px;
+    width: 70px;
+}
+
+#heroTitle {
+    font-size: 35px;
+    line-height: 42px;
+}
+
+#heroTagline {
+    font-size: 11px;
+    line-height: 18px;
+}
+
+.content-section {
+    padding: 20px 40px 0px 30px;
+}
+
+.content-section-title {
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.content-section-text {
+    font-size: 12px;
+}
+
+.content-section-description {
+    margin-bottom: 26px;
+}
+
+.content-button {
+    font-size: 12px;
+}
+
+#specSection {
+    padding-bottom: 20px;
+}
+
+#specSectionButtons {
+    margin-bottom: 15px;
+}
+
+#specSectionButtonRead {
+    height: 40px;
+    width: 300px;
+}
+
+#specSectionButtonAsk {
+    height: 40px;
+    width: 300px;
+}
+
+#specSectionButtonView {
+    height: 100px;
+    width: 300px;
+}
+
+.button-subtitle {
+    font-size: 9px;
+}
+
+#collabSection {
+    padding-bottom: 20px;
+}
+
+#collabSectionButtons img {
+    border: 1px solid #D2D2D2;
+    height: 70px;
+    margin: 5px 7px;
+    width: 70px;
+}
+
+#toolsSectionContent > div {
+    flex: 1 300px;
+    margin-bottom: 40px;
+    margin-right: 0px;
+}
+
+.tools-section-platform-label-large {
+    font-size: 18px;
+}
+
+.tools-section-platform-label-small {
+    font-size: 12px;
+}
+
+.path-line-container {
+    margin-left: 8px;
+    margin-right: 10px;
+}
+
+.tools-item-list > div {
+    margin-top: 15px;
+}
+
+#toolsSectionContentOther > div {
+    margin-top: 20px;
+}
+
+.tools-item-other-label {
+    margin-right: 10px;
+}
+
+.tools-item-description {
+    flex: 1 0;
+    font-size: 11px;
+    line-height: 12px;
+}
+
+.tools-item-button {
+    height: 25px;
+    margin-left: 12px;
+    padding: 6px 6px;
+    text-align: center;
+    white-space: nowrap;
+    width: unset;
+}
+
+.tools-item-button-icon {
+    display: none;
+}
+
+#viewersSection {
+    padding-bottom: 15px;
+}
+
+.viewer-card {
+    background: #EAEAEA;
+    border: 2px solid #D2D2D2;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    margin-right: 10px;
+    padding: 8px;
+}
+
+.viewer-title {
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.viewer-description {
+    margin-bottom: 10px;
+}
+
+.viewer-screenshot img {
+    cursor: unset;
+    margin-bottom: 8px;
+}
+
+.viewer-buttons button {
+    font-size: 12px;
+    height: 26px;
+    margin-right: 4px;
+    width: 90px;
+}

@@ -1,161 +1,5 @@
-﻿
-/* 
-  ##Device = Desktops
-  ##Screen = 1281px to higher resolution desktops
-*/
-@media (min-width: 1281px) {
-}
-
-/* 
-  ##Device = Laptops, Desktops
-  ##Screen = B/w 1025px to 1280px
-*/
-@media (min-width: 1025px) and (max-width: 1280px) {
-}
-
-/* 
-  ##Device = Tablets, Ipads (portrait)
-  ##Screen = B/w 768px to 1024px
-*/
-@media (min-width: 768px) and (max-width: 1024px) {
-}
-
-/* 
-  ##Device = Tablets, Ipads (landscape)
-  ##Screen = B/w 768px to 1024px
-*/
-@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-}
-
-/* 
-  ##Device = Low Resolution Tablets, Mobiles (Landscape)
-  ##Screen = B/w 481px to 767px
-*/
-@media (min-width: 481px) and (max-width: 767px) {
-}
-
-/* 
-  ##Device = Most of the Smartphones Mobiles (Portrait)
-  ##Screen = B/w 320px to 479px
-*/
-@media (min-width: 320px) and (max-width: 480px) {
-}
-
-
-:root {
-    --main-border-radius: 5px;
-    --content-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-html, body {
-    height: 100%;
-}
-
-body {
-    background-color: #E5E5E5;
-}
-
-a:link, a:visited {
-    color: #004D8E;
-    text-decoration: none;
-}
-
-a:hover, a:active {
-    color: #008AFF;
-    text-decoration: underline;
-}
-
-button.sarifweb-button {
-    background: #DADADA;
-    background: -moz-linear-gradient(top, #F2F2F2 0%, #F2F2F2 50%, #DADADA 100%);
-    background: -webkit-linear-gradient(top, #F2F2F2 0%, #F2F2F2 50%, #DADADA 100%);
-    background-image: linear-gradient(to bottom, #F2F2F2 0%, #F2F2F2 50%, #DADADA 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#F2F2F2", endColorstr="#DADADA", GradientType=0);
-    border: 2px solid #D2D2D2;
-}
-
-button:not([disabled]) {
-    cursor: pointer;
-}
-
-button:disabled {
-    background-image: none;
-}
-
-button.sarifweb-button:not([disabled]):hover, button.sarifweb-button:active {
-    border: solid 2px #008AFF !important;
-    background-color: #E6EDF3 !important;
-    color: #008AFF;
-}
-
-#pageContainer {
-    margin: auto;
-    max-width: 1200px;
-}
-
-header {
-    align-items: center;
-    background-color: #FFFFFF;
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
-    display: flex;
-    height: 50px;
-}
-
-header > div {
-    flex-grow: 0;
-}
-
-.header-site-title {
-    font-family: 'Roboto', sans-serif;
-    font-size: 18px;
-    font-weight: bold;
-    margin-left: 63px;
-    margin-right: 9px;
-}
-
-#headerHomeLink:link, #headerHomeLink:visited,
-#headerHomeLink:hover, #headerHomeLink:active {
-    color: #000;
-    text-decoration: none;
-}
-
-.header-version-badge {
-    background-color: #FFCC00;
-    border: solid 1px #000;
-    border-radius: 3px;
-    font-family: 'Roboto', sans-serif;
-    font-size: 10px;
-    padding: 3px 6px;
-    text-wrap: none;
-}
-
-.header-nav-strip {
-    align-items: center;
-    display: flex;
-    flex-grow: 1;
-    justify-content: center;
-}
-
-#headerNavItems {
-    display: flex;
-    flex: 1;
-    flex-grow: 1;
-    justify-content: center;
-}
-
-#headerNavItems a {
-    margin: 0px 25px;
-}
-
-.header-nav-item {
-    font-family: var(--content-font-family);
-    font-size: 14px;
-}
-
-#headerNavValidator {
-    margin-right: 58px;
-    text-align: right;
+﻿body {
+    content: "image-viewer-active"; /* Will be unset by @media when the screen is too small for the image viewer */
 }
 
 #hero {
@@ -292,7 +136,7 @@ header > div {
 
 #specSectionButtonView {
     height: 182px;
-    width: 400px;
+    width: 300px;
 }
 
 .button-subtitle {
@@ -329,10 +173,9 @@ header > div {
 }
 
 #toolsSectionContent > div {
-    flex: 1 410px;
+    flex: 1;
     margin-bottom: 80px;
     margin-right: 50px;
-    width: 410px;
 }
 
 #toolsSectionContentCsharp {
@@ -408,7 +251,7 @@ line.stroke-2x {
 }
 
 .tools-item-description {
-    flex: 1 0 220px;
+    flex: 1 0;
     font-family: var(--content-font-family);
     font-size: 13px;
     line-height: 17px;
@@ -442,11 +285,15 @@ line.stroke-2x {
 }
 
 .viewer-card {
+    background: #EAEAEA;
+    border: 2px solid #D2D2D2;
+    border-radius: 7px;
     display: flex;
     flex-direction: column;
     margin-bottom: 27px;
     margin-right: 40px;
-    width: 360px;
+    padding: 12px;
+    width: 380px;
 }
 
 .viewer-title {
@@ -466,13 +313,13 @@ line.stroke-2x {
 .viewer-screenshot img {
     border-radius: var(--main-border-radius);
     cursor: pointer;
-    height: 240px;
+    height: auto;
     margin-bottom: 12px;
-    width: 360px;
+    width: 100%;
 }
 
 .viewer-buttons button {
-    background-color: #FFFFFF;
+    background: #DADADA;
     border-radius: var(--main-border-radius);
     font-family: var(--content-font-family);
     font-size: 14px;
@@ -481,26 +328,8 @@ line.stroke-2x {
     width: 120px;
 }
 
-footer {
-    align-items: center;
-    background: #4D4D4D;
-    background: -moz-linear-gradient(top, #4D4D4D 0%, #4D4D4D 60%, #373737 100%);
-    background: -webkit-linear-gradient(top, #4D4D4D 0%, #4D4D4D 60%, #373737 100%);
-    background-image: linear-gradient(to bottom, #4D4D4D 0%, #4D4D4D 60%, #373737 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#4D4D4D", endColorstr="#373737", GradientType=0);
-    border-bottom-left-radius: 7px;
-    border-bottom-right-radius: 7px;
-    color: #FFFFFF;
-    display: flex;
-    font-family: var(--content-font-family);
-    font-size: 12px;
-    justify-content: center;
-    height: 145px;
-}
-
-footer p {
-    margin: 0;
-    text-align: center;
+.viewer-buttons button:not([disabled]) {
+    background: #FFFFFF;
 }
 
 /* ImageViewer overrides */

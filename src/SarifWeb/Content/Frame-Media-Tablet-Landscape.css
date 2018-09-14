@@ -1,0 +1,26 @@
+﻿button.sarifweb-button {
+    background: #DADADA;
+    border: 1px solid #D2D2D2;
+}
+
+button.sarifweb-button:not([disabled]):hover, button.sarifweb-button:active {
+    border: solid 1px #008AFF !important;
+}
+
+.header-site-title {
+    margin-left: 15px;
+    margin-right: 9px;
+}
+
+.header-version-badge {
+    font-size: 7px;
+    padding: 2px 4px;
+}
+
+#headerNavValidator {
+    margin-right: 15px;
+}
+
+footer {
+    height: 70px;
+}
