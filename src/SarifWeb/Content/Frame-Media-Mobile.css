@@ -32,6 +32,10 @@ header {
     display: none;
 }
 
+.header-nav-item {
+    font-size: 12px;
+}
+
 #headerNavValidator {
     margin-right: 15px;
 }
