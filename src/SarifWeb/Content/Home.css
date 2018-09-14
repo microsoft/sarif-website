@@ -11,6 +11,7 @@
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#373737", endColorstr="#4D4D4D", GradientType=0);
     display: flex;
     height: 280px;
+    padding: 0px 20px;
 }
 
 #heroContentGrid {
