@@ -1,0 +1,58 @@
+﻿#hero {
+    height: 200px;
+}
+
+#heroContentGrid {
+    grid-gap: 10px;
+}
+
+#heroLogo img {
+    height: 70px;
+    width: 70px;
+}
+
+#heroTitle {
+    font-size: 35px;
+    line-height: 42px;
+}
+
+#heroTagline {
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.content-section {
+    padding: 20px 20px 0px 30px;
+}
+
+.content-section-title {
+    font-size: 18px;
+    margin-bottom: 16px;
+}
+
+.content-section-description {
+    margin-bottom: 26px;
+}
+
+#specSection {
+    padding-bottom: 40px;
+}
+
+#collabSection {
+    padding-bottom: 32px;
+}
+
+#toolsSectionContent > div {
+    margin-bottom: 40px;
+}
+
+#viewersSection {
+    padding-bottom: 30px;
+}
+
+.viewer-card {
+    margin-bottom: 25px;
+    margin-right: 25px;
+    padding: 10px;
+    width: 330px;
+}

@@ -2,6 +2,12 @@
     ViewBag.Title = "SARIF Home";
 }
 
+<link href="~/Content/Home.css" rel="stylesheet" />
+<link href="~/Content/Home-Media-Mobile.css" rel="stylesheet" media="only screen and (min-width: 320px) and (max-width: 480px)" />
+<link href="~/Content/Home-Media-Mobile-Landscape.css" rel="stylesheet" media="only screen and (min-width: 481px) and (max-width: 767px)" />
+<link href="~/Content/Home-Media-Tablet.css" rel="stylesheet" media="only screen and (min-width: 768px) and (max-width: 1024px)" />
+<link href="~/Content/Home-Media-Tablet-Landscape.css" rel="stylesheet" media="only screen and (min-width: 768px) and (max-width: 1024px) and (orientation: landscape)" />
+
 <section id="hero" role="banner" aria-labelledby="heroTitle" aria-label="Hero">
     <div id="heroContentGrid">
         <div id="heroLogo">
@@ -251,17 +257,27 @@
 <script src="~/Scripts/ImageViewer.js"></script>
 <script type="text/javascript">
     var imageGallery = null;
+    var useImageViewer = false;
 
     $(function () {
-        imageGallery = [
-            "screenshot01",
-            "screenshot02",
-            "screenshot03",
-            "screenshot04"
-        ];
+        // See if we should use the image viewer.
+        // This property will be unset by a media style if the screen is too small.
+        var flag = $("body").css("content");
+        if (flag == "\"image-viewer-active\"") {
+            useImageViewer = true;
+
+            imageGallery = [
+                "screenshot01",
+                "screenshot02",
+                "screenshot03",
+                "screenshot04"
+            ];
+        }
 
         $(".viewer-screenshot").on("click", "img", function () {
-            $(this).showImageViewer();
+            if (useImageViewer) {
+                $(this).showImageViewer();
+            }
         });
 
         $("button.sarifweb-button").on("click", function () {

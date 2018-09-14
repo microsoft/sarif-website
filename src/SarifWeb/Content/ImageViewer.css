@@ -49,8 +49,8 @@
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 11px;
     padding: 3px 6px;
-    text-wrap: none;
     user-select: none;
+    white-space: nowrap;
 }
 
 #imageViewerImage {
