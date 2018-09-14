@@ -1,6 +1,7 @@
 ﻿$(function () {
     var currentIndex = -1;
     var currentColoration = "light";
+    var isActive = false;
 
     // Create the image viewer elements
     $(`
@@ -40,6 +41,7 @@
         $("#selector").disableScroll();
         $("#selector").loadImage(index)
         $("#imageViewer").css("display", "flex");
+        isActive = true;
     };
 
     $.fn.loadImage = function (index) {
@@ -83,11 +85,9 @@
         }
     });
 
-    // This doesn't work
-    // Issue #38
-    $("#imageViewerDialog").keypress(function (event) {
+    $("body").keyup(function (event) {
         // Dismiss if they've pressed Esc
-        if (event.key == "Escape") {
+        if (isActive && event.key == "Escape") {
             $("#selector").closeViewer();
         }
     });
@@ -95,5 +95,6 @@
     $.fn.closeViewer = function () {
         $("#selector").enableScroll();
         $("#imageViewer").fadeOut(100);
+        isActive = false;
     };
 });
