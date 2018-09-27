@@ -87,6 +87,8 @@
     </div>
 </section>
 
+<a id="downloadLink" style="display: none;">Download</a>
+
 @section Scripts {
     <script src="~/Scripts/ace/ace.js"></script>
     <script src="~/Scripts/jqueryui/jquery-ui.min.js"></script>
@@ -248,6 +250,7 @@
                         $(themeList).selectmenu("enable");
                     };
                     reader.readAsDataURL(file);
+                    fileName = file.name;
                     $('#dropArea').removeClass('active-drop');
                     $('#dropAreaText').removeClass('drop-area-text-complete');
                     $('#dropAreaText').addClass('drop-area-text-busy');
