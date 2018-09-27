@@ -1,0 +1,204 @@
+﻿#validatorSection {
+    padding: 0px 70px 30px 70px;
+}
+
+#validatorContainer {
+    display: flex;
+    height: 50vmin;
+}
+
+#results {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+}
+
+#source {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+}
+
+#editor {
+    flex: 1;
+    border: 4px solid #000;
+}
+
+#editorControls {
+    display: flex;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 12px;
+    margin-bottom: 3px;
+}
+
+#leftSide {
+    flex: 1;
+}
+
+#downloadLog {
+    display: flex;
+}
+
+#downloadLog img {
+    margin-right: 5px;
+}
+/*
+
+#downloadLog img {
+    margin-top: 2px;
+    padding: .3em 1em;
+}
+.rule-header {
+    background-color: #DDD;
+    border-bottom: 1px solid #AAA;
+    display: flex;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    padding: 10px;
+}
+
+.rule-id {
+    align-items: flex-start;
+    display: flex;
+    flex-wrap: nowrap;
+    font-weight: bold;
+    margin-right: 10px;
+    white-space: nowrap;
+}
+
+.ruleid-count-badge {
+    background-color: #FFCC00;
+    border: 1px solid #000;
+    border-radius: 3px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 9px;
+    margin: 3px 3px 3px 5px;
+    padding: 0px 2px;
+}
+
+.rule-desc {
+    flex: 1;
+}
+*/
+#ruleDescription {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 11px;
+}
+
+#resultsList {
+    border: 4px double #000;
+    flex: 1;
+    margin-top: 3px;
+    overflow-y: scroll;
+}
+
+.rule-result {
+    border: 2px solid transparent;
+    cursor: pointer;
+    display: flex;
+    padding: 6px;
+}
+
+.rule-result:hover {
+    border: 2px solid #008AFF;
+    background-color: #E6EDF3;
+    color: #008AFF;
+}
+
+.rule-result div {
+    padding-right: 15px;
+}
+
+.rule-result-line {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.rule-result-snip {
+    font-family: Consolas, 'Lucida Console', sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.drop-area {
+    background-color: #b5b5b5;
+    border: black dashed 2px;
+    color: #fff;
+    display: table;
+    height: 50px;
+    text-align: center;
+    text-shadow: 0 0 1px #000;
+    width: 100%;
+}
+
+.drop-area-text {
+    display: table-cell;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    vertical-align: middle;
+}
+
+.drop-area-text-busy {
+    color: #000;
+    font-weight: bold;
+    text-shadow: 0 0 1px #fff;
+}
+
+.drop-area-text-complete {
+    color: #0e0;
+    font-weight: bold;
+    text-shadow: 0 0 1px #000;
+}
+
+.active-drop {
+    background-color: #77bafa;
+    border: solid 2px #000;
+    color: #000;
+    opacity: 0.5;
+}
+
+#dropSection {
+    padding-bottom: 30px;
+    padding-top: 20px;
+}
+
+#resultsSection {
+    /*display: none;*/
+    padding-bottom: 50px;
+    padding-top: 0px;
+}
+
+#responseMessage {
+    font-family: var(--content-font-family);
+    font-size: 12px;
+}
+
+.heading {
+    font-family: var(--content-font-family);
+    font-size: 16px;
+    font-weight: bold;
+}
+
+pre {
+    display: block;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 1.428571429;
+    color: #333333;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: #f5f5f5;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+}
+
+code, pre {
+    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+}
+
+pre {
+    white-space: pre-wrap;
+}
