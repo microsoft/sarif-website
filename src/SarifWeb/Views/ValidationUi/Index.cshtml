@@ -119,21 +119,20 @@
                     </div>
                     `;
 
-            // Rules dictionary: key = rule ID, value = { description, count }
+            // Rules dictionary: key = rule ID, value = { description, results[] }
             var rulesDictionary = {};
 
             function addRule(ruleId, description) {
                 rulesDictionary[ruleId] = {
                     description: description,
-                    count: 0
+                    results: []
                 };
             }
 
             function addResult(ruleId, line, snippet) {
                 var html = resultTemplate.replace(/{LINE}/g, line)
                     .replace(/{SNIPPET}/g, snippet);
-                $(html).appendTo("#resultsList");
-                rulesDictionary[ruleId].count++;
+                rulesDictionary[ruleId].results.push({ html: html, line: line });
             }
 
             function processResults(sarif) {
@@ -170,11 +169,11 @@
                         // Now we know how many results we have for each rule, so populate the rules dropdown
                         var options = [];
                         for (var key in rulesDictionary) {
-                            options.push("<option value='" + key + "'>" + key + " (" + rulesDictionary[key].count + ")</option>");
+                            options.push("<option value='" + key + "'>" + key + " (" + rulesDictionary[key].results.length + ")</option>");
                         }
 
                         $(ruleList).empty();
-                        $(ruleList).append(options.join("")).selectmenu("refresh");
+                        $(ruleList).append(options.join("")).selectmenu("refresh").trigger("selectmenuchange");
                     }
                 }
             }
@@ -194,6 +193,13 @@
             $(ruleList).on("selectmenuchange", function () {
                 var ruleId = $(this).val();
                 var rule = rulesDictionary[ruleId];
+                var resultsList = $("#resultsList");
+                $(resultsList).empty();
+
+                rule.results.forEach(function (result) {
+                    $(result.html).appendTo(resultsList);
+                });
+
                 $("#ruleDescription").text(rule.description);
             });
 
