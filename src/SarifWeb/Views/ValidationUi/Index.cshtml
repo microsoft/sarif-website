@@ -3,9 +3,9 @@
 }
 
 <link href="~/Content/Home.css" rel="stylesheet" />
-<link href="~/Scripts/jqueryui/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Scripts/jqueryui/themes/redmond/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Scripts/jqueryui/themes/redmond/theme.min.css" rel="stylesheet" />
 <link href="~/Scripts/jqueryui/jquery-ui.structure.css" rel="stylesheet" />
-<link href="~/Scripts/jqueryui/jquery-ui.theme.css" rel="stylesheet" />
 <link href="~/Content/Validator.css" rel="stylesheet" />
 
 <section id="dropSection" class="content-section gray-section">
@@ -13,6 +13,7 @@
 
     <div id="dropArea" class="drop-area">
         <div id="dropAreaText" class="drop-area-text">Drop your SARIF log file here to validate it</div>
+        <input type="file" accept="*.sarif" style="display: none;">
     </div>
 </section>
 
@@ -87,6 +88,7 @@
     </div>
 </section>
 
+<!-- This hidden hyperlink is used by the Download button -->
 <a id="downloadLink" style="display: none;">Download</a>
 
 @section Scripts {
@@ -97,6 +99,7 @@
         $(function () {
             var fileName = "";
             var editor = null;
+            var markers = [];
             var ruleList = $("#ruleList").selectmenu();
             var downloadButton = $("#downloadLog").button();
 
@@ -124,6 +127,7 @@
             // Rules dictionary: key = rule ID, value = { description, results[] }
             var rulesDictionary = {};
 
+            // Adds a bare rule to the dictionary
             function addRule(ruleId, description) {
                 rulesDictionary[ruleId] = {
                     description: description,
@@ -131,12 +135,14 @@
                 };
             }
 
+            // Creates HTML for a result and adds it to the corresponding rule's results array
             function addResult(ruleId, line, snippet) {
                 var html = resultTemplate.replace(/{LINE}/g, line)
                     .replace(/{SNIPPET}/g, snippet);
                 rulesDictionary[ruleId].results.push({ html: html, line: line });
             }
 
+            // Creates a SARIF log object from JSON, then processes rules and results
             function processResults(sarif) {
                 var sarifLog = JSON.parse(sarif);
 
@@ -162,7 +168,9 @@
                             var result = run.results[j];
 
                             for (var k = 0; k < result.locations.length; k++) {
+                                // Get the startLine from the result location
                                 var startLine = result.locations[k].physicalLocation.region.startLine;
+                                // Get the defect line from the editor
                                 var snippet = editor.session.getLine(startLine - 1).trim();
                                 addResult(result.ruleId, startLine, snippet);
                             }
@@ -174,12 +182,14 @@
                             options.push("<option value='" + key + "'>" + key + " (" + rulesDictionary[key].results.length + ")</option>");
                         }
 
+                        // Clear the dropdown, then add the rules and trigger a change event
                         $(ruleList).empty();
                         $(ruleList).append(options.join("")).selectmenu("refresh").trigger("selectmenuchange");
                     }
                 }
             }
 
+            // Downloads the complete text from the editor
             function saveTextAsFile() {
                 var textToWrite = editor.getValue();
                 var textFileAsBlob = new Blob([textToWrite], { type: "text/json" });
@@ -192,14 +202,32 @@
                 window.URL.revokeObjectURL(textFileAsBlob);
             }
 
+            // Sets a line marker in the editor
+            function setMarker(line) {
+                var range = new ace.Range(line - 1, 0, line - 1, Infinity);
+                range.start = editor.session.doc.createAnchor(range.start);
+                range.end = editor.session.doc.createAnchor(range.end);
+                range.id = editor.session.addMarker(range, "sarif-error", "text", false);
+                markers.push(range.id);
+                //editor.session.addGutterDecoration(line - 1, "sarif-error-gutter");
+            }
+
             $(ruleList).on("selectmenuchange", function () {
                 var ruleId = $(this).val();
                 var rule = rulesDictionary[ruleId];
                 var resultsList = $("#resultsList");
                 $(resultsList).empty();
 
+                // Remove exising line markers
+                markers.forEach(function (id) {
+                    editor.session.removeMarker(id);
+                });
+                markers = [];
+
+                // Add the HTML for each result corresponding to this rule
                 rule.results.forEach(function (result) {
                     $(result.html).appendTo(resultsList);
+                    setMarker(result.line);
                 });
 
                 $("#ruleDescription").text(rule.description);
@@ -233,6 +261,7 @@
                     $('#dropArea').removeClass('active-drop');
                 },
                 drop: function (e) {
+
                     var file = e.originalEvent.dataTransfer.files[0];
                     var reader = new FileReader();
                     reader.onload = function () {
@@ -244,6 +273,7 @@
                                 showPrintMargin: false
                             });
                         }
+                        // Get the target file text, excluding the header segment
                         editor.setValue(atob(reader.result.substring(reader.result.indexOf(',')+1)));
                         editor.selection.clearSelection();
                         $(downloadButton).button("enable");

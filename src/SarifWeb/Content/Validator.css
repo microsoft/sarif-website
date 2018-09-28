@@ -43,11 +43,6 @@
     margin-right: 5px;
 }
 /*
-
-#downloadLog img {
-    margin-top: 2px;
-    padding: .3em 1em;
-}
 .rule-header {
     background-color: #DDD;
     border-bottom: 1px solid #AAA;
@@ -120,6 +115,16 @@
     font-family: Consolas, 'Lucida Console', sans-serif;
     font-size: 12px;
     line-height: 16px;
+}
+
+.sarif-error {
+    background-color: #ffcee4 !important;
+    position: absolute;
+}
+
+.sarif-error-gutter {
+    background-color: #e30613 !important;
+    color: #fff;
 }
 
 .drop-area {
