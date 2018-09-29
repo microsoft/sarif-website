@@ -11,10 +11,13 @@
 <section id="dropSection" class="content-section gray-section">
     <div class="content-section-title">@ViewBag.Title</div>
 
-    <div id="dropArea" class="drop-area">
-        <div id="dropAreaText" class="drop-area-text">Drop your SARIF log file here to validate it</div>
-        <input type="file" accept="*.sarif" style="display: none;">
-    </div>
+    <form id="dropForm" method="post" action="@Url.Action("ValidateFilesAsync")" class="drop-area">
+        <input id="fileInput" name="postedFiles" type="file" style="display: none;">
+        <div class="drop-area-text drop-area-text-input">Drop your SARIF file here or click to browse</div>
+        <div class="drop-area-text drop-area-text-busy">Validating&hellip;</div>
+        <div class="drop-area-text drop-area-text-complete">Validation complete!</div>
+        <div class="drop-area-text drop-area-text-error">Error</div>
+    </form>
 </section>
 
 <section id="validatorSection" class="content-section gray-section">
@@ -212,6 +215,11 @@
                 //editor.session.addGutterDecoration(line - 1, "sarif-error-gutter");
             }
 
+            function isSarifFile(fileName) {
+                var ext = fileName.substr(fileName.lastIndexOf(".") + 1).toLowerCase();
+                return ext == "sarif";
+            }
+
             $(ruleList).on("selectmenuchange", function () {
                 var ruleId = $(this).val();
                 var rule = rulesDictionary[ruleId];
@@ -248,21 +256,41 @@
                 editor.gotoLine(line, 0, true);
             });
 
-            $('#dropArea').filedrop({
-                fallback_dropzoneClick: false,
-                url: '@Url.Action("ValidateFilesAsync")',
-                allowedfileextensions: ['.sarif', '.json'],
-                paramname: 'postedFiles',
-                maxfiles: 1,
-                dragOver: function () {
-                    $('#dropArea').addClass('active-drop');
-                },
-                dragLeave: function () {
-                    $('#dropArea').removeClass('active-drop');
-                },
-                drop: function (e) {
+            var $dropForm = $("#dropForm");
+            var $fileInput = $("#fileInput");
 
-                    var file = e.originalEvent.dataTransfer.files[0];
+            $fileInput.on("change", function (e) {
+                var val = $(this).val();
+
+                if (!isSarifFile(val)) {
+                    alert("Only .sarif files are supported.");
+                    $(this).val("");
+                }
+                else {
+                    $dropForm.trigger("submit");
+                }
+            });
+            var droppedFile = null;
+
+            $dropForm.on("click", function (e) {
+                $fileInput[0].click();
+            })
+            .on("drag dragstart dragend dragover dragenter dragleave drop", function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            })
+            .on("dragover dragenter", function () {
+                $dropForm.addClass("drop-area-active");
+            })
+            .on("dragleave dragend drop", function () {
+                $dropForm.removeClass("drop-area-active");
+            })
+            .on("drop", function (e) {
+                droppedFile = e.originalEvent.dataTransfer.files[0];
+                if (!isSarifFile(droppedFile.name)) {
+                    alert("Only .sarif files are supported.");
+                }
+                else {
                     var reader = new FileReader();
                     reader.onload = function () {
                         if (!editor) {
@@ -274,27 +302,54 @@
                             });
                         }
                         // Get the target file text, excluding the header segment
-                        editor.setValue(atob(reader.result.substring(reader.result.indexOf(',')+1)));
+                        editor.setValue(atob(reader.result.substring(reader.result.indexOf(',') + 1)));
                         editor.selection.clearSelection();
                         $(downloadButton).button("enable");
                         $(themeList).selectmenu("enable");
                     };
-                    reader.readAsDataURL(file);
-                    fileName = file.name;
-                    $('#dropArea').removeClass('active-drop');
-                    $('#dropAreaText').removeClass('drop-area-text-complete');
-                    $('#dropAreaText').addClass('drop-area-text-busy');
-                    $('#dropAreaText').text('Validating file...');
-                },
-                uploadFinished: function (i, file, response, time) {
-                    $('#uploadList').append('<li class="list-group-item">' + file.name + '</li>');
-                    $('#responseMessage').text(response.Message);
-                    processResults(response.LogContents);
-                    $('#resultsSection').show();
-                    $('#dropAreaText').removeClass('drop-area-text-busy');
-                    $('#dropAreaText').addClass('drop-area-text-complete');
-                    $('#dropAreaText').text('Validation complete!');
+                    reader.readAsDataURL(droppedFile);
+                    fileName = droppedFile.name;
+                    $dropForm.trigger("submit");
                 }
+            });
+
+            $dropForm.on("submit", function (e) {
+                // Prevent duplicate submissions
+                if ($dropForm.hasClass("is-busy")) {
+                    return false;
+                }
+
+                $dropForm.addClass("is-busy").removeClass("is-error");
+                e.preventDefault();
+
+                var formData = new FormData();
+                if (droppedFile) {
+                    formData.append($fileInput.attr("name"), droppedFile);
+                }
+
+                $.ajax({
+                    url: $dropForm.attr("action"),
+                    type: $dropForm.attr("method"),
+                    data: formData,
+                    dataType: "json",
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    complete: function () {
+                        $dropForm.removeClass("is-busy");
+                    },
+                    success: function (data) {
+                        $dropForm.addClass("is-complete");
+                        setTimeout(function () {
+                            $dropForm.removeClass("is-complete");
+                        }, 5000);
+                        processResults(data.LogContents);
+                    },
+                    error: function () {
+                        $dropForm.addClass("is-error");
+                        alert("An unexpected error occurred.");
+                    }
+                });
             });
         });
     </script>

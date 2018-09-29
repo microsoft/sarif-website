@@ -129,39 +129,60 @@
 
 .drop-area {
     background-color: #b5b5b5;
-    border: black dashed 2px;
-    color: #fff;
     display: table;
-    height: 50px;
+    height: 70px;
+    outline: 2px dashed #555;
+    outline-offset: -5px;
     text-align: center;
-    text-shadow: 0 0 1px #000;
+    transition: outline-offset .1s ease-in-out, background-color .1s linear;
     width: 100%;
 }
 
+.drop-area-active {
+    background-color: #77bafa;
+    color: #000;
+    outline: 2px dashed #000;
+    outline-offset: -10px;
+}
+
 .drop-area-text {
+    color: #fff;
     display: table-cell;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: var(--content-font-family);
     font-size: 16px;
+    user-select: none;
     vertical-align: middle;
 }
 
-.drop-area-text-busy {
-    color: #000;
-    font-weight: bold;
-    text-shadow: 0 0 1px #fff;
-}
-
-.drop-area-text-complete {
-    color: #0e0;
-    font-weight: bold;
+.drop-area-text-input {
     text-shadow: 0 0 1px #000;
 }
 
-.active-drop {
-    background-color: #77bafa;
-    border: solid 2px #000;
+.drop-area-text-busy {
+    color: #00549c;
+    font-weight: bold;
+}
+
+.drop-area-text-complete {
     color: #000;
-    opacity: 0.5;
+    font-weight: bold;
+}
+
+.drop-area-text-busy, .drop-area-text-complete, .drop-area-text-error {
+    display: none;
+}
+
+.drop-area.is-busy .drop-area-text-input,
+.drop-area.is-complete .drop-area-text-input {
+    display: none;
+}
+
+.drop-area.is-busy .drop-area-text-busy {
+    display: table-cell;
+}
+
+.drop-area.is-complete .drop-area-text-complete {
+    display: table-cell;
 }
 
 #dropSection {
