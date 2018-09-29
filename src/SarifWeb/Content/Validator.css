@@ -4,19 +4,16 @@
 
 #validatorContainer {
     display: flex;
+    flex-direction: column;
     height: 50vmin;
 }
 
-#results {
+#validatorToolbar {
     display: flex;
-    flex-direction: column;
-    width: 40%;
 }
 
-#source {
+#validatorToolbar > div {
     display: flex;
-    flex-direction: column;
-    width: 60%;
 }
 
 #editor {
@@ -35,46 +32,16 @@
     flex: 1;
 }
 
-#downloadLog {
+#downloadLog,
+#revalidate {
     display: flex;
 }
 
-#downloadLog img {
+#downloadLog img,
+#revalidate img {
     margin-right: 5px;
 }
-/*
-.rule-header {
-    background-color: #DDD;
-    border-bottom: 1px solid #AAA;
-    display: flex;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 14px;
-    padding: 10px;
-}
 
-.rule-id {
-    align-items: flex-start;
-    display: flex;
-    flex-wrap: nowrap;
-    font-weight: bold;
-    margin-right: 10px;
-    white-space: nowrap;
-}
-
-.ruleid-count-badge {
-    background-color: #FFCC00;
-    border: 1px solid #000;
-    border-radius: 3px;
-    font-family: 'Roboto', sans-serif;
-    font-size: 9px;
-    margin: 3px 3px 3px 5px;
-    padding: 0px 2px;
-}
-
-.rule-desc {
-    flex: 1;
-}
-*/
 #ruleDescription {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 11px;
@@ -120,6 +87,7 @@
 .sarif-error {
     background-color: #ffcee4 !important;
     position: absolute;
+    z-index: 3;
 }
 
 .sarif-error-gutter {
