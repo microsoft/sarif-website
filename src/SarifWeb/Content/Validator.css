@@ -53,20 +53,20 @@
     margin-right: 5px;
 }
 
+#ruleDescription {
+    align-self: center;
+}
+
 #resultPosition {
     align-items: center;
     display: flex;
-    flex-direction: column;
     justify-content: flex-start;
-    margin-top: 10px;
-}
-
-#resultPositionCurrent {
-    line-height: 8px;
+    margin-top: 6px;
 }
 
 #resultPositionSeparator {
-    line-height: 3px;
+    margin-left: 2px;
+    margin-right: 2px;
 }
 
 #editor {
