@@ -5,27 +5,30 @@
 #validatorContainer {
     display: flex;
     flex-direction: column;
-    height: 50vmin;
+    height: 65vmin;
 }
 
 #validatorToolbar {
+    align-items: flex-start;
     display: flex;
+    margin-bottom: 4px;
+}
+
+#validatorToolbar[data-disabled] {
+    color: #9c9c9c;
 }
 
 #validatorToolbar > div {
     display: flex;
 }
 
-#editor {
-    flex: 1;
-    border: 4px solid #000;
+#validatorToolbar button {
+    margin-left: 3px;
 }
 
-#editorControls {
-    display: flex;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 12px;
-    margin-bottom: 3px;
+#validatorToolbar button > * {
+    margin-bottom: -3px;
+    margin-top: 3px;
 }
 
 #leftSide {
@@ -42,46 +45,43 @@
     margin-right: 5px;
 }
 
+#resultPosition,
 #ruleDescription {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 11px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
-#resultsList {
-    border: 4px double #000;
-    flex: 1;
-    margin-top: 3px;
-    overflow-y: scroll;
-}
-
-.rule-result {
-    border: 2px solid transparent;
-    cursor: pointer;
+#resultPosition {
+    align-items: center;
     display: flex;
-    padding: 6px;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-top: 10px;
 }
 
-.rule-result:hover {
-    border: 2px solid #008AFF;
-    background-color: #E6EDF3;
-    color: #008AFF;
+#resultPositionCurrent {
+    line-height: 8px;
 }
 
-.rule-result div {
-    padding-right: 15px;
+#resultPositionSeparator {
+    line-height: 3px;
 }
 
-.rule-result-line {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 11px;
-    font-weight: bold;
-    white-space: nowrap;
+#editor {
+    flex: 1;
+    border: 4px solid #000;
 }
 
-.rule-result-snip {
-    font-family: Consolas, 'Lucida Console', sans-serif;
-    font-size: 12px;
-    line-height: 16px;
+#validatorFooter {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 4px;
+}
+
+.ui-selectmenu-menu .ui-menu {
+    max-height: 400px;
 }
 
 .sarif-error {
@@ -99,6 +99,7 @@
     background-color: #b5b5b5;
     display: table;
     height: 70px;
+    cursor: pointer;
     outline: 2px dashed #555;
     outline-offset: -5px;
     text-align: center;

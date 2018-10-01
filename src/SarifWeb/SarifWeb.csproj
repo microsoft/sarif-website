@@ -217,7 +217,10 @@
     <Content Include="Images\Logos\Microsoft.png" />
     <Content Include="Images\Logos\Semmle.png" />
     <Content Include="Images\Logos\SWAMP.png" />
+    <Content Include="Images\next.png" />
     <Content Include="Images\Nuget.png" />
+    <Content Include="Images\prev.png" />
+    <Content Include="Images\reload.png" />
     <Content Include="Images\Screenshots\VSCodeViewer.png" />
     <Content Include="Images\Screenshots\VSCodeViewer.thumbnail.png" />
     <Content Include="Images\Screenshots\VSViewer.png" />
