@@ -378,10 +378,7 @@
 
                 $("#ruleDescription").text(currentRule.description);
 
-                setTimeout(function () {
-                    // Go to the first result
-                    editor.gotoLine(currentRule.results[0].line, 0, true);
-                }, 1);
+                editor.gotoLine(currentRule.results[0].line, 0, true);
             });
 
             $(prevResultButton).on("click", function () {
