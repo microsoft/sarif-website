@@ -9,9 +9,9 @@
 <link href="~/Content/Validator.css" rel="stylesheet" />
 
 <section id="dropSection" class="content-section gray-section">
-    <div class="content-section-title">@ViewBag.Title</div>
+    <div id="pageTitle" class="content-section-title">@ViewBag.Title</div>
 
-    <form id="dropForm" method="post" action="@Url.Action("ValidateFilesAsync")" class="drop-area">
+    <form id="dropForm" role="region" aria-dropeffect="execute" aria-label="Click to browse for your log file" tabindex="0" method="post" action="@Url.Action("ValidateFilesAsync")" class="drop-area">
         <input id="fileInput" name="postedFiles" type="file" style="display: none;">
         <div class="drop-area-text drop-area-text-input">Drop your SARIF file here or click to browse</div>
         <div class="drop-area-text drop-area-text-busy">Validating&hellip;</div>
@@ -20,42 +20,42 @@
     </form>
 </section>
 
-<section id="validatorSection" class="content-section gray-section">
+<section id="validatorSection" role="region" aria-labelledby="pageTitle" class="content-section gray-section">
     <div id="validatorContainer">
         <div id="validatorToolbar" data-disabled>
             <div id="leftSide">
-                <select id="ruleList" disabled>
+                <select id="ruleList" role="combobox" aria-label="Rule list" disabled>
                     <option value=""></option>
                 </select>
                 <div id="ruleDescription"></div>
             </div>
             <div id="rightSide">
-                <button id="prevResult" disabled>
+                <button id="prevResult" aria-label="Previous result" disabled>
                     <img src="~/Images/prev.png" />
                 </button>
                 <div id="resultPosition">
-                    <div id="resultPositionCurrent">0</div>
-                    <div id="resultPositionSeparator">/</div>
+                    <div id="resultPositionCurrent" aria-label="Result number">0</div>
+                    <div id="resultPositionSeparator" aria-label="of">/</div>
                     <div id="resultPositionCount">0</div>
                 </div>
-                <button id="nextResult" disabled>
+                <button id="nextResult" aria-label="Next result" disabled>
                     <img src="~/Images/next.png" />
                 </button>
-                <button id="downloadLog" disabled>
+                <button id="downloadLog" aria-label="Download log file" disabled>
                     <img src="~/Images/download.png" />
                     <div>Download</div>
                 </button>
                 <!--
-                <button id="revalidate" disabled>
+                <button id="revalidate" aria-label="Re-validate log file" disabled>
                     <img src="~/Images/reload.png" />
                     <div>Re-validate</div>
                 </button>
                 -->
             </div>
         </div>
-        <div id="editor"></div>
+        <div id="editor" role="textbox" aria-label="Log file editor"></div>
         <div id="validatorFooter">
-            <select id="themeList" disabled>
+            <select id="themeList" role="combobox" aria-label="Editor color theme" disabled>
                 <optgroup label="Light">
                     <option value="ace/theme/chrome">Chrome</option>
                     <option value="ace/theme/clouds">Clouds</option>

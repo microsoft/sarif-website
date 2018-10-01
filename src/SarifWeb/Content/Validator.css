@@ -137,6 +137,11 @@
     font-weight: bold;
 }
 
+.drop-area-text-error {
+    color: #f2000f;
+    font-weight: bold;
+}
+
 .drop-area-text-busy, .drop-area-text-complete, .drop-area-text-error {
     display: none;
 }
