@@ -52,28 +52,16 @@ namespace SarifWeb.Services
                 try
                 {
                     postedFile.SaveAs(savedFilePath);
+                    request.ContentType = "application/json";
 
-                    using (var client = new HttpClient())
+                    // Send request to Validation service
+                    ValidationRequest validationRequest = new ValidationRequest
                     {
-                        request.ContentType = "application/json";
-                        client.BaseAddress = new Uri(baseAddress, UriKind.Absolute);
-                        client.DefaultRequestHeaders.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        PostedFileName = postedFileName,
+                        SavedFileName = savedFileName
+                    };
 
-                        // Send request to Validation service
-                        ValidationRequest validationRequest = new ValidationRequest
-                        {
-                            PostedFileName = postedFileName,
-                            SavedFileName = savedFileName
-                        };
-
-                        string requestBody = JsonConvert.SerializeObject(validationRequest);
-                        HttpContent requestContent = new StringContent(requestBody, Encoding.UTF8, "application/json");
-
-                        HttpResponseMessage response = await _httpClientProxy.PostAsync(client, "api/Validation", requestContent);
-                        string responseContent = response.Content.ReadAsStringAsync().Result;
-                        validationResponse = JsonConvert.DeserializeObject<ValidationResponse>(responseContent);
-                    }
+                    validationResponse = await GetValidationResponse(validationRequest, baseAddress);
                 }
                 finally
                 {
@@ -85,6 +73,61 @@ namespace SarifWeb.Services
             }
 
             return validationResponse;
+        }
+
+        public async Task<ValidationResponse> ValidateJSonAsync(
+            string json,
+            HttpRequestBase request,
+            string postedFilesPath,
+            string baseAddress)
+        {
+            string savedFileName = $"{Guid.NewGuid()}.sarif";
+            string savedFilePath = Path.Combine(postedFilesPath, savedFileName);
+
+            _fileSystem.WriteAllText(savedFilePath, json);
+            request.ContentType = "application/json";
+
+            // Send request to Validation service
+            ValidationRequest validationRequest = new ValidationRequest
+            {
+                PostedFileName = savedFileName,
+                SavedFileName = savedFileName
+            };
+
+            ValidationResponse validationResponse = null;
+
+            try
+            {
+                validationResponse = await GetValidationResponse(validationRequest, baseAddress);
+            }
+            finally
+            {
+                if (_fileSystem.FileExists(savedFilePath))
+                {
+                    _fileSystem.DeleteFile(savedFilePath);
+                }
+            }
+
+            return validationResponse;
+        }
+
+        private async Task<ValidationResponse> GetValidationResponse(
+            ValidationRequest validationRequest,
+            string baseAddress)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseAddress, UriKind.Absolute);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                string requestBody = JsonConvert.SerializeObject(validationRequest);
+                HttpContent requestContent = new StringContent(requestBody, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await _httpClientProxy.PostAsync(client, "api/Validation", requestContent);
+                string responseContent = response.Content.ReadAsStringAsync().Result;
+                return JsonConvert.DeserializeObject<ValidationResponse>(responseContent);
+            }
         }
     }
 }

@@ -45,12 +45,10 @@
                     <img src="~/Images/download.png" />
                     <div>Download</div>
                 </button>
-                <!--
                 <button id="revalidate" aria-label="Re-validate log file" disabled>
                     <img src="~/Images/reload.png" />
                     <div>Re-validate</div>
                 </button>
-                -->
             </div>
         </div>
         <div id="editor" role="textbox" aria-label="Log file editor"></div>
@@ -114,7 +112,7 @@
             var editor = null;
             var markers = [];
             var currentRule = null;
-            var currentResultIndex = 0;
+            var currentResultIndex = -1;
             var toolbar = $("#validatorToolbar");
             var ruleList = $("#ruleList").selectmenu();
             var resultPositionCurrentText = $("#resultPositionCurrent");
@@ -122,7 +120,7 @@
             var prevResultButton = $("#prevResult").button();
             var nextResultButton = $("#nextResult").button();
             var downloadButton = $("#downloadLog").button();
-            //var revalidateButton = $("#revalidate").button();
+            var revalidateButton = $("#revalidate").button();
 
             var theme = getCookie("editorTheme");
             theme = theme ? theme : "ace/theme/sqlserver";
@@ -199,7 +197,16 @@
                 }
 
                 if (!hasResults) {
-                    alert("No errors were found during validation!");
+                    rulesDictionary = {};
+                    clearRuleList();
+                    setResultPositionText(0, 0);
+                    clearLineMarkers();
+                    currentResultIndex = -1;
+
+                    setTimeout(function () {
+                        // Push this to another thread to allow the above settings to take effect
+                        alert("No errors were found during validation!");
+                    }, 0);
                 }
             }
 
@@ -217,13 +224,21 @@
             }
 
             // Sets a line marker in the editor
-            function setMarker(line) {
+            function setLineMarker(line) {
                 var range = new ace.Range(line - 1, 0, line - 1, Infinity);
                 range.start = editor.session.doc.createAnchor(range.start);
                 range.end = editor.session.doc.createAnchor(range.end);
                 range.id = editor.session.addMarker(range, "sarif-error", "text", false);
                 markers.push(range.id);
                 //editor.session.addGutterDecoration(line - 1, "sarif-error-gutter");
+            }
+
+            // Clears all line markers in the editor
+            function clearLineMarkers() {
+                markers.forEach(function (id) {
+                    editor.session.removeMarker(id);
+                });
+                markers = [];
             }
 
             function isSarifFile(fileName) {
@@ -322,7 +337,7 @@
                     }
                 }
 
-                $dropForm.addClass("is-busy").removeClass("is-error");
+                $dropForm.addClass("is-busy").removeClass("is-complete").removeClass("is-error");
 
                 var formData = new FormData();
                 formData.append($fileInput.attr("name"), file);
@@ -365,53 +380,89 @@
                 currentResultIndex = 0;
                 setResultPositionText(1, currentRule.results.length);
 
-                // Remove exising line markers
-                markers.forEach(function (id) {
-                    editor.session.removeMarker(id);
-                });
-                markers = [];
+                clearLineMarkers();
 
                 // Set line markers for each result corresponding to this rule
                 currentRule.results.forEach(function (result) {
-                    setMarker(result.line);
+                    setLineMarker(result.line);
                 });
 
                 $("#ruleDescription").text(currentRule.description);
-
-                editor.gotoLine(currentRule.results[0].line, 0, true);
+                
+                setTimeout(function () {
+                    editor.gotoLine(currentRule.results[0].line, 0, true);
+                }, 0);
             });
 
             $(prevResultButton).on("click", function () {
-                if (currentResultIndex > 0) {
-                    currentResultIndex--;
-                }
-                else {
-                    currentResultIndex = currentRule.results.length - 1;
-                }
+                if (currentResultIndex > -1) {
+                    if (currentResultIndex > 0) {
+                        currentResultIndex--;
+                    }
+                    else {
+                        currentResultIndex = currentRule.results.length - 1;
+                    }
 
-                setResultPositionText(currentResultIndex + 1);
-                editor.gotoLine(currentRule.results[currentResultIndex].line, 0, true);
+                    setResultPositionText(currentResultIndex + 1);
+                    editor.gotoLine(currentRule.results[currentResultIndex].line, 0, true);
+                }
             });
 
             $(nextResultButton).on("click", function () {
-                if (currentResultIndex < currentRule.results.length - 1) {
-                    currentResultIndex++;
-                }
-                else {
-                    currentResultIndex = 0;
-                }
+                if (currentResultIndex > -1) {
+                    if (currentResultIndex < currentRule.results.length - 1) {
+                        currentResultIndex++;
+                    }
+                    else {
+                        currentResultIndex = 0;
+                    }
 
-                setResultPositionText(currentResultIndex + 1);
-                editor.gotoLine(currentRule.results[currentResultIndex].line, 0, true);
+                    setResultPositionText(currentResultIndex + 1);
+                    editor.gotoLine(currentRule.results[currentResultIndex].line, 0, true);
+                }
             });
 
             $(downloadButton).on("click", function () {
                 saveTextAsFile();
             });
 
-            //$(revalidateButton).on("click", function () {
-            //    // TODO: add support for validating text
-            //})
+            $(revalidateButton).on("click", function () {
+                // Disable controls
+                setToolbarEnabled(false);
+                $dropForm.addClass("is-busy").removeClass("is-complete").removeClass("is-error");
+
+                $.ajax({
+                    url: "@Url.Action("ValidateJsonAsync")",
+                    type: "POST",
+                    data: JSON.stringify({ json: editor.getValue() }),
+                    dataType: "json",
+                    cache: false,
+                    contentType: "application/json",
+                    processData: false,
+                    complete: function () {
+                        // Enable controls
+                        setToolbarEnabled(true);
+                        $dropForm.removeClass("is-busy");
+                    },
+                    success: function (data) {
+                        $dropForm.addClass("is-complete");
+                        setTimeout(function () {
+                            $dropForm.removeClass("is-complete");
+                        }, 5000);
+                        processResults(data.LogContents);
+                    },
+                    error: function (xmlhttprequest, textstatus, message) {
+                        $dropForm.addClass("is-error");
+                        setTimeout(function () {
+                            $dropForm.removeClass("is-error");
+                        }, 5000);
+                        var error = textstatus == "timeout" ?
+                            "The re-validation request timed out." :
+                            "An unknown error occurred.";
+                        alert(error);
+                    }
+                });
+            })
 
             $(themeList).on("selectmenuchange", function () {
                 var theme = $(this).val();
@@ -425,12 +476,14 @@
             $fileInput.on("change", function (e) {
                 var val = $(this).val();
 
-                if (!isSarifFile(val)) {
-                    alert("Only .sarif files are supported.");
-                    $(this).val("");
-                }
-                else {
-                    submitValidationRequest($(this)[0].files[0]);
+                if (val != "") {
+                    if (!isSarifFile(val)) {
+                        alert("Only .sarif files are supported.");
+                        $(this).val("");
+                    }
+                    else {
+                        submitValidationRequest($(this)[0].files[0]);
+                    }
                 }
             });
 
