@@ -1,138 +1,460 @@
 ﻿@{
-    ViewBag.Title = "SARIF Log File Validator";
+    ViewBag.Title = "SARIF Validator";
 }
 
 <link href="~/Content/Home.css" rel="stylesheet" />
+<link href="~/Scripts/jqueryui/themes/redmond/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Scripts/jqueryui/themes/redmond/theme.min.css" rel="stylesheet" />
+<link href="~/Scripts/jqueryui/jquery-ui.structure.css" rel="stylesheet" />
+<link href="~/Content/Validator.css" rel="stylesheet" />
 
 <section id="dropSection" class="content-section gray-section">
-    <div class="content-section-title">@ViewBag.Title</div>
+    <div id="pageTitle" class="content-section-title">@ViewBag.Title</div>
 
-    <div id="dropArea" class="drop-area">
-        <div id="dropAreaText" class="drop-area-text">Drop your SARIF log file here to validate it</div>
+    <form id="dropForm" role="region" aria-dropeffect="execute" aria-label="Click to browse for your log file" tabindex="0" method="post" action="@Url.Action("ValidateFilesAsync")" class="drop-area">
+        <input id="fileInput" name="postedFiles" type="file" style="display: none;">
+        <div class="drop-area-text drop-area-text-input">Drop your SARIF file here or click to browse</div>
+        <div class="drop-area-text drop-area-text-busy">Validating&hellip;</div>
+        <div class="drop-area-text drop-area-text-complete">Validation complete!</div>
+        <div class="drop-area-text drop-area-text-error">Error</div>
+    </form>
+</section>
+
+<section id="validatorSection" role="region" aria-labelledby="pageTitle" class="content-section gray-section">
+    <div id="validatorContainer">
+        <div id="validatorToolbar" data-disabled>
+            <div id="leftSide">
+                <select id="ruleList" role="combobox" aria-label="Rule list" disabled>
+                    <option value=""></option>
+                </select>
+                <div id="ruleDescription"></div>
+            </div>
+            <div id="rightSide">
+                <button id="prevResult" aria-label="Previous result" disabled>
+                    <img src="~/Images/prev.png" />
+                </button>
+                <div id="resultPosition">
+                    <div id="resultPositionCurrent" aria-label="Result number">0</div>
+                    <div id="resultPositionSeparator" aria-label="of">/</div>
+                    <div id="resultPositionCount">0</div>
+                </div>
+                <button id="nextResult" aria-label="Next result" disabled>
+                    <img src="~/Images/next.png" />
+                </button>
+                <button id="downloadLog" aria-label="Download log file" disabled>
+                    <img src="~/Images/download.png" />
+                    <div>Download</div>
+                </button>
+                <!--
+                <button id="revalidate" aria-label="Re-validate log file" disabled>
+                    <img src="~/Images/reload.png" />
+                    <div>Re-validate</div>
+                </button>
+                -->
+            </div>
+        </div>
+        <div id="editor" role="textbox" aria-label="Log file editor"></div>
+        <div id="validatorFooter">
+            <select id="themeList" role="combobox" aria-label="Editor color theme" disabled>
+                <optgroup label="Light">
+                    <option value="ace/theme/chrome">Chrome</option>
+                    <option value="ace/theme/clouds">Clouds</option>
+                    <option value="ace/theme/crimson_editor">Crimson Editor</option>
+                    <option value="ace/theme/dawn">Dawn</option>
+                    <option value="ace/theme/dreamweaver">Dreamweaver</option>
+                    <option value="ace/theme/eclipse">Eclipse</option>
+                    <option value="ace/theme/github">GitHub</option>
+                    <option value="ace/theme/iplastic">IPlastic</option>
+                    <option value="ace/theme/solarized_light">Solarized Light</option>
+                    <option value="ace/theme/textmate">TextMate</option>
+                    <option value="ace/theme/tomorrow">Tomorrow</option>
+                    <option value="ace/theme/xcode">XCode</option>
+                    <option value="ace/theme/kuroir">Kuroir</option>
+                    <option value="ace/theme/katzenmilch">KatzenMilch</option>
+                    <option value="ace/theme/sqlserver" selected>SQL Server</option>
+                </optgroup>
+                <optgroup label="Dark">
+                    <option value="ace/theme/ambiance">Ambiance</option>
+                    <option value="ace/theme/chaos">Chaos</option>
+                    <option value="ace/theme/clouds_midnight">Clouds Midnight</option>
+                    <option value="ace/theme/dracula">Dracula</option>
+                    <option value="ace/theme/cobalt">Cobalt</option>
+                    <option value="ace/theme/gruvbox">Gruvbox</option>
+                    <option value="ace/theme/gob">Green on Black</option>
+                    <option value="ace/theme/idle_fingers">idle Fingers</option>
+                    <option value="ace/theme/kr_theme">krTheme</option>
+                    <option value="ace/theme/merbivore">Merbivore</option>
+                    <option value="ace/theme/merbivore_soft">Merbivore Soft</option>
+                    <option value="ace/theme/mono_industrial">Mono Industrial</option>
+                    <option value="ace/theme/monokai">Monokai</option>
+                    <option value="ace/theme/pastel_on_dark">Pastel on dark</option>
+                    <option value="ace/theme/solarized_dark">Solarized Dark</option>
+                    <option value="ace/theme/terminal">Terminal</option>
+                    <option value="ace/theme/tomorrow_night">Tomorrow Night</option>
+                    <option value="ace/theme/tomorrow_night_blue">Tomorrow Night Blue</option>
+                    <option value="ace/theme/tomorrow_night_bright">Tomorrow Night Bright</option>
+                    <option value="ace/theme/tomorrow_night_eighties">Tomorrow Night 80s</option>
+                    <option value="ace/theme/twilight">Twilight</option>
+                    <option value="ace/theme/vibrant_ink">Vibrant Ink</option>
+                </optgroup>
+            </select>
+        </div>
     </div>
 </section>
 
-<section id="resultsSection" class="content-section gray-section">
-    <div class="heading">Response message:</div>
-    <p id="responseMessage"></p>
-
-    <div class="heading">SARIF log file contents:</div>
-    <pre id="sarifLogFileContents"></pre>
-</section>
-
-<style>
-    .drop-area {
-        background-color: #b5b5b5;
-        border: black dashed 1px;
-        color: #fff;
-        display: table;
-        height: 50px;
-        text-align: center;
-        text-shadow: 0 0 1px #000;
-        width: 100%;
-    }
-
-    .drop-area-text {
-        display: table-cell;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        font-size: 16px;
-        vertical-align: middle;
-    }
-
-    .drop-area-text-busy {
-        color: #000;
-        font-weight: bold;
-        text-shadow: 0 0 1px #fff;
-    }
-
-    .drop-area-text-complete {
-        color: #0e0;
-        font-weight: bold;
-        text-shadow: 0 0 1px #000;
-    }
-
-    .active-drop {
-        background-color: #77bafa;
-        border: solid 2px #000;
-        color: #000;
-        opacity: 0.5;
-    }
-
-    #dropSection {
-        padding-bottom: 30px;
-        padding-top: 20px;
-    }
-
-    #resultsSection {
-        display: none;
-        padding-bottom: 50px;
-        padding-top: 0px;
-    }
-
-    #responseMessage {
-        font-family: var(--content-font-family);
-        font-size: 12px;
-    }
-
-    .heading {
-        font-family: var(--content-font-family);
-        font-size: 16px;
-        font-weight: bold;
-    }
-
-    pre {
-        display: block;
-        padding: 9.5px;
-        margin: 0 0 10px;
-        font-size: 13px;
-        line-height: 1.428571429;
-        color: #333333;
-        word-break: break-all;
-        word-wrap: break-word;
-        background-color: #f5f5f5;
-        border: 1px solid #cccccc;
-        border-radius: 4px;
-    }
-
-    code, pre {
-        font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
-    }
-
-    pre {
-        white-space: pre-wrap;
-    }
-</style>
+<!-- This hidden hyperlink is used by the Download button -->
+<a id="downloadLink" style="display: none;">Download</a>
 
 @section Scripts {
-    <script src="~/Scripts/jquery.filedrop.js"></script>
+    <script src="~/Scripts/ace/ace.js"></script>
+    <script src="~/Scripts/jqueryui/jquery-ui.min.js"></script>
     <script type="text/javascript">
         $(function () {
-            $('#dropArea').filedrop({
-                fallback_dropzoneClick: false,
-                url: '@Url.Action("ValidateFilesAsync")',
-                allowedfileextensions: ['.sarif', '.json'],
-                paramname: 'postedFiles',
-                maxfiles: 1,
-                dragOver: function () {
-                    $('#dropArea').addClass('active-drop');
-                },
-                dragLeave: function () {
-                    $('#dropArea').removeClass('active-drop');
-                },
-                drop: function () {
-                    $('#dropArea').removeClass('active-drop');
-                    $('#dropAreaText').removeClass('drop-area-text-complete');
-                    $('#dropAreaText').addClass('drop-area-text-busy');
-                    $('#dropAreaText').text('Validating file...');
-                },
-                uploadFinished: function (i, file, response, time) {
-                    $('#uploadList').append('<li class="list-group-item">' + file.name + '</li>');
-                    $('#responseMessage').text(response.Message);
-                    $('#sarifLogFileContents').text(response.LogContents);
-                    $('#resultsSection').show();
-                    $('#dropAreaText').removeClass('drop-area-text-busy');
-                    $('#dropAreaText').addClass('drop-area-text-complete');
-                    $('#dropAreaText').text('Validation complete!');
+            var fileName = "";
+            var editor = null;
+            var markers = [];
+            var currentRule = null;
+            var currentResultIndex = 0;
+            var toolbar = $("#validatorToolbar");
+            var ruleList = $("#ruleList").selectmenu();
+            var resultPositionCurrentText = $("#resultPositionCurrent");
+            var resultPositionCountText = $("#resultPositionCount");
+            var prevResultButton = $("#prevResult").button();
+            var nextResultButton = $("#nextResult").button();
+            var downloadButton = $("#downloadLog").button();
+            //var revalidateButton = $("#revalidate").button();
+
+            var theme = getCookie("editorTheme");
+            theme = theme ? theme : "ace/theme/sqlserver";
+            var themeList = $("#themeList")
+                .selectmenu()
+                .val(theme)
+                .selectmenu("refresh")
+                .selectmenu("option", "position", { my: "left bottom", at: "left top", collision: "fit" });
+
+            // Rules dictionary: key = rule ID, value = { description, results[ { line } ] }
+            var rulesDictionary = {};
+
+            // Adds a bare rule to the dictionary
+            function addRule(ruleId, description) {
+                rulesDictionary[ruleId] = {
+                    description: description,
+                    results: []
+                };
+            }
+
+            // Creates HTML for a result and adds it to the corresponding rule's results array
+            function addResult(ruleId, line) {
+                rulesDictionary[ruleId].results.push({ line: line });
+            }
+
+            // Creates a SARIF log object from JSON, then processes rules and results
+            function processResults(sarif) {
+                rulesDictionary = {};
+                var sarifLog = JSON.parse(sarif);
+                var hasResults = false;
+
+                for (var i = 0; i < sarifLog.runs.length; i++) {
+                    var run = sarifLog.runs[i];
+
+                    if (run.results.length > 0) {
+                        hasResults = true;
+
+                        if (run.resources && run.resources.rules) {
+                            // Process rules
+                            var rules = run.resources.rules;
+
+                            for (var key in rules) {
+                                var rule = rules[key];
+                                var ruleId = rule.id;
+
+                                if (!rulesDictionary[ruleId]) {
+                                    var description = rule.shortDescription ? rule.shortDescription.text : rule.fullDescription.text;
+                                    addRule(ruleId, description);
+                                }
+                            }
+
+                            // Process results
+                            for (var j = 0; j < run.results.length; j++) {
+                                var result = run.results[j];
+
+                                for (var k = 0; k < result.locations.length; k++) {
+                                    // Get the startLine from the result location
+                                    var startLine = result.locations[k].physicalLocation.region.startLine;
+                                    addResult(result.ruleId, startLine);
+                                }
+                            }
+
+                            // Now we know how many results we have for each rule, so populate the rules dropdown
+                            var options = [];
+                            for (var key in rulesDictionary) {
+                                options.push("<option value='" + key + "'>" + key + " (" + rulesDictionary[key].results.length + ")</option>");
+                            }
+
+                            // Clear the dropdown, then add the rules and trigger a change event
+                            clearRuleList();
+                            $(ruleList).append(options.join("")).selectmenu("refresh").trigger("selectmenuchange");
+                        }
+                    }
+                }
+
+                if (!hasResults) {
+                    alert("No errors were found during validation!");
+                }
+            }
+
+            // Downloads the complete text from the editor
+            function saveTextAsFile() {
+                var textToWrite = editor.getValue();
+                var textFileAsBlob = new Blob([textToWrite], { type: "text/json" });
+
+                var downloadLink = $("#downloadLink")[0];
+                downloadLink.download = fileName;
+                downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+                downloadLink.click();
+
+                window.URL.revokeObjectURL(textFileAsBlob);
+            }
+
+            // Sets a line marker in the editor
+            function setMarker(line) {
+                var range = new ace.Range(line - 1, 0, line - 1, Infinity);
+                range.start = editor.session.doc.createAnchor(range.start);
+                range.end = editor.session.doc.createAnchor(range.end);
+                range.id = editor.session.addMarker(range, "sarif-error", "text", false);
+                markers.push(range.id);
+                //editor.session.addGutterDecoration(line - 1, "sarif-error-gutter");
+            }
+
+            function isSarifFile(fileName) {
+                var ext = fileName.substr(fileName.lastIndexOf(".") + 1).toLowerCase();
+                return ext == "sarif";
+            }
+
+            function setUpEditor(file) {
+                return new Promise(function (resolve, reject) {
+                    var reader = new FileReader();
+                    reader.onload = function () {
+                        editor = ace.edit("editor", {
+                            mode: "ace/mode/json",
+                            theme: $(themeList).val(),
+                            selectionStyle: "text",
+                            showPrintMargin: false
+                        });
+
+                        // Get the target file text, excluding the header segment
+                        editor.setValue(atob(reader.result.substring(reader.result.indexOf(',') + 1)));
+                        editor.selection.clearSelection();
+
+                        // Enable controls
+                        setToolbarEnabled(true);
+                        resolve();
+                    };
+                    reader.readAsDataURL(file);
+                    fileName = file.name;
+                });
+            }
+
+            function resetFileInput() {
+                $fileInput.val(null);
+            }
+
+            function resetEditor() {
+                if (editor) {
+                    editor.setValue("");
+                }
+
+                clearRuleList();
+                setToolbarEnabled(false);
+                setResultPositionText(0, 0);
+            }
+
+            function setToolbarEnabled(enable) {
+                var verb;
+                var selector = "";
+
+                if (enable) {
+                    verb = "enable";
+                    selector = ":disabled";
+                    $(toolbar).removeAttr("data-disabled");
+                }
+                else {
+                    verb = "disable";
+                    $(toolbar).attr("data-disabled");
+                }
+
+                $("#validatorToolbar button" + selector).each(function (index, button) {
+                    $(button).button(verb);
+                });
+                $(ruleList).selectmenu(verb);
+                $(themeList).selectmenu(verb);
+            }
+
+            function clearRuleList() {
+                $("#ruleList option").each(function (index, option) {
+                    $(option).remove();
+                })
+                $(ruleList).selectmenu("refresh");
+                $("#ruleDescription").text("");
+            }
+
+            function setResultPositionText(current, count) {
+                $(resultPositionCurrentText).text(current);
+
+                if (typeof count != "undefined") {
+                    $(resultPositionCountText).text(count);
+                }
+            }
+
+            function submitValidationRequest(file) {
+                // Prevent duplicate submissions
+                if ($dropForm.hasClass("is-busy")) {
+                    return false;
+                }
+
+                resetEditor();
+
+                // Confirm if the file is > 20 MB
+                if (file.size > 20971520) {
+                    if (!confirm("The file you have selected is large, and validating this file could take a long time. Do you want to continue?")) {
+                        resetFileInput();
+                        return;
+                    }
+                }
+
+                $dropForm.addClass("is-busy").removeClass("is-error");
+
+                var formData = new FormData();
+                formData.append($fileInput.attr("name"), file);
+
+                $.ajax({
+                    url: $dropForm.attr("action"),
+                    type: $dropForm.attr("method"),
+                    data: formData,
+                    dataType: "json",
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    complete: function () {
+                        resetFileInput();
+                        $dropForm.removeClass("is-busy");
+                    },
+                    success: function (data) {
+                        $dropForm.addClass("is-complete");
+                        setTimeout(function () {
+                            $dropForm.removeClass("is-complete");
+                        }, 5000);
+                        setUpEditor(file)
+                            .then(function () {
+                                processResults(data.LogContents);
+                            });
+                    },
+                    error: function (xmlhttprequest, textstatus, message) {
+                        $dropForm.addClass("is-error");
+                        var error = textstatus == "timeout" ?
+                            "The validation request timed out." :
+                            "An unknown error occurred.";
+                        alert(error);
+                    }
+                });
+            }
+
+            $(ruleList).on("selectmenuchange", function () {
+                var ruleId = $(this).val();
+                currentRule = rulesDictionary[ruleId];
+                currentResultIndex = 0;
+                setResultPositionText(1, currentRule.results.length);
+
+                // Remove exising line markers
+                markers.forEach(function (id) {
+                    editor.session.removeMarker(id);
+                });
+                markers = [];
+
+                // Set line markers for each result corresponding to this rule
+                currentRule.results.forEach(function (result) {
+                    setMarker(result.line);
+                });
+
+                $("#ruleDescription").text(currentRule.description);
+
+                editor.gotoLine(currentRule.results[0].line, 0, true);
+            });
+
+            $(prevResultButton).on("click", function () {
+                if (currentResultIndex > 0) {
+                    currentResultIndex--;
+                }
+                else {
+                    currentResultIndex = currentRule.results.length - 1;
+                }
+
+                setResultPositionText(currentResultIndex + 1);
+                editor.gotoLine(currentRule.results[currentResultIndex].line, 0, true);
+            });
+
+            $(nextResultButton).on("click", function () {
+                if (currentResultIndex < currentRule.results.length - 1) {
+                    currentResultIndex++;
+                }
+                else {
+                    currentResultIndex = 0;
+                }
+
+                setResultPositionText(currentResultIndex + 1);
+                editor.gotoLine(currentRule.results[currentResultIndex].line, 0, true);
+            });
+
+            $(downloadButton).on("click", function () {
+                saveTextAsFile();
+            });
+
+            //$(revalidateButton).on("click", function () {
+            //    // TODO: add support for validating text
+            //})
+
+            $(themeList).on("selectmenuchange", function () {
+                var theme = $(this).val();
+                editor.setTheme(theme);
+                setCookie("editorTheme", theme, 365 * 10);
+            });
+
+            var $dropForm = $("#dropForm");
+            var $fileInput = $("#fileInput");
+
+            $fileInput.on("change", function (e) {
+                var val = $(this).val();
+
+                if (!isSarifFile(val)) {
+                    alert("Only .sarif files are supported.");
+                    $(this).val("");
+                }
+                else {
+                    submitValidationRequest($(this)[0].files[0]);
+                }
+            });
+
+            $dropForm.on("click", function (e) {
+                $fileInput[0].click();
+            })
+            .on("drag dragstart dragend dragover dragenter dragleave drop", function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            })
+            .on("dragover dragenter", function () {
+                $dropForm.addClass("drop-area-active");
+            })
+            .on("dragleave dragend drop", function () {
+                $dropForm.removeClass("drop-area-active");
+            })
+            .on("drop", function (e) {
+                var file = e.originalEvent.dataTransfer.files[0];
+
+                if (!isSarifFile(file.name)) {
+                    alert("Only .sarif files are supported.");
+                }
+                else {
+                    submitValidationRequest(file);
                 }
             });
         });
