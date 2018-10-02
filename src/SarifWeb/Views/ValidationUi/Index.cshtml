@@ -45,12 +45,10 @@
                     <img src="~/Images/download.png" />
                     <div>Download</div>
                 </button>
-                <!--
                 <button id="revalidate" aria-label="Re-validate log file" disabled>
                     <img src="~/Images/reload.png" />
                     <div>Re-validate</div>
                 </button>
-                -->
             </div>
         </div>
         <div id="editor" role="textbox" aria-label="Log file editor"></div>
@@ -122,7 +120,7 @@
             var prevResultButton = $("#prevResult").button();
             var nextResultButton = $("#nextResult").button();
             var downloadButton = $("#downloadLog").button();
-            //var revalidateButton = $("#revalidate").button();
+            var revalidateButton = $("#revalidate").button();
 
             var theme = getCookie("editorTheme");
             theme = theme ? theme : "ace/theme/sqlserver";
@@ -322,7 +320,7 @@
                     }
                 }
 
-                $dropForm.addClass("is-busy").removeClass("is-error");
+                $dropForm.addClass("is-busy").removeClass("is-complete").removeClass("is-error");
 
                 var formData = new FormData();
                 formData.append($fileInput.attr("name"), file);
@@ -378,7 +376,10 @@
 
                 $("#ruleDescription").text(currentRule.description);
 
-                editor.gotoLine(currentRule.results[0].line, 0, true);
+                // TODO: figure out why there is a race here
+                setTimeout(function () {
+                    editor.gotoLine(currentRule.results[0].line, 0, true);
+                }, 0);
             });
 
             $(prevResultButton).on("click", function () {
@@ -409,9 +410,43 @@
                 saveTextAsFile();
             });
 
-            //$(revalidateButton).on("click", function () {
-            //    // TODO: add support for validating text
-            //})
+            $(revalidateButton).on("click", function () {
+                // Disable controls
+                setToolbarEnabled(false);
+                $dropForm.addClass("is-busy").removeClass("is-complete").removeClass("is-error");
+
+                $.ajax({
+                    url: "@Url.Action("ValidateJsonAsync")",
+                    type: "POST",
+                    data: JSON.stringify({ json: editor.getValue() }),
+                    dataType: "json",
+                    cache: false,
+                    contentType: "application/json",
+                    processData: false,
+                    complete: function () {
+                        // Enable controls
+                        setToolbarEnabled(true);
+                        $dropForm.removeClass("is-busy");
+                    },
+                    success: function (data) {
+                        $dropForm.addClass("is-complete");
+                        setTimeout(function () {
+                            $dropForm.removeClass("is-complete");
+                        }, 5000);
+                        processResults(data.LogContents);
+                    },
+                    error: function (xmlhttprequest, textstatus, message) {
+                        $dropForm.addClass("is-error");
+                        setTimeout(function () {
+                            $dropForm.removeClass("is-error");
+                        }, 5000);
+                        var error = textstatus == "timeout" ?
+                            "The re-validation request timed out." :
+                            "An unknown error occurred.";
+                        alert(error);
+                    }
+                });
+            })
 
             $(themeList).on("selectmenuchange", function () {
                 var theme = $(this).val();
@@ -425,12 +460,14 @@
             $fileInput.on("change", function (e) {
                 var val = $(this).val();
 
-                if (!isSarifFile(val)) {
-                    alert("Only .sarif files are supported.");
-                    $(this).val("");
-                }
-                else {
-                    submitValidationRequest($(this)[0].files[0]);
+                if (val != "") {
+                    if (!isSarifFile(val)) {
+                        alert("Only .sarif files are supported.");
+                        $(this).val("");
+                    }
+                    else {
+                        submitValidationRequest($(this)[0].files[0]);
+                    }
                 }
             });
 

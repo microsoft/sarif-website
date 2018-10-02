@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using SarifWeb.Utilities;
 using SarifWeb.Services;
 using SarifWeb.Models;
+using FromBody = System.Web.Http.FromBodyAttribute;
 
 namespace SarifWeb.Controllers
 {
@@ -66,12 +67,25 @@ namespace SarifWeb.Controllers
                 "{0}://{1}{2}",
                 request.Url.Scheme, request.Url.Authority, Url.Content("~"));
 
-            // The JQuery filedrop API allows you to drop multiple files, but at least for
-            // now, for simplicity, the ValidationUi Index view enforces a limit of one file
-            // at a time (it does this by setting maxfiles to 1 in the handler for the filedrop event).
+            // The ValidationUi Index view enforces a limit of one file at a time.
             HttpPostedFileBase postedFile = postedFiles.FirstOrDefault();
 
             ValidationResponse response = await _validationUiService.ValidateFileAsync(postedFile, request, postedFilesDirectory, baseAddress);
+            return JsonConvert.SerializeObject(response);
+        }
+
+        [HttpPost]
+        public async Task<string> ValidateJsonAsync([FromBody] string json)
+        {
+            // Extract information from the parts of the Controller object that are hard to mock.
+            HttpRequestBase request = ControllerContext.RequestContext.HttpContext.Request;
+            string postedFilesDirectory = HostingHelper.PostedFilesDirectory;
+            string baseAddress = string.Format(
+                CultureInfo.InvariantCulture,
+                "{0}://{1}{2}",
+                request.Url.Scheme, request.Url.Authority, Url.Content("~"));
+
+            ValidationResponse response = await _validationUiService.ValidateJSonAsync(json, request, postedFilesDirectory, baseAddress);
             return JsonConvert.SerializeObject(response);
         }
     }
