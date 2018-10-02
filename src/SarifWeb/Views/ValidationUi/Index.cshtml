@@ -112,7 +112,7 @@
             var editor = null;
             var markers = [];
             var currentRule = null;
-            var currentResultIndex = 0;
+            var currentResultIndex = -1;
             var toolbar = $("#validatorToolbar");
             var ruleList = $("#ruleList").selectmenu();
             var resultPositionCurrentText = $("#resultPositionCurrent");
@@ -197,7 +197,16 @@
                 }
 
                 if (!hasResults) {
-                    alert("No errors were found during validation!");
+                    rulesDictionary = {};
+                    clearRuleList();
+                    setResultPositionText(0, 0);
+                    clearLineMarkers();
+                    currentResultIndex = -1;
+
+                    setTimeout(function () {
+                        // Push this to another thread to allow the above settings to take effect
+                        alert("No errors were found during validation!");
+                    }, 0);
                 }
             }
 
@@ -215,13 +224,21 @@
             }
 
             // Sets a line marker in the editor
-            function setMarker(line) {
+            function setLineMarker(line) {
                 var range = new ace.Range(line - 1, 0, line - 1, Infinity);
                 range.start = editor.session.doc.createAnchor(range.start);
                 range.end = editor.session.doc.createAnchor(range.end);
                 range.id = editor.session.addMarker(range, "sarif-error", "text", false);
                 markers.push(range.id);
                 //editor.session.addGutterDecoration(line - 1, "sarif-error-gutter");
+            }
+
+            // Clears all line markers in the editor
+            function clearLineMarkers() {
+                markers.forEach(function (id) {
+                    editor.session.removeMarker(id);
+                });
+                markers = [];
             }
 
             function isSarifFile(fileName) {
@@ -363,15 +380,11 @@
                 currentResultIndex = 0;
                 setResultPositionText(1, currentRule.results.length);
 
-                // Remove exising line markers
-                markers.forEach(function (id) {
-                    editor.session.removeMarker(id);
-                });
-                markers = [];
+                clearLineMarkers();
 
                 // Set line markers for each result corresponding to this rule
                 currentRule.results.forEach(function (result) {
-                    setMarker(result.line);
+                    setLineMarker(result.line);
                 });
 
                 $("#ruleDescription").text(currentRule.description);
@@ -383,27 +396,31 @@
             });
 
             $(prevResultButton).on("click", function () {
-                if (currentResultIndex > 0) {
-                    currentResultIndex--;
-                }
-                else {
-                    currentResultIndex = currentRule.results.length - 1;
-                }
+                if (currentResultIndex > -1) {
+                    if (currentResultIndex > 0) {
+                        currentResultIndex--;
+                    }
+                    else {
+                        currentResultIndex = currentRule.results.length - 1;
+                    }
 
-                setResultPositionText(currentResultIndex + 1);
-                editor.gotoLine(currentRule.results[currentResultIndex].line, 0, true);
+                    setResultPositionText(currentResultIndex + 1);
+                    editor.gotoLine(currentRule.results[currentResultIndex].line, 0, true);
+                }
             });
 
             $(nextResultButton).on("click", function () {
-                if (currentResultIndex < currentRule.results.length - 1) {
-                    currentResultIndex++;
-                }
-                else {
-                    currentResultIndex = 0;
-                }
+                if (currentResultIndex > -1) {
+                    if (currentResultIndex < currentRule.results.length - 1) {
+                        currentResultIndex++;
+                    }
+                    else {
+                        currentResultIndex = 0;
+                    }
 
-                setResultPositionText(currentResultIndex + 1);
-                editor.gotoLine(currentRule.results[currentResultIndex].line, 0, true);
+                    setResultPositionText(currentResultIndex + 1);
+                    editor.gotoLine(currentRule.results[currentResultIndex].line, 0, true);
+                }
             });
 
             $(downloadButton).on("click", function () {
