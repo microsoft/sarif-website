@@ -18,7 +18,7 @@ button.sarifweb-button:not([disabled]):hover, button.sarifweb-button:active {
 }
 
 #headerNavValidator {
-    margin-right: 15px;
+    display: none;
 }
 
 footer {
