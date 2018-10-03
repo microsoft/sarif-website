@@ -7,7 +7,8 @@ button.sarifweb-button {
     border: 1px solid #D2D2D2;
 }
 
-button.sarifweb-button:not([disabled]):hover, button.sarifweb-button:active {
+button.sarifweb-button:not([disabled]):hover,
+button.sarifweb-button:active {
     border: solid 1px #008AFF !important;
 }
 
@@ -28,16 +29,13 @@ header {
     padding: 2px 4px;
 }
 
-#headerNavItems {
+#headerNavItems,
+#headerNavValidator {
     display: none;
 }
 
 .header-nav-item {
     font-size: 12px;
-}
-
-#headerNavValidator {
-    margin-right: 15px;
 }
 
 footer {
