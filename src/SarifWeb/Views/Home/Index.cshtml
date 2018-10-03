@@ -8,12 +8,12 @@
 <link href="~/Content/Home-Media-Tablet.css" rel="stylesheet" media="only screen and (min-width: 768px) and (max-width: 1024px)" />
 <link href="~/Content/Home-Media-Tablet-Landscape.css" rel="stylesheet" media="only screen and (min-width: 768px) and (max-width: 1024px) and (orientation: landscape)" />
 
-<section id="hero" role="banner" aria-labelledby="heroTitle" aria-label="Hero">
+<section id="hero" role="region" aria-label="SARIF Hero">
     <div id="heroContentGrid">
         <div id="heroLogo">
             <img src="~/Images/triskelion.png" role="img" aria-label="SARIF logo" />
         </div>
-        <div id="heroTitle" role="heading">SARIF</div>
+        <div id="heroTitle" role="heading" aria-level="1">SARIF</div>
         <div id="heroTagline">
             The Static Analysis Results Interchange Format (SARIF)
             <br />
@@ -24,7 +24,7 @@
 
 <section id="specSection" role="region" aria-labelledby="specSectionTitle" class="content-section white-section">
     <a name="Specification"></a>
-    <div id="specSectionTitle" role="heading" class="content-section-title">Specification</div>
+    <div id="specSectionTitle" role="heading" aria-level="2" class="content-section-title">Specification</div>
     <div class="content-section-text content-section-description">
         The <b>Static Analysis Results Interchange Format (SARIF)</b> specification is currently being
         standardized by <a href="https://www.oasis-open.org/" target="_blank" class="strong-link">OASIS</a> in the <a href="https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=sarif" target="_blank" class="strong-link">OASIS SARIF Technical Committee</a>. The information and tools
@@ -50,7 +50,7 @@
 
 <section id="collabSection" role="region" aria-labelledby="collabSectionTitle" class="content-section gray-section">
     <a name="Collaborators"></a>
-    <div id="collabSectionTitle" role="heading" class="content-section-title">Collaborators</div>
+    <div id="collabSectionTitle" role="heading" aria-level="2" class="content-section-title">Collaborators</div>
     <div class="content-section-text content-section-description">
         The SARIF project is supported by a group of industry contributors.
     </div>
@@ -66,7 +66,7 @@
 
 <section id="toolsSection" role="region" aria-labelledby="toolsSectionTitle" class="content-section white-section">
     <a name="ToolsLibraries"></a>
-    <div id="toolsSectionTitle" role="heading" class="content-section-title">Tools &amp; Libraries</div>
+    <div id="toolsSectionTitle" role="heading" aria-level="2" class="content-section-title">Tools &amp; Libraries</div>
     <div class="content-section-text content-section-description">
         A collection of tools offering facilities for producing, consuming, and validating files in the SARIF format.
         <br />
@@ -90,7 +90,7 @@
                     <div class="tools-item-description"><b>SDK</b> - Object model and utilities for reading and writing files in the SARIF format.</div>
                     <button id="toolsItemSdkLink" role="button" aria-label="View SARIF SDK NuGet package" href="https://www.nuget.org/packages/Sarif.Sdk/2.0.0-csd.1.0.3" target="_blank" class="tools-item-button sarifweb-button">
                         <div class="tools-item-button-icon">
-                            <img src="~/Images/Nuget.png" />
+                            <img src="~/Images/Nuget.png" alt="NuGet" />
                         </div>
                         <div>View Package</div>
                     </button>
@@ -99,7 +99,7 @@
                     <div class="tools-item-description"><b>Driver</b> - Framework for creating a command line analysis tool which produces files in the SARIF format.</div>
                     <button id="toolsItemDriverLink" role="button" aria-label="View SARIF Driver NuGet package" href="https://www.nuget.org/packages/Sarif.Driver/2.0.0-csd.1.0.3" target="_blank" class="tools-item-button sarifweb-button">
                         <div class="tools-item-button-icon">
-                            <img src="~/Images/Nuget.png" />
+                            <img src="~/Images/Nuget.png" alt="NuGet" />
                         </div>
                         <div>View Package</div>
                     </button>
@@ -108,7 +108,7 @@
                     <div class="tools-item-description"><b>Converters</b> - classes for converting the output of various static analysis tools to the SARIF format.</div>
                     <button id="toolsItemConvertersLink" role="button" aria-label="View SARIF Converters NuGet package" href="https://www.nuget.org/packages/Sarif.Converters/2.0.0-csd.1.0.3" target="_blank" class="tools-item-button sarifweb-button">
                         <div class="tools-item-button-icon">
-                            <img src="~/Images/Nuget.png" />
+                            <img src="~/Images/Nuget.png" alt="NuGet" />
                         </div>
                         <div>View Package</div>
                     </button>
@@ -117,7 +117,7 @@
                     <div class="tools-item-description"><b>Multitool</b> - Multi-purpose command line tool for analyzing and manipulating SARIF files.</div>
                     <button id="toolsItemMultitoolLink" role="button" aria-label="View SARIF Multitool NuGet package" href="https://www.nuget.org/packages/Sarif.Multitool/2.0.0-csd.1.0.3" target="_blank" class="tools-item-button sarifweb-button">
                         <div class="tools-item-button-icon">
-                            <img src="~/Images/Nuget.png" />
+                            <img src="~/Images/Nuget.png" alt="NuGet" />
                         </div>
                         <div>View Package</div>
                     </button>
@@ -186,13 +186,13 @@
 
 <section id="viewersSection" role="region" aria-labelledby="viewersSectionTitle" class="content-section gray-section">
     <a name="Viewers"></a>
-    <div id="viewersSectionTitle" role="heading" class="content-section-title">Viewers</div>
+    <div id="viewersSectionTitle" role="heading" aria-level="2" class="content-section-title">Viewers</div>
     <div class="content-section-text content-section-description">
         SARIF is based on JSON and can be viewed in any text editor. For a richer experience the following open-source viewers are provided.
     </div>
     <div id="viewersSectionContent" role="list">
         <div role="listitem" class="viewer-card">
-            <div id="vsViewerCardTitle" role="heading" class="viewer-title">
+            <div id="vsViewerCardTitle" role="heading" aria-level="3" class="viewer-title">
                 Visual Studio extension
             </div>
             <div class="viewer-description">
@@ -208,7 +208,7 @@
         </div>
 
         <div role="listitem" class="viewer-card">
-            <div id="vsCodeViewerCardTitle" role="heading" class="viewer-title">
+            <div id="vsCodeViewerCardTitle" role="heading" aria-level="3" class="viewer-title">
                 VS Code extension
             </div>
             <div class="viewer-description">
