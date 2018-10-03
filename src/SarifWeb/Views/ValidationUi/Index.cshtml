@@ -488,6 +488,7 @@
             });
 
             $dropForm.on("click", function (e) {
+                $dropForm.blur();
                 $fileInput[0].click();
             })
             .on("keypress", function (e) {

@@ -44,51 +44,16 @@ namespace SarifWeb.UnitTests.Services
 
             var service = new ValidationUiService(mockFileSystem.Object, mockHttpClientProxy.Object);
 
-            // The file to be posted to the ValidateFile Web API.
-            var mockPostedFile = new Mock<HttpPostedFileBase>();
-            mockPostedFile.SetupGet(x => x.FileName).Returns("anything");
-            mockPostedFile.Setup(x => x.SaveAs(It.IsAny<string>())).Verifiable();
-
             var mockRequest = new Mock<HttpRequestBase>();
 
-            // Act.
-            ValidationResponse response = await service.ValidateFileAsync(mockPostedFile.Object, mockRequest.Object, "PostedFilesPath", WebSiteBaseAddress);
-
-            // Assert.
-            response.Message.Should().Be(ValidationApiResponseMessage);
-        }
-
-        [Fact]
-        public async Task ValidateJsonAsync_ReturnsDeserializedValidationApiResponse()
-        {
-            // Arrange.
-
-            // The JSON response from the service's invocation of the ValidateJson Web API.
-            const string ValidationApiResponseMessage = "Hello from ValidateJson API";
-            const string ValidationApiResponse = "{ \"Message\": \"" + ValidationApiResponseMessage + "\" }";
-
-            var mockFileSystem = new Mock<IFileSystem>();
-            mockFileSystem.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
-            mockFileSystem.Setup(x => x.DeleteFile(It.IsAny<string>())).Verifiable();
-            mockFileSystem.Setup(x => x.WriteAllText(It.IsAny<string>(), It.IsAny<string>())).Verifiable();
-
-            // Cause the service's invocation of the ValidateJson Web API to return the desired JSON response.
-            var mockHttpClientProxy = new Mock<IHttpClientProxy>();
-            HttpResponseMessage responseMessage = new HttpResponseMessage
+            ValidationRequest validationRequest = new ValidationRequest
             {
-                Content = new StringContent(ValidationApiResponse)
+                PostedFileName = "anything",
+                SavedFileName = "anything else"
             };
 
-            mockHttpClientProxy
-                .Setup(x => x.PostAsync(It.IsAny<HttpClient>(), It.IsAny<string>(), It.IsAny<HttpContent>()))
-                .Returns(Task.FromResult(responseMessage));
-
-            var service = new ValidationUiService(mockFileSystem.Object, mockHttpClientProxy.Object);
-
-            var mockRequest = new Mock<HttpRequestBase>();
-
             // Act.
-            ValidationResponse response = await service.ValidateJSonAsync("{ Some: \"random json\" }", mockRequest.Object, "PostedFilesPath", WebSiteBaseAddress);
+            ValidationResponse response = await service.ValidateFileAsync(validationRequest, mockRequest.Object, WebSiteBaseAddress);
 
             // Assert.
             response.Message.Should().Be(ValidationApiResponseMessage);

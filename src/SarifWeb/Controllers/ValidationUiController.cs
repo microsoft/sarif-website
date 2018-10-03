@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
-using SarifWeb.Utilities;
-using SarifWeb.Services;
 using SarifWeb.Models;
+using SarifWeb.Services;
+using SarifWeb.Utilities;
 using FromBody = System.Web.Http.FromBodyAttribute;
 
 namespace SarifWeb.Controllers
@@ -20,16 +22,17 @@ namespace SarifWeb.Controllers
     /// </summary>
     public class ValidationUiController : Controller
     {
+        private readonly IFileSystem _fileSystem;
         private readonly ValidationUiService _validationUiService;
 
         public ValidationUiController()
         {
             // CONSIDER: Use the Unity DI container to inject dependencies, rather than
             // instantiating them by hand.
-            IFileSystem fileSystem = new FileSystem();
+            _fileSystem = new FileSystem();
             IHttpClientProxy httpClientProxy = new HttpClientProxy();
 
-            _validationUiService = new ValidationUiService(fileSystem, httpClientProxy);
+            _validationUiService = new ValidationUiService(_fileSystem, httpClientProxy);
         }
 
         /// <summary>
@@ -59,34 +62,51 @@ namespace SarifWeb.Controllers
         [HttpPost]
         public async Task<string> ValidateFilesAsync(IEnumerable<HttpPostedFileBase> postedFiles)
         {
-            // Extract information from the parts of the Controller object that are hard to mock.
-            HttpRequestBase request = ControllerContext.RequestContext.HttpContext.Request;
-            string postedFilesDirectory = HostingHelper.PostedFilesDirectory;
-            string baseAddress = string.Format(
-                CultureInfo.InvariantCulture,
-                "{0}://{1}{2}",
-                request.Url.Scheme, request.Url.Authority, Url.Content("~"));
-
             // The ValidationUi Index view enforces a limit of one file at a time.
             HttpPostedFileBase postedFile = postedFiles.FirstOrDefault();
 
-            ValidationResponse response = await _validationUiService.ValidateFileAsync(postedFile, request, postedFilesDirectory, baseAddress);
+            string postedFileName = postedFile.FileName;
+            string savedFileName = Guid.NewGuid() + Path.GetExtension(postedFileName);
+            string savedFilePath = Path.Combine(HostingHelper.PostedFilesDirectory, savedFileName);
+            postedFile.SaveAs(savedFilePath);
+
+            ValidationRequest validationRequest = new ValidationRequest
+            {
+                PostedFileName = postedFileName,
+                SavedFileName = savedFilePath
+            };
+
+            ValidationResponse response = await GetFileValidationResponse(validationRequest);
             return JsonConvert.SerializeObject(response);
         }
 
         [HttpPost]
         public async Task<string> ValidateJsonAsync([FromBody] string json)
         {
+            string fileName = $"{Guid.NewGuid()}.sarif";
+            string filePath = Path.Combine(HostingHelper.PostedFilesDirectory, fileName);
+            _fileSystem.WriteAllText(filePath, json);
+
+            ValidationRequest validationRequest = new ValidationRequest
+            {
+                PostedFileName = filePath,
+                SavedFileName = filePath
+            };
+
+            ValidationResponse response = await GetFileValidationResponse(validationRequest);
+            return JsonConvert.SerializeObject(response);
+        }
+
+        private async Task<ValidationResponse> GetFileValidationResponse(ValidationRequest validationRequest)
+        {
             // Extract information from the parts of the Controller object that are hard to mock.
             HttpRequestBase request = ControllerContext.RequestContext.HttpContext.Request;
-            string postedFilesDirectory = HostingHelper.PostedFilesDirectory;
             string baseAddress = string.Format(
                 CultureInfo.InvariantCulture,
                 "{0}://{1}{2}",
                 request.Url.Scheme, request.Url.Authority, Url.Content("~"));
 
-            ValidationResponse response = await _validationUiService.ValidateJSonAsync(json, request, postedFilesDirectory, baseAddress);
-            return JsonConvert.SerializeObject(response);
+            return await _validationUiService.ValidateFileAsync(validationRequest, request, baseAddress);
         }
     }
 }
