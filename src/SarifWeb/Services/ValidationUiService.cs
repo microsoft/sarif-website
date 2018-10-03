@@ -79,17 +79,17 @@ namespace SarifWeb.Services
         {
             ValidationResponse validationResponse = null;
 
+            request.ContentType = "application/json";
+
+            // Send request to Validation service
+            ValidationRequest validationRequest = new ValidationRequest
+            {
+                PostedFileName = originalFileName,
+                SavedFileName = Path.GetFileName(savedFilePath)
+            };
+
             try
             {
-                request.ContentType = "application/json";
-
-                // Send request to Validation service
-                ValidationRequest validationRequest = new ValidationRequest
-                {
-                    PostedFileName = originalFileName,
-                    SavedFileName = Path.GetFileName(savedFilePath)
-                };
-
                 validationResponse = await GetValidationResponse(validationRequest, baseAddress);
             }
             finally
