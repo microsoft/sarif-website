@@ -46,8 +46,14 @@ namespace SarifWeb.UnitTests.Services
 
             var mockRequest = new Mock<HttpRequestBase>();
 
+            ValidationRequest validationRequest = new ValidationRequest
+            {
+                PostedFileName = "anything",
+                SavedFileName = "anything else"
+            };
+
             // Act.
-            ValidationResponse response = await service.ValidateFileAsync("anything", mockRequest.Object, WebSiteBaseAddress);
+            ValidationResponse response = await service.ValidateFileAsync(validationRequest, mockRequest.Object, WebSiteBaseAddress);
 
             // Assert.
             response.Message.Should().Be(ValidationApiResponseMessage);

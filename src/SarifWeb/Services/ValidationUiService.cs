@@ -35,7 +35,7 @@ namespace SarifWeb.Services
         }
 
         public async Task<ValidationResponse> ValidateFileAsync(
-            string filePath,
+            ValidationRequest validationRequest,
             HttpRequestBase request,
             string baseAddress)
         {
@@ -45,20 +45,13 @@ namespace SarifWeb.Services
             {
                 request.ContentType = "application/json";
 
-                // Send request to Validation service
-                ValidationRequest validationRequest = new ValidationRequest
-                {
-                    PostedFileName = filePath,
-                    SavedFileName = filePath
-                };
-
                 validationResponse = await GetValidationResponse(validationRequest, baseAddress);
             }
             finally
             {
-                if (_fileSystem.FileExists(filePath))
+                if (_fileSystem.FileExists(validationRequest.SavedFileName))
                 {
-                    _fileSystem.DeleteFile(filePath);
+                    _fileSystem.DeleteFile(validationRequest.SavedFileName);
                 }
             }
 

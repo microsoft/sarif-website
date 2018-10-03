@@ -70,7 +70,13 @@ namespace SarifWeb.Controllers
             string savedFilePath = Path.Combine(HostingHelper.PostedFilesDirectory, savedFileName);
             postedFile.SaveAs(savedFilePath);
 
-            ValidationResponse response = await GetFileValidationResponse(savedFilePath);
+            ValidationRequest validationRequest = new ValidationRequest
+            {
+                PostedFileName = postedFileName,
+                SavedFileName = savedFilePath
+            };
+
+            ValidationResponse response = await GetFileValidationResponse(validationRequest);
             return JsonConvert.SerializeObject(response);
         }
 
@@ -81,11 +87,17 @@ namespace SarifWeb.Controllers
             string filePath = Path.Combine(HostingHelper.PostedFilesDirectory, fileName);
             _fileSystem.WriteAllText(filePath, json);
 
-            ValidationResponse response = await GetFileValidationResponse(filePath);
+            ValidationRequest validationRequest = new ValidationRequest
+            {
+                PostedFileName = filePath,
+                SavedFileName = filePath
+            };
+
+            ValidationResponse response = await GetFileValidationResponse(validationRequest);
             return JsonConvert.SerializeObject(response);
         }
 
-        private async Task<ValidationResponse> GetFileValidationResponse(string filePath)
+        private async Task<ValidationResponse> GetFileValidationResponse(ValidationRequest validationRequest)
         {
             // Extract information from the parts of the Controller object that are hard to mock.
             HttpRequestBase request = ControllerContext.RequestContext.HttpContext.Request;
@@ -94,7 +106,7 @@ namespace SarifWeb.Controllers
                 "{0}://{1}{2}",
                 request.Url.Scheme, request.Url.Authority, Url.Content("~"));
 
-            return await _validationUiService.ValidateFileAsync(filePath, request, baseAddress);
+            return await _validationUiService.ValidateFileAsync(validationRequest, request, baseAddress);
         }
     }
 }
