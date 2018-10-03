@@ -9,7 +9,7 @@
 <link href="~/Content/Validator.css" rel="stylesheet" />
 
 <section id="dropSection" class="content-section gray-section">
-    <div id="pageTitle" class="content-section-title">@ViewBag.Title</div>
+    <div id="pageTitle" role="heading" aria-level="1" class="content-section-title">@ViewBag.Title</div>
 
     <form id="dropForm" role="region" aria-dropeffect="execute" aria-label="Click to browse for your log file" tabindex="0" method="post" action="@Url.Action("ValidateFilesAsync")" class="drop-area">
         <input id="fileInput" name="postedFiles" type="file" style="display: none;">
@@ -31,7 +31,7 @@
             </div>
             <div id="rightSide">
                 <button id="prevResult" aria-label="Previous result" disabled>
-                    <img src="~/Images/prev.png" />
+                    <img src="~/Images/prev.png" alt="Previous result" />
                 </button>
                 <div id="resultPosition">
                     <div id="resultPositionCurrent" aria-label="Result number">0</div>
@@ -39,14 +39,14 @@
                     <div id="resultPositionCount">0</div>
                 </div>
                 <button id="nextResult" aria-label="Next result" disabled>
-                    <img src="~/Images/next.png" />
+                    <img src="~/Images/next.png" alt="Next result" />
                 </button>
                 <button id="downloadLog" aria-label="Download log file" disabled>
-                    <img src="~/Images/download.png" />
+                    <img src="~/Images/download.png" alt="Download icon" />
                     <div>Download</div>
                 </button>
                 <button id="revalidate" aria-label="Re-validate log file" disabled>
-                    <img src="~/Images/reload.png" />
+                    <img src="~/Images/reload.png" alt="Reload icon" />
                     <div>Re-validate</div>
                 </button>
             </div>
@@ -489,6 +489,13 @@
 
             $dropForm.on("click", function (e) {
                 $fileInput[0].click();
+            })
+            .on("keypress", function (e) {
+                if (e.key == "Enter" || e.key == " ") {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $fileInput[0].click();
+                }
             })
             .on("drag dragstart dragend dragover dragenter dragleave drop", function (e) {
                 e.preventDefault();

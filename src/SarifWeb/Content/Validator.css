@@ -109,7 +109,7 @@
     width: 100%;
 }
 
-.drop-area-active {
+.drop-area-active, .drop-area:focus {
     background-color: #77bafa;
     color: #000;
     outline: 2px dashed #000;
@@ -117,31 +117,32 @@
 }
 
 .drop-area-text {
-    color: #fff;
     display: table-cell;
     font-family: var(--content-font-family);
     font-size: 16px;
+    font-weight: bold;
     user-select: none;
     vertical-align: middle;
 }
 
+.drop-area-active .drop-area-text-input {
+    color: #000;
+}
+
 .drop-area-text-input {
-    text-shadow: 0 0 1px #000;
+    color: #333;
 }
 
 .drop-area-text-busy {
     color: #00549c;
-    font-weight: bold;
 }
 
 .drop-area-text-complete {
     color: #000;
-    font-weight: bold;
 }
 
 .drop-area-text-error {
     color: #f2000f;
-    font-weight: bold;
 }
 
 .drop-area-text-busy, .drop-area-text-complete, .drop-area-text-error {

@@ -8,7 +8,7 @@
         <div id="imageViewer">
             <div id="imageViewerDialog" role="dialog" aria-labelledby="imageViewerTitle">
                 <div id="imageViewerTitleBar">
-                    <div id="imageViewerTitle" role="banner"></div>
+                    <div id="imageViewerTitle" role="heading" aria-level="1"></div>
                     <button id="imageViewerCloseButton" role="button" aria-label="Close image viewer" tabindex="3">close</button>
                 </div>
                 <img id="imageViewerImage" role="img" aria-labelledby="imageViewerTitle" />
