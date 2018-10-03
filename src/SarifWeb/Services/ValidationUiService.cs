@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -36,75 +35,30 @@ namespace SarifWeb.Services
         }
 
         public async Task<ValidationResponse> ValidateFileAsync(
-            HttpPostedFileBase postedFile,
+            string filePath,
             HttpRequestBase request,
-            string postedFilesPath,
             string baseAddress)
         {
-            ValidationResponse validationResponse = null;
-
-            if (postedFile != null)
-            {
-                string postedFileName = postedFile.FileName;
-                string savedFileName = Guid.NewGuid() + Path.GetExtension(postedFileName);
-                string savedFilePath = Path.Combine(postedFilesPath, savedFileName);
-
-                try
-                {
-                    postedFile.SaveAs(savedFilePath);
-                    request.ContentType = "application/json";
-
-                    // Send request to Validation service
-                    ValidationRequest validationRequest = new ValidationRequest
-                    {
-                        PostedFileName = postedFileName,
-                        SavedFileName = savedFileName
-                    };
-
-                    validationResponse = await GetValidationResponse(validationRequest, baseAddress);
-                }
-                finally
-                {
-                    if (_fileSystem.FileExists(savedFilePath))
-                    {
-                        _fileSystem.DeleteFile(savedFilePath);
-                    }
-                }
-            }
-
-            return validationResponse;
-        }
-
-        public async Task<ValidationResponse> ValidateJSonAsync(
-            string json,
-            HttpRequestBase request,
-            string postedFilesPath,
-            string baseAddress)
-        {
-            string savedFileName = $"{Guid.NewGuid()}.sarif";
-            string savedFilePath = Path.Combine(postedFilesPath, savedFileName);
-
-            _fileSystem.WriteAllText(savedFilePath, json);
-            request.ContentType = "application/json";
-
-            // Send request to Validation service
-            ValidationRequest validationRequest = new ValidationRequest
-            {
-                PostedFileName = savedFileName,
-                SavedFileName = savedFileName
-            };
-
             ValidationResponse validationResponse = null;
 
             try
             {
+                request.ContentType = "application/json";
+
+                // Send request to Validation service
+                ValidationRequest validationRequest = new ValidationRequest
+                {
+                    PostedFileName = filePath,
+                    SavedFileName = filePath
+                };
+
                 validationResponse = await GetValidationResponse(validationRequest, baseAddress);
             }
             finally
             {
-                if (_fileSystem.FileExists(savedFilePath))
+                if (_fileSystem.FileExists(filePath))
                 {
-                    _fileSystem.DeleteFile(savedFilePath);
+                    _fileSystem.DeleteFile(filePath);
                 }
             }
 
