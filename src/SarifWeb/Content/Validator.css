@@ -24,12 +24,16 @@
 
 #validatorToolbar button {
     margin-left: 3px;
-    padding: 6px 6px 2px 6px;;
+    padding: .4em .2em;
 }
 
 #leftSide {
     align-items: flex-start;
     flex: 1;
+}
+
+#rightSide .ui-icon {
+    font-size: 20px;
 }
 
 #resultPosition,
@@ -45,11 +49,15 @@
     width: 100%;
 }
 
+#prevResultButton span,
+#nextResultButton span {
+    font-weight: bold;
+}
+
 #resultPosition {
     align-items: center;
     display: flex;
     justify-content: flex-start;
-    margin-top: 6px;
 }
 
 #resultPositionSeparator {
@@ -61,6 +69,7 @@
     box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
     display: none;
     position: absolute;
+    z-index: 100;
 }
 
 #utilitiesMenu .ui-menu {
@@ -151,6 +160,19 @@
 
 .drop-area-text-busy {
     color: #00549c;
+}
+
+.drop-area-busy {
+    display: flex;
+    justify-content: center;
+}
+
+.drop-area-busy > div {
+    margin: 0px 5px;
+}
+
+#busyText {
+    align-self: center;
 }
 
 .drop-area-text-complete {
