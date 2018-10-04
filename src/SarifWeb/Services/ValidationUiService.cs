@@ -48,28 +48,9 @@ namespace SarifWeb.Services
                 string postedFileName = postedFile.FileName;
                 string savedFileName = Guid.NewGuid() + Path.GetExtension(postedFileName);
                 string savedFilePath = Path.Combine(postedFilesPath, savedFileName);
+                postedFile.SaveAs(savedFilePath);
 
-                try
-                {
-                    postedFile.SaveAs(savedFilePath);
-                    request.ContentType = "application/json";
-
-                    // Send request to Validation service
-                    ValidationRequest validationRequest = new ValidationRequest
-                    {
-                        PostedFileName = postedFileName,
-                        SavedFileName = savedFileName
-                    };
-
-                    validationResponse = await GetValidationResponse(validationRequest, baseAddress);
-                }
-                finally
-                {
-                    if (_fileSystem.FileExists(savedFilePath))
-                    {
-                        _fileSystem.DeleteFile(savedFilePath);
-                    }
-                }
+                validationResponse = await ValidateSavedFileAsync(request, baseAddress, postedFileName, savedFilePath);
             }
 
             return validationResponse;
@@ -85,16 +66,27 @@ namespace SarifWeb.Services
             string savedFilePath = Path.Combine(postedFilesPath, savedFileName);
 
             _fileSystem.WriteAllText(savedFilePath, json);
+
+            return await ValidateSavedFileAsync(request, baseAddress, savedFileName, savedFilePath);
+
+        }
+
+        private async Task<ValidationResponse> ValidateSavedFileAsync(
+            HttpRequestBase request,
+            string baseAddress,
+            string originalFileName,
+            string savedFilePath)
+        {
+            ValidationResponse validationResponse = null;
+
             request.ContentType = "application/json";
 
             // Send request to Validation service
             ValidationRequest validationRequest = new ValidationRequest
             {
-                PostedFileName = savedFileName,
-                SavedFileName = savedFileName
+                PostedFileName = originalFileName,
+                SavedFileName = Path.GetFileName(savedFilePath)
             };
-
-            ValidationResponse validationResponse = null;
 
             try
             {
