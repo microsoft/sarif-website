@@ -206,8 +206,9 @@
     <Content Include="Content\Home-Media-Tablet.css" />
     <Content Include="Content\ImageViewer.css" />
     <Content Include="Content\Home-Media-Mobile.css" />
-    <Content Include="Content\Looper.css" />
-    <Content Include="Content\Spinner.css" />
+    <Content Include="Content\jquery.multiselect.css" />
+    <Content Include="Content\jquery.multiselect.filter.css" />
+    <Content Include="Content\Loader.css" />
     <Content Include="Content\Validator.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -329,6 +330,10 @@
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.multiselect.filter.js" />
+    <Content Include="Scripts\jquery.multiselect.filter.min.js" />
+    <Content Include="Scripts\jquery.multiselect.js" />
+    <Content Include="Scripts\jquery.multiselect.min.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />

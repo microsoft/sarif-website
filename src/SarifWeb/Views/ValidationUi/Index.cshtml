@@ -7,6 +7,7 @@
 <link href="~/Scripts/jqueryui/themes/redmond/theme.min.css" rel="stylesheet" />
 <link href="~/Scripts/jqueryui/jquery-ui.structure.css" rel="stylesheet" />
 <link href="~/Scripts/jqueryui/jquery-ui-1.12.icon-font.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.multiselect.css" rel="stylesheet" />
 <link href="~/Content/Loader.css" rel="stylesheet" />
 <link href="~/Content/Validator.css" rel="stylesheet" />
 
@@ -34,13 +35,13 @@
 <section id="validatorSection" role="region" aria-labelledby="pageTitle" class="content-section gray-section">
     <div id="validatorContainer">
         <div id="validatorToolbar" data-disabled>
-            <div id="leftSide">
-                <select id="ruleList" role="combobox" aria-label="Rule list" disabled>
+            <div id="rulesToolbar">
+                <select id="ruleList" role="combobox" aria-label="Rule list" multiple size="1" disabled>
                     <option value=""></option>
                 </select>
                 <div id="ruleDescription"></div>
             </div>
-            <div id="rightSide">
+            <div id="buttonsToolbar">
                 <button id="prevResultButton" aria-label="Previous result" disabled>
                     <span class="ui-icon ui-icon-caret-1-n">icon</span>
                 </button>
@@ -68,44 +69,44 @@
                     <div>Editor color themes</div>
                     <ul id="utilitiesMenuThemesFlyout">
                         <li class="ui-widget-header"><div>Light</div></li>
-                            <li data-value="ace/theme/chrome"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Chrome</div></li>
-                            <li data-value="ace/theme/clouds"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Clouds</div></li>
-                            <li data-value="ace/theme/crimson_editor"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Crimson Editor</div></li>
-                            <li data-value="ace/theme/dawn"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Dawn</div></li>
-                            <li data-value="ace/theme/dreamweaver"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Dreamweaver</div></li>
-                            <li data-value="ace/theme/eclipse"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Eclipse</div></li>
-                            <li data-value="ace/theme/github"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>GitHub</div></li>
-                            <li data-value="ace/theme/iplastic"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>IPlastic</div></li>
-                            <li data-value="ace/theme/katzenmilch"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>KatzenMilch</div></li>
-                            <li data-value="ace/theme/kuroir"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Kuroir</div></li>
-                            <li data-value="ace/theme/solarized_light"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Solarized Light</div></li>
-                            <li data-value="ace/theme/sqlserver"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>SQL Server</div></li>
-                            <li data-value="ace/theme/textmate"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>TextMate</div></li>
-                            <li data-value="ace/theme/tomorrow"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Tomorrow</div></li>
-                            <li data-value="ace/theme/xcode"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>XCode</div></li>
+                        <li data-value="ace/theme/chrome"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Chrome</div></li>
+                        <li data-value="ace/theme/clouds"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Clouds</div></li>
+                        <li data-value="ace/theme/crimson_editor"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Crimson Editor</div></li>
+                        <li data-value="ace/theme/dawn"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Dawn</div></li>
+                        <li data-value="ace/theme/dreamweaver"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Dreamweaver</div></li>
+                        <li data-value="ace/theme/eclipse"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Eclipse</div></li>
+                        <li data-value="ace/theme/github"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>GitHub</div></li>
+                        <li data-value="ace/theme/iplastic"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>IPlastic</div></li>
+                        <li data-value="ace/theme/katzenmilch"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>KatzenMilch</div></li>
+                        <li data-value="ace/theme/kuroir"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Kuroir</div></li>
+                        <li data-value="ace/theme/solarized_light"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Solarized Light</div></li>
+                        <li data-value="ace/theme/sqlserver"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>SQL Server</div></li>
+                        <li data-value="ace/theme/textmate"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>TextMate</div></li>
+                        <li data-value="ace/theme/tomorrow"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Tomorrow</div></li>
+                        <li data-value="ace/theme/xcode"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>XCode</div></li>
                         <li class="ui-widget-header"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Dark</div></li>
-                            <li data-value="ace/theme/ambiance"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Ambiance</div></li>
-                            <li data-value="ace/theme/chaos"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Chaos</div></li>
-                            <li data-value="ace/theme/clouds_midnight"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Clouds Midnight</div></li>
-                            <li data-value="ace/theme/cobalt"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Cobalt</div></li>
-                            <li data-value="ace/theme/dracula"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Dracula</div></li>
-                            <li data-value="ace/theme/gob"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Green on Black</div></li>
-                            <li data-value="ace/theme/gruvbox"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Gruvbox</div></li>
-                            <li data-value="ace/theme/idle_fingers"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>idle Fingers</div></li>
-                            <li data-value="ace/theme/kr_theme"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>krTheme</div></li>
-                            <li data-value="ace/theme/merbivore"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Merbivore</div></li>
-                            <li data-value="ace/theme/merbivore_soft"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Merbivore Soft</div></li>
-                            <li data-value="ace/theme/mono_industrial"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Mono Industrial</div></li>
-                            <li data-value="ace/theme/monokai"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Monokai</div></li>
-                            <li data-value="ace/theme/pastel_on_dark"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Pastel on dark</div></li>
-                            <li data-value="ace/theme/solarized_dark"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Solarized Dark</div></li>
-                            <li data-value="ace/theme/terminal"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Terminal</div></li>
-                            <li data-value="ace/theme/tomorrow_night"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Tomorrow Night</div></li>
-                            <li data-value="ace/theme/tomorrow_night_blue"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Tomorrow Night Blue</div></li>
-                            <li data-value="ace/theme/tomorrow_night_bright"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Tomorrow Night Bright</div></li>
-                            <li data-value="ace/theme/tomorrow_night_eighties"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Tomorrow Night 80s</div></li>
-                            <li data-value="ace/theme/twilight"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Twilight</div></li>
-                            <li data-value="ace/theme/vibrant_ink"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Vibrant Ink</div></li>
+                        <li data-value="ace/theme/ambiance"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Ambiance</div></li>
+                        <li data-value="ace/theme/chaos"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Chaos</div></li>
+                        <li data-value="ace/theme/clouds_midnight"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Clouds Midnight</div></li>
+                        <li data-value="ace/theme/cobalt"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Cobalt</div></li>
+                        <li data-value="ace/theme/dracula"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Dracula</div></li>
+                        <li data-value="ace/theme/gob"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Green on Black</div></li>
+                        <li data-value="ace/theme/gruvbox"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Gruvbox</div></li>
+                        <li data-value="ace/theme/idle_fingers"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>idle Fingers</div></li>
+                        <li data-value="ace/theme/kr_theme"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>krTheme</div></li>
+                        <li data-value="ace/theme/merbivore"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Merbivore</div></li>
+                        <li data-value="ace/theme/merbivore_soft"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Merbivore Soft</div></li>
+                        <li data-value="ace/theme/mono_industrial"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Mono Industrial</div></li>
+                        <li data-value="ace/theme/monokai"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Monokai</div></li>
+                        <li data-value="ace/theme/pastel_on_dark"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Pastel on dark</div></li>
+                        <li data-value="ace/theme/solarized_dark"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Solarized Dark</div></li>
+                        <li data-value="ace/theme/terminal"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Terminal</div></li>
+                        <li data-value="ace/theme/tomorrow_night"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Tomorrow Night</div></li>
+                        <li data-value="ace/theme/tomorrow_night_blue"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Tomorrow Night Blue</div></li>
+                        <li data-value="ace/theme/tomorrow_night_bright"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Tomorrow Night Bright</div></li>
+                        <li data-value="ace/theme/tomorrow_night_eighties"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Tomorrow Night 80s</div></li>
+                        <li data-value="ace/theme/twilight"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Twilight</div></li>
+                        <li data-value="ace/theme/vibrant_ink"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Vibrant Ink</div></li>
                     </ul>
                 </li>
             </ul>
@@ -122,15 +123,63 @@
 @section Scripts {
     <script src="~/Scripts/ace/ace.js"></script>
     <script src="~/Scripts/jqueryui/jquery-ui.min.js"></script>
+    <script src="~/Scripts/jquery.multiselect.min.js"></script>
     <script type="text/javascript">
         $(function () {
             var fileName = "";
             var editor = null;
             var markers = [];
-            var currentRule = null;
+            var currentRules = [];
+            var currentResults = [];
             var currentResultIndex = -1;
             var toolbar = $("#validatorToolbar");
-            var ruleList = $("#ruleList").selectmenu();
+            var ruleList = $("#ruleList").multiselect({
+                minWidth: 300,
+                checkAllText: "Select all",
+                uncheckAllText: "Clear all",
+                noneSelectedText: "Select rules",
+                selectedText: "# rule(s) selected",
+                beforeclose: function (e) {
+                    var sender = e.target;
+                    var count = 0;
+
+                    for (var i = 0; i < sender.options.length; i++) {
+                        var option = sender.options[i];
+                        if (option.selected && option.value != "") {
+                            var ruleId = option.value;
+                            currentRules.push(rulesDictionary[ruleId]);
+                        }
+                    }
+
+                    clearLineMarkers();
+
+                    if (currentRules.length > 0) {
+                        // We need to sort all results by line number, so we'll pull them into a local array
+                        currentRules.forEach(function (rule) {
+                            rule.results.forEach(function (result) {
+                                currentResults.push({ ruleId: rule.id, line: result.line });
+                                setLineMarker(result.line);
+                                count++;
+                            });
+                        });
+
+                        // Sort the result by line number
+                        currentResults.sort(function (r1, r2) {
+                            return r1.line - r2.line;
+                        });
+
+                        setResultPositionText(1, count);
+                        currentResultIndex = 0;
+                        var firstResult = currentResults[0];
+                        var rule = rulesDictionary[firstResult.ruleId];
+                        setRuleDescription(rule.description);
+
+                        setTimeout(function () {
+                            editor.gotoLine(firstResult.line, 0, true);
+                        }, 0);
+                    }
+                }
+            });
             var resultPositionCurrentText = $("#resultPositionCurrent");
             var resultPositionCountText = $("#resultPositionCount");
             var prevResultButton = $("#prevResultButton").button();
@@ -152,6 +201,7 @@
             // Adds a bare rule to the dictionary
             function addRule(ruleId, description) {
                 rulesDictionary[ruleId] = {
+                    id: ruleId,
                     description: description,
                     results: []
                 };
@@ -207,7 +257,7 @@
 
                             // Clear the dropdown, then add the rules and trigger a change event
                             clearRuleList();
-                            $(ruleList).append(options.join("")).selectmenu("refresh").trigger("selectmenuchange");
+                            $(ruleList).append(options.join("")).multiselect("refresh");
                         }
                     }
                 }
@@ -314,17 +364,17 @@
                     $(toolbar).attr("data-disabled");
                 }
 
-                $("#validatorToolbar button" + selector).each(function (index, button) {
+                $("#buttonsToolbar button" + selector).each(function (index, button) {
                     $(button).button(verb);
                 });
-                $(ruleList).selectmenu(verb);
+                $(ruleList).multiselect(verb);
             }
 
             function clearRuleList() {
                 $("#ruleList option").each(function (index, option) {
                     $(option).remove();
                 })
-                $(ruleList).selectmenu("refresh");
+                $(ruleList).multiselect("refresh");
                 $("#ruleDescription").text("");
             }
 
@@ -345,7 +395,7 @@
                 resetEditor();
 
                 // Confirm if the file is > 20 MB
-                if (file.size > 20971520) {
+                if (file.size > (20 * 1024 * 1024)) {
                     if (!confirm("The file you have selected is large, and validating this file could take a long time. Do you want to continue?")) {
                         resetFileInput();
                         return;
@@ -389,25 +439,15 @@
                 });
             }
 
-            $(ruleList).on("selectmenuchange", function () {
-                var ruleId = $(this).val();
-                currentRule = rulesDictionary[ruleId];
-                currentResultIndex = 0;
-                setResultPositionText(1, currentRule.results.length);
+            function setRuleDescription(text) {
+                $("#ruleDescription").text(text);
+            }
 
-                clearLineMarkers();
-
-                // Set line markers for each result corresponding to this rule
-                currentRule.results.forEach(function (result) {
-                    setLineMarker(result.line);
-                });
-
-                $("#ruleDescription").text(currentRule.description);
-
-                setTimeout(function () {
-                    editor.gotoLine(currentRule.results[0].line, 0, true);
-                }, 0);
-            });
+            function changeCurrentResult() {
+                setResultPositionText(currentResultIndex + 1);
+                setRuleDescription(rulesDictionary[currentResults[currentResultIndex].ruleId].description);
+                editor.gotoLine(currentResults[currentResultIndex].line, 0, true);
+            }
 
             function goToPreviousResult() {
                 if (currentResultIndex > -1) {
@@ -415,25 +455,23 @@
                         currentResultIndex--;
                     }
                     else {
-                        currentResultIndex = currentRule.results.length - 1;
+                        currentResultIndex = currentResults.length - 1;
                     }
 
-                    setResultPositionText(currentResultIndex + 1);
-                    editor.gotoLine(currentRule.results[currentResultIndex].line, 0, true);
+                    changeCurrentResult();
                 }
             }
 
             function goToNextResult() {
                 if (currentResultIndex > -1) {
-                    if (currentResultIndex < currentRule.results.length - 1) {
+                    if (currentResultIndex < currentResults.length - 1) {
                         currentResultIndex++;
                     }
                     else {
                         currentResultIndex = 0;
                     }
 
-                    setResultPositionText(currentResultIndex + 1);
-                    editor.gotoLine(currentRule.results[currentResultIndex].line, 0, true);
+                    changeCurrentResult();
                 }
             }
 
@@ -498,11 +536,11 @@
 
             $(utilitiesButton).button().on("click", function () {
                 $(utilitiesMenu).show().position({
-                    my: "left top",
+                    my: "right top",
                     at: "left bottom",
                     of: this,
                     collision: "flip flip",
-                    within: "#validatorContainer"
+                    within: "#pageContainer"
                 });
 
                 $(document).on("click", function () {

@@ -22,23 +22,34 @@
     display: flex;
 }
 
-#validatorToolbar button {
-    margin-left: 3px;
-    padding: .4em .2em;
-}
-
-#leftSide {
+#rulesToolbar {
     align-items: flex-start;
     flex: 1;
 }
 
-#rightSide .ui-icon {
+.ui-multiselect-menu {
+    box-shadow: var(--menu-box-shadow);
+    z-index: 99;
+}
+
+#ruleList_ms {
+    height: 32px;
+    padding-left: 15px;
+    padding-right: 5px;
+}
+
+#buttonsToolbar button {
+    margin-left: 3px;
+    padding: .4em .2em;
+}
+
+#buttonsToolbar .ui-icon {
     font-size: 20px;
 }
 
 #resultPosition,
 #ruleDescription {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: var(--content-font-family);
     font-size: 11px;
     margin-left: 5px;
     margin-right: 5px;
@@ -67,14 +78,14 @@
 }
 
 #utilitiesMenu {
-    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--menu-box-shadow);
     display: none;
     position: absolute;
     z-index: 100;
 }
 
 #utilitiesMenu .ui-menu {
-    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--menu-box-shadow);
 }
 
 #utilitiesMenu .ui-widget-header div {
@@ -87,6 +98,10 @@
 
 #utilitiesMenu .ui-menu-item-wrapper {
     white-space: nowrap;
+}
+
+#utilitiesMenuThemesFlyout .ui-menu-item-wrapper {
+    font-size: .8em;
 }
 
 #utilitiesMenu .menu-check-hidden {
@@ -135,7 +150,8 @@
     width: 100%;
 }
 
-.drop-area-active, .drop-area:focus {
+.drop-area-active,
+.drop-area:focus {
     background-color: #77bafa;
     color: #000;
     outline: 2px dashed #000;
@@ -184,7 +200,9 @@
     color: #f2000f;
 }
 
-.drop-area-text-busy, .drop-area-text-complete, .drop-area-text-error {
+.drop-area-text-busy,
+.drop-area-text-complete,
+.drop-area-text-error {
     display: none;
 }
 
