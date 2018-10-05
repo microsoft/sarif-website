@@ -409,7 +409,7 @@
                 }, 0);
             });
 
-            $(prevResultButton).on("click", function () {
+            function goToPreviousResult() {
                 if (currentResultIndex > -1) {
                     if (currentResultIndex > 0) {
                         currentResultIndex--;
@@ -421,9 +421,9 @@
                     setResultPositionText(currentResultIndex + 1);
                     editor.gotoLine(currentRule.results[currentResultIndex].line, 0, true);
                 }
-            });
+            }
 
-            $(nextResultButton).on("click", function () {
+            function goToNextResult() {
                 if (currentResultIndex > -1) {
                     if (currentResultIndex < currentRule.results.length - 1) {
                         currentResultIndex++;
@@ -435,6 +435,23 @@
                     setResultPositionText(currentResultIndex + 1);
                     editor.gotoLine(currentRule.results[currentResultIndex].line, 0, true);
                 }
+            }
+
+            $(document).on("keyup", function (e) {
+                if (e.key == "F7") {
+                    goToPreviousResult();
+                }
+                else if (e.key == "F8") {
+                    goToNextResult();
+                }
+            });
+
+            $(prevResultButton).on("click", function () {
+                goToPreviousResult();
+            });
+
+            $(nextResultButton).on("click", function () {
+                goToNextResult();
             });
 
             $(downloadButton).on("click", function () {
