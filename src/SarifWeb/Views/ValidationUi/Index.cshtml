@@ -39,7 +39,7 @@
                 <select id="ruleList" role="combobox" aria-label="Rule list" multiple size="1" disabled>
                     <option value=""></option>
                 </select>
-                <button id="prevResultButton" aria-label="Previous result" class="toolbar-button" disabled>
+                <button id="prevResultButton" aria-label="Previous result" title="Previous result" class="toolbar-button" disabled>
                     <span class="ui-icon ui-icon-caret-1-n">icon</span>
                 </button>
                 <div id="resultPosition">
@@ -47,19 +47,19 @@
                     <div id="resultPositionSeparator" aria-label="of">/</div>
                     <div id="resultPositionCount">0</div>
                 </div>
-                <button id="nextResultButton" aria-label="Next result" class="toolbar-button" disabled>
+                <button id="nextResultButton" aria-label="Next result" title="Next result" class="toolbar-button" disabled>
                     <span class="ui-icon ui-icon-caret-1-s">icon</span>
                 </button>
                 <div id="ruleDescription"></div>
             </div>
             <div id="rightToolbarGroup">
-                <button id="downloadLogButton" aria-label="Download log file" class="toolbar-button" disabled>
+                <button id="downloadLogButton" aria-label="Download log file" title="Download log file" class="toolbar-button" disabled>
                     <span class="ui-icon ui-icon-download">icon</span>
                 </button>
-                <button id="revalidateButton" aria-label="Re-validate log file" class="toolbar-button" disabled>
+                <button id="revalidateButton" aria-label="Re-validate log file" title="Re-validate log file" class="toolbar-button" disabled>
                     <span class="ui-icon ui-icon-arrowrefresh-1-e">icon</span>
                 </button>
-                <button id="utilitiesButton" aria-label="Utilities" class="toolbar-button" disabled>
+                <button id="utilitiesButton" aria-label="Utilities menu" title="Utilities menu" class="toolbar-button" disabled>
                     <span class="ui-icon ui-icon-gear">icon</span>
                 </button>
             </div>
@@ -132,29 +132,45 @@
             var currentRules = [];
             var currentResults = [];
             var currentResultIndex = -1;
-            var toolbar = $("#validatorToolbar");
-            var ruleList = $("#ruleList").multiselect({
+            var $toolbar = $("#validatorToolbar");
+            var $ruleList = $("#ruleList").multiselect({
                 minWidth: 300,
+                header: "<input type='checkbox' id='ruleListSelectAll' checked class='ui-multiselect-header-item' /><label for='ruleListSelectAll'></label>",
                 checkAllText: "Select all",
                 uncheckAllText: "Clear all",
                 noneSelectedText: "Select rules",
                 selectedText: "# rule(s) selected",
+                click: function (e) {
+                    var target = e.currentTarget;
+
+                    if (!$(target).hasClass("ui-multiselect-header-item")) {
+                        if (!target.checked) {
+                            ruleListSelectAll.checked = false;
+                        }
+                        else {
+                            var checked = $(this).multiselect("getChecked");
+                            ruleListSelectAll.checked = checked.length == rulesCount;
+                        }
+                    }
+                },
                 beforeclose: function () {
                     currentRules = [];
                     currentResults = [];
                     var count = 0;
 
                     $.each($(this).multiselect("getChecked"), function (index, option) {
-                        var ruleId = option.value;
-                        currentRules.push(rulesDictionary[ruleId]);
+                        // The "select all" checkbox will be included if it's checked, so skip it
+                        if (option.id != "ruleListSelectAll") {
+                            var ruleId = option.value;
+                            currentRules.push(rulesDictionary[ruleId]);
+                        }
                     });
 
                     clearLineMarkers();
 
                     if (currentRules.length > 0) {
-                        // We need to sort all results by line number, so we'll pull them into a separate array
-                        currentRules.forEach(function (rule) {
-                            rule.results.forEach(function (result) {
+                        $.each(currentRules, function (index, rule) {
+                            $.each(rule.results, function (index, result) {
                                 currentResults.push({ ruleId: rule.id, line: result.line });
                                 setLineMarker(result.line);
                                 count++;
@@ -178,14 +194,26 @@
                     }
                 }
             });
-            var resultPositionCurrentText = $("#resultPositionCurrent");
-            var resultPositionCountText = $("#resultPositionCount");
-            var prevResultButton = $("#prevResultButton").button();
-            var nextResultButton = $("#nextResultButton").button();
-            var downloadButton = $("#downloadLogButton").button();
-            var revalidateButton = $("#revalidateButton").button();
-            var utilitiesButton = $("#utilitiesButton").button();
-            var utilitiesMenu = $("#utilitiesMenu").menu({
+            var $ruleListSelectAll = $("#ruleListSelectAll")
+                .on("click", function (e) {
+                    var checked = e.target.checked;
+
+                    if (checked) {
+                        $ruleList.multiselect("checkAll");
+                    }
+                    else {
+                        $ruleList.multiselect("uncheckAll");
+                    }
+                    // Add handler for multiselect check
+            });
+            var $resultPositionCurrentText = $("#resultPositionCurrent");
+            var $resultPositionCountText = $("#resultPositionCount");
+            var $prevResultButton = $("#prevResultButton").button();
+            var $nextResultButton = $("#nextResultButton").button();
+            var $downloadButton = $("#downloadLogButton").button();
+            var $revalidateButton = $("#revalidateButton").button();
+            var $utilitiesButton = $("#utilitiesButton").button();
+            var $utilitiesMenu = $("#utilitiesMenu").menu({
                 items: "> :not(.ui-widget-header)"
             }).hide();
 
@@ -195,6 +223,7 @@
 
             // Rules dictionary: key = rule ID, value = { description, results[ { line } ] }
             var rulesDictionary = {};
+            var rulesCount = 0;
 
             // Adds a bare rule to the dictionary
             function addRule(ruleId, description) {
@@ -203,6 +232,7 @@
                     description: description,
                     results: []
                 };
+                rulesCount++;
             }
 
             // Creates HTML for a result and adds it to the corresponding rule's results array
@@ -253,9 +283,9 @@
                                 options.push("<option value='" + key + "'>" + key + " (" + rulesDictionary[key].results.length + ")</option>");
                             }
 
-                            // Clear the dropdown, then add the rules and trigger a change event
+                            // Clear the dropdown, then add the rules and trigger a close event
                             clearRuleList();
-                            $(ruleList).append(options.join("")).multiselect("refresh").multiselect("checkAll").multiselect("close");
+                            $ruleList.append(options.join("")).multiselect("refresh").multiselect("checkAll").multiselect("close");
                         }
                     }
                 }
@@ -356,32 +386,32 @@
                 if (enable) {
                     verb = "enable";
                     selector = ":disabled";
-                    $(toolbar).removeAttr("data-disabled");
+                    $toolbar.removeAttr("data-disabled");
                 }
                 else {
                     verb = "disable";
-                    $(toolbar).attr("data-disabled");
+                    $toolbar.attr("data-disabled");
                 }
 
                 $("#validatorToolbar .toolbar-button" + selector).each(function (index, button) {
                     $(button).button(verb);
                 });
-                $(ruleList).multiselect(verb);
+                $ruleList.multiselect(verb);
             }
 
             function clearRuleList() {
                 $("#ruleList option").each(function (index, option) {
                     $(option).remove();
                 })
-                $(ruleList).multiselect("refresh");
+                $ruleList.multiselect("refresh");
                 $("#ruleDescription").text("");
             }
 
             function setResultPositionText(current, count) {
-                $(resultPositionCurrentText).text(current);
+                $resultPositionCurrentText.text(current);
 
                 if (typeof count != "undefined") {
-                    $(resultPositionCountText).text(count);
+                    $resultPositionCountText.text(count);
                 }
             }
 
@@ -483,19 +513,19 @@
                 }
             });
 
-            $(prevResultButton).on("click", function () {
+            $prevResultButton.on("click", function () {
                 goToPreviousResult();
             });
 
-            $(nextResultButton).on("click", function () {
+            $nextResultButton.on("click", function () {
                 goToNextResult();
             });
 
-            $(downloadButton).on("click", function () {
+            $downloadButton.on("click", function () {
                 saveTextAsFile();
             });
 
-            $(revalidateButton).on("click", function () {
+            $revalidateButton.on("click", function () {
                 // Disable controls
                 setToolbarEnabled(false);
                 $dropForm.addClass("is-busy").removeClass("is-complete").removeClass("is-error");
@@ -533,8 +563,8 @@
                 });
             });
 
-            $(utilitiesButton).button().on("click", function () {
-                $(utilitiesMenu).show().position({
+            $utilitiesButton.button().on("click", function () {
+                $utilitiesMenu.show().position({
                     my: "right top",
                     at: "left bottom",
                     of: this,
@@ -543,17 +573,17 @@
                 });
 
                 $(document).on("click", function () {
-                    $(utilitiesMenu).hide();
+                    $utilitiesMenu.hide();
                 }).on("keyup", function (e) {
                     if (e.key == "Escape") {
-                        $(utilitiesMenu).hide();
+                        $utilitiesMenu.hide();
                     }
                 });
 
                 return false;
             });
 
-            $(utilitiesMenu).on("menuselect", function (e, ui) {
+            $utilitiesMenu.on("menuselect", function (e, ui) {
                 $("#utilitiesMenuThemesFlyout li.selected-theme").removeClass("selected-theme");
                 var theme = ui.item.attr("data-value");
                 ui.item.addClass("selected-theme");
