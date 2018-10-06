@@ -22,7 +22,7 @@
     display: flex;
 }
 
-#rulesToolbar {
+#leftToolbarGroup {
     align-items: flex-start;
     flex: 1;
 }
@@ -38,12 +38,12 @@
     padding-right: 5px;
 }
 
-#buttonsToolbar button {
+#validatorToolbar .toolbar-button {
     margin-left: 3px;
     padding: .4em .2em;
 }
 
-#buttonsToolbar .ui-icon {
+#validatorToolbar .toolbar-button .ui-icon {
     font-size: 20px;
 }
 
@@ -53,6 +53,10 @@
     font-size: 11px;
     margin-left: 5px;
     margin-right: 5px;
+}
+
+#resultPosition {
+    align-self: center;
 }
 
 #ruleDescription {
