@@ -22,14 +22,19 @@
     display: flex;
 }
 
+#validatorToolbar .toolbar-button {
+    margin-left: 3px;
+    padding: .4em .2em;
+}
+
+#validatorToolbar .toolbar-button .ui-icon {
+    font-size: 20px;
+}
+
 #leftToolbarGroup {
     align-items: flex-start;
     flex: 1;
-}
-
-.ui-multiselect-menu {
-    box-shadow: var(--menu-box-shadow);
-    z-index: 99;
+    padding-right: 30px;
 }
 
 #ruleList_ms {
@@ -38,21 +43,17 @@
     padding-right: 5px;
 }
 
+.ui-multiselect-menu {
+    box-shadow: var(--menu-box-shadow);
+    z-index: 99;
+}
+
 .ui-multiselect-header {
     padding: 3px 0 1px 1px;
 }
 
 .ui-multiselect-close {
     display: none;
-}
-
-#validatorToolbar .toolbar-button {
-    margin-left: 3px;
-    padding: .4em .2em;
-}
-
-#validatorToolbar .toolbar-button .ui-icon {
-    font-size: 20px;
 }
 
 #resultPosition,
@@ -64,7 +65,11 @@
 }
 
 #resultPosition {
-    align-self: center;
+    align-items: center;
+    align-self: flex-start;
+    display: flex;
+    margin-top: 10px;
+    user-select: none;
 }
 
 #ruleDescription {
@@ -75,13 +80,6 @@
 #prevResultButton span,
 #nextResultButton span {
     font-weight: bold;
-}
-
-#resultPosition {
-    align-items: center;
-    display: flex;
-    justify-content: flex-start;
-    user-select: none;
 }
 
 #resultPositionSeparator {

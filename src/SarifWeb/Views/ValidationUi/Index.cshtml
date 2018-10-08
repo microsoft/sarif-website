@@ -64,7 +64,7 @@
                 </button>
             </div>
             <ul id="utilitiesMenu">
-                <li><div>Download validation results</div></li>
+                <li id="downloadResultsLog"><div>Download validation results</div></li>
                 <li>
                     <div>Editor color themes</div>
                     <ul id="utilitiesMenuThemesFlyout">
@@ -127,17 +127,20 @@
     <script type="text/javascript">
         $(function () {
             var fileName = "";
-            var editor = null;
-            var markers = [];
+            var targetLogText = null;
+            var resultsLog = null;
+
             var currentRules = [];
             var currentResults = [];
             var currentResultIndex = -1;
+
+            var editor = null;
+            var markers = [];
+
             var $toolbar = $("#validatorToolbar");
             var $ruleList = $("#ruleList").multiselect({
                 minWidth: 300,
                 header: "<input type='checkbox' id='ruleListSelectAll' checked class='ui-multiselect-header-item' /><label for='ruleListSelectAll'></label>",
-                checkAllText: "Select all",
-                uncheckAllText: "Clear all",
                 noneSelectedText: "Select rules",
                 selectedText: "# rule(s) selected",
                 click: function (e) {
@@ -160,7 +163,7 @@
 
                     $.each($(this).multiselect("getChecked"), function (index, option) {
                         // The "select all" checkbox will be included if it's checked, so skip it
-                        if (option.id != "ruleListSelectAll") {
+                        if (!$(option).hasClass("ui-multiselect-header-item")) {
                             var ruleId = option.value;
                             currentRules.push(rulesDictionary[ruleId]);
                         }
@@ -186,7 +189,7 @@
                         currentResultIndex = 0;
                         var firstResult = currentResults[0];
                         var rule = rulesDictionary[firstResult.ruleId];
-                        setRuleDescription(rule.description);
+                        setRuleDescription(firstResult.ruleId, rule.description);
 
                         setTimeout(function () {
                             editor.gotoLine(firstResult.line, 0, true);
@@ -194,7 +197,7 @@
                     }
                 }
             });
-            var $ruleListSelectAll = $("#ruleListSelectAll")
+            $("#ruleListSelectAll")
                 .on("click", function (e) {
                     var checked = e.target.checked;
 
@@ -204,8 +207,8 @@
                     else {
                         $ruleList.multiselect("uncheckAll");
                     }
-                    // Add handler for multiselect check
-            });
+                });
+            var $ruleDescription = $("#ruleDescription");
             var $resultPositionCurrentText = $("#resultPositionCurrent");
             var $resultPositionCountText = $("#resultPositionCount");
             var $prevResultButton = $("#prevResultButton").button();
@@ -216,6 +219,23 @@
             var $utilitiesMenu = $("#utilitiesMenu").menu({
                 items: "> :not(.ui-widget-header)"
             }).hide();
+
+            $("#downloadResultsLog").on("click", function () {
+                // BUGBUG: issue #83 calls for the file key to be the uploaded filename
+                // For now, find the file with the sarif content type
+                $.each(resultsLog.runs[0].files, function (key, file) {
+                    if (file.mimeType == "application/sarif-json") {
+                        file.contents = {
+                            text: targetLogText
+                        }
+                    }
+                });
+                var text = JSON.stringify(resultsLog, null, " ");
+                var index = fileName.lastIndexOf(".");
+                var extension = fileName.substring(index + 1);
+                var outputFileName = fileName.substring(0, index) + ".validation." + extension;
+                saveTextAsFile(text, outputFileName);
+            });
 
             var theme = getCookie("editorTheme");
             theme = theme ? theme : "ace/theme/sqlserver";
@@ -251,6 +271,7 @@
 
                     if (run.results.length > 0) {
                         hasResults = true;
+                        resultsLog = sarifLog;
 
                         if (run.resources && run.resources.rules) {
                             // Process rules
@@ -306,8 +327,8 @@
             }
 
             // Downloads the complete text from the editor
-            function saveTextAsFile() {
-                var textToWrite = editor.getValue();
+            function saveTextAsFile(text, fileName) {
+                var textToWrite = text;
                 var textFileAsBlob = new Blob([textToWrite], { type: "text/json" });
 
                 var downloadLink = $("#downloadLink")[0];
@@ -353,7 +374,8 @@
                         });
 
                         // Get the target file text, excluding the header segment
-                        editor.setValue(atob(reader.result.substring(reader.result.indexOf(',') + 1)));
+                        targetLogText = atob(reader.result.substring(reader.result.indexOf(',') + 1));
+                        editor.setValue(targetLogText);
                         editor.selection.clearSelection();
 
                         // Enable controls
@@ -404,7 +426,7 @@
                     $(option).remove();
                 })
                 $ruleList.multiselect("refresh");
-                $("#ruleDescription").text("");
+                setRuleDescription();
             }
 
             function setResultPositionText(current, count) {
@@ -468,13 +490,25 @@
                 });
             }
 
-            function setRuleDescription(text) {
-                $("#ruleDescription").text(text);
+            function setRuleDescription(ruleId, text) {
+                $ruleDescription.empty();
+                var html = "";
+
+                if (ruleId) {
+                    html = "<b>" + ruleId + ":</b> ";
+                }
+
+                if (text) {
+                    html += text;
+                }
+
+                $ruleDescription.html(html);
             }
 
             function changeCurrentResult() {
                 setResultPositionText(currentResultIndex + 1);
-                setRuleDescription(rulesDictionary[currentResults[currentResultIndex].ruleId].description);
+                var ruleId = currentResults[currentResultIndex].ruleId;
+                setRuleDescription(ruleId, rulesDictionary[ruleId].description);
                 editor.gotoLine(currentResults[currentResultIndex].line, 0, true);
             }
 
@@ -522,7 +556,7 @@
             });
 
             $downloadButton.on("click", function () {
-                saveTextAsFile();
+                saveTextAsFile(editor.getValue(), fileName);
             });
 
             $revalidateButton.on("click", function () {
