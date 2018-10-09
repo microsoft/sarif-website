@@ -64,7 +64,7 @@
                 </button>
             </div>
             <ul id="utilitiesMenu">
-                <li id="downloadResultsLog"><div>Download validation results</div></li>
+                <li id="downloadvalidationLog"><div>Download validation results</div></li>
                 <li>
                     <div>Editor color themes</div>
                     <ul id="utilitiesMenuThemesFlyout">
@@ -113,6 +113,7 @@
         </div>
         <div id="editor" role="textbox" aria-label="Log file editor"></div>
         <div id="validatorFooter">
+            <div id="resultDetails"></div>
         </div>
     </div>
 </section>
@@ -128,14 +129,16 @@
         $(function () {
             var fileName = "";
             var targetLogText = null;
-            var resultsLog = null;
+            var validationLog = null;
 
             var currentRules = [];
-            var currentResults = [];
-            var currentResultIndex = -1;
+            var currentResultLocations = [];
+            var currentResultLocationIndex = -1;
 
             var editor = null;
-            var markers = [];
+
+            var ruleDescriptionTemplate = `<b><a href="{HELPURL}" target="_blank">{RULEID}</a>:</b> {RULEDESC}`;
+            var resultDetailTemplate = `<b><a href="{HELPURL}" target="_blank">{RULEID}</a>:</b> {RESULTMSG}`;
 
             var $toolbar = $("#validatorToolbar");
             var $ruleList = $("#ruleList").multiselect({
@@ -158,41 +161,40 @@
                 },
                 beforeclose: function () {
                     currentRules = [];
-                    currentResults = [];
+                    currentResultLocations = [];
                     var count = 0;
 
                     $.each($(this).multiselect("getChecked"), function (index, option) {
                         // The "select all" checkbox will be included if it's checked, so skip it
                         if (!$(option).hasClass("ui-multiselect-header-item")) {
-                            var ruleId = option.value;
-                            currentRules.push(rulesDictionary[ruleId]);
+                            currentRules.push(option.value);
                         }
                     });
 
                     clearLineMarkers();
 
                     if (currentRules.length > 0) {
-                        $.each(currentRules, function (index, rule) {
-                            $.each(rule.results, function (index, result) {
-                                currentResults.push({ ruleId: rule.id, line: result.line });
+                        $.each(currentRules, function (index, ruleId) {
+                            $.each(rulesDictionary[ruleId].results, function (index, result) {
+                                currentResultLocations.push({ ruleId: ruleId, result: result });
                                 setLineMarker(result.line);
                                 count++;
                             });
                         });
 
                         // Sort the result by line number
-                        currentResults.sort(function (r1, r2) {
-                            return r1.line - r2.line;
+                        currentResultLocations.sort(function (r1, r2) {
+                            return r1.result.line - r2.result.line;
                         });
 
                         setResultPositionText(1, count);
-                        currentResultIndex = 0;
-                        var firstResult = currentResults[0];
-                        var rule = rulesDictionary[firstResult.ruleId];
-                        setRuleDescription(firstResult.ruleId, rule.description);
+                        currentResultLocationIndex = 0;
+                        var firstResultLocation = currentResultLocations[0]
+                        setRuleDescription(firstResultLocation.ruleId);
+                        setResultLocationDetails(firstResultLocation)
 
                         setTimeout(function () {
-                            editor.gotoLine(firstResult.line, 0, true);
+                            editor.gotoLine(firstResultLocation.result.line, 0, true);
                         }, 0);
                     }
                 }
@@ -219,18 +221,20 @@
             var $utilitiesMenu = $("#utilitiesMenu").menu({
                 items: "> :not(.ui-widget-header)"
             }).hide();
+            var $resultDetails = $("#resultDetails");
 
-            $("#downloadResultsLog").on("click", function () {
+            $("#downloadvalidationLog").on("click", function () {
                 // BUGBUG: issue #83 calls for the file key to be the uploaded filename
                 // For now, find the file with the sarif content type
-                $.each(resultsLog.runs[0].files, function (key, file) {
+                $.each(validationLog.runs[0].files, function (key, file) {
                     if (file.mimeType == "application/sarif-json") {
                         file.contents = {
                             text: targetLogText
                         }
+                        return false; // Break
                     }
                 });
-                var text = JSON.stringify(resultsLog, null, " ");
+                var text = JSON.stringify(validationLog, null, " ");
                 var index = fileName.lastIndexOf(".");
                 var extension = fileName.substring(index + 1);
                 var outputFileName = fileName.substring(0, index) + ".validation." + extension;
@@ -241,75 +245,64 @@
             theme = theme ? theme : "ace/theme/sqlserver";
             $("#utilitiesMenuThemesFlyout li[data-value='" + theme + "']").addClass("selected-theme");
 
-            // Rules dictionary: key = rule ID, value = { description, results[ { line } ] }
+            // Rules dictionary: key = rule ID, value = { results[{ line, message }] }
             var rulesDictionary = {};
             var rulesCount = 0;
 
-            // Adds a bare rule to the dictionary
-            function addRule(ruleId, description) {
-                rulesDictionary[ruleId] = {
-                    id: ruleId,
-                    description: description,
-                    results: []
-                };
-                rulesCount++;
-            }
+            function addResult(rule, result) {
+                if (!rulesDictionary[rule.id]) {
+                    rulesDictionary[rule.id] = {
+                        // We could just have the results array be the value, but
+                        // it reads more clearly as an object with a results property
+                        results: []
+                    };
+                    rulesCount++;
+                }
 
-            // Creates HTML for a result and adds it to the corresponding rule's results array
-            function addResult(ruleId, line) {
-                rulesDictionary[ruleId].results.push({ line: line });
+                // Get the messageString specified by this result
+                var message = rule.messageStrings[result.message.messageId];
+
+                // Replace tokens in the messageString with this result's arguments
+                $.each(result.message.arguments, function (index, arg) {
+                    message = message.replace("{" + index + "}", arg);
+                });
+
+                // Add each location for this result
+                $.each(result.locations, function (index, location) {
+                    var startLine = location.physicalLocation.region.startLine;
+                    rulesDictionary[result.ruleId].results.push({
+                        line: startLine,
+                        message: message
+                    });
+                });
             }
 
             // Creates a SARIF log object from JSON, then processes rules and results
             function processResults(sarif) {
                 rulesDictionary = {};
-                var sarifLog = JSON.parse(sarif);
+                validationLog= JSON.parse(sarif);
                 var hasResults = false;
+                var run = validationLog.runs[0];
 
-                for (var i = 0; i < sarifLog.runs.length; i++) {
-                    var run = sarifLog.runs[i];
+                if (run.results.length > 0) {
+                    hasResults = true;
 
-                    if (run.results.length > 0) {
-                        hasResults = true;
-                        resultsLog = sarifLog;
+                    if (run.resources && run.resources.rules) {
+                        $.each(run.results, function (index, result) {
+                            addResult(run.resources.rules[result.ruleId], result);
+                        });
 
-                        if (run.resources && run.resources.rules) {
-                            // Process rules
-                            var rules = run.resources.rules;
-
-                            for (var key in rules) {
-                                var rule = rules[key];
-                                var ruleId = rule.id;
-
-                                if (!rulesDictionary[ruleId]) {
-                                    var description = rule.shortDescription ? rule.shortDescription.text : rule.fullDescription.text;
-                                    addRule(ruleId, description);
-                                }
-                            }
-
-                            // Process results
-                            for (var j = 0; j < run.results.length; j++) {
-                                var result = run.results[j];
-
-                                for (var k = 0; k < result.locations.length; k++) {
-                                    // Get the startLine from the result location
-                                    var startLine = result.locations[k].physicalLocation.region.startLine;
-                                    addResult(result.ruleId, startLine);
-                                }
-                            }
-
-                            // Now we know how many results we have for each rule, so populate the rules dropdown
-                            var options = [];
-                            for (var key in rulesDictionary) {
-                                options.push("<option value='" + key + "'>" + key + " (" + rulesDictionary[key].results.length + ")</option>");
-                            }
-
-                            // Clear the dropdown, then add the rules and trigger a close event
-                            clearRuleList();
-                            $ruleList.append(options.join("")).multiselect("refresh").multiselect("checkAll").multiselect("close");
+                        // Now we know how many result locations we have for each rule, so populate the rules dropdown
+                        var options = [];
+                        for (var key in rulesDictionary) {
+                            options.push("<option value='" + key + "'>" + key + " (" + rulesDictionary[key].results.length + ")</option>");
                         }
+
+                        // Clear the dropdown, then add the rules and trigger a close event
+                        clearRuleList();
+                        $ruleList.append(options.join("")).multiselect("refresh").multiselect("checkAll").multiselect("close");
                     }
-                }
+                };
 
                 if (!hasResults) {
                     rulesDictionary = {};
@@ -317,7 +310,7 @@
                     setResultPositionText(0, 0);
                     setToolbarEnabled(false);
                     clearLineMarkers();
-                    currentResultIndex = -1;
+                    currentResultLocationIndex = -1;
 
                     setTimeout(function () {
                         // Push this to another thread to allow the above settings to take effect
@@ -345,16 +338,14 @@
                 range.start = editor.session.doc.createAnchor(range.start);
                 range.end = editor.session.doc.createAnchor(range.end);
                 range.id = editor.session.addMarker(range, "sarif-error", "text", false);
-                markers.push(range.id);
-                //editor.session.addGutterDecoration(line - 1, "sarif-error-gutter");
             }
 
             // Clears all line markers in the editor
             function clearLineMarkers() {
-                markers.forEach(function (id) {
+                var markers = editor.session.getMarkers();
+                $.each(markers, function (id) {
                     editor.session.removeMarker(id);
                 });
-                markers = [];
             }
 
             function isSarifFile(fileName) {
@@ -490,69 +481,81 @@
                 });
             }
 
-            function setRuleDescription(ruleId, text) {
+            function setRuleDescription(ruleId) {
                 $ruleDescription.empty();
-                var html = "";
 
                 if (ruleId) {
-                    html = "<b>" + ruleId + ":</b> ";
+                    var rule = validationLog.runs[0].resources.rules[ruleId];
+                    var html = ruleDescriptionTemplate
+                        .replace("{RULEID}", rule.id)
+                        .replace("{RULEDESC}", rule.fullDescription.text ? rule.fullDescription.text : rule.shortDescription.text)
+                        .replace("{HELPURL}", rule.helpUri);
+                    $ruleDescription.html(html);
                 }
-
-                if (text) {
-                    html += text;
-                }
-
-                $ruleDescription.html(html);
             }
 
-            function changeCurrentResult() {
-                setResultPositionText(currentResultIndex + 1);
-                var ruleId = currentResults[currentResultIndex].ruleId;
-                setRuleDescription(ruleId, rulesDictionary[ruleId].description);
-                editor.gotoLine(currentResults[currentResultIndex].line, 0, true);
+            function setResultLocationDetails(resultLocation) {
+                $resultDetails.empty();
+
+                if (resultLocation) {
+                    var rule = validationLog.runs[0].resources.rules[resultLocation.ruleId];
+                    var html = resultDetailTemplate
+                        .replace("{RULEID}", rule.id)
+                        .replace("{RESULTMSG}", resultLocation.result.message)
+                        .replace("{HELPURL}", rule.helpUri);
+                    $resultDetails.html(html);
+                }
             }
 
-            function goToPreviousResult() {
-                if (currentResultIndex > -1) {
-                    if (currentResultIndex > 0) {
-                        currentResultIndex--;
+            function changeCurrentResultLocation() {
+                setResultPositionText(currentResultLocationIndex + 1);
+                var resultLocation = currentResultLocations[currentResultLocationIndex];
+                setRuleDescription(resultLocation.ruleId);
+                setResultLocationDetails(resultLocation);
+                editor.gotoLine(resultLocation.result.line, 0, true);
+            }
+
+            function goToPreviousResultLocation() {
+                if (currentResultLocationIndex > -1) {
+                    if (currentResultLocationIndex > 0) {
+                        currentResultLocationIndex--;
                     }
                     else {
-                        currentResultIndex = currentResults.length - 1;
+                        currentResultLocationIndex = currentResultLocations.length - 1;
                     }
 
-                    changeCurrentResult();
+                    changeCurrentResultLocation();
                 }
             }
 
-            function goToNextResult() {
-                if (currentResultIndex > -1) {
-                    if (currentResultIndex < currentResults.length - 1) {
-                        currentResultIndex++;
+            function goToNextResultLocation() {
+                if (currentResultLocationIndex > -1) {
+                    if (currentResultLocationIndex < currentResultLocations.length - 1) {
+                        currentResultLocationIndex++;
                     }
                     else {
-                        currentResultIndex = 0;
+                        currentResultLocationIndex = 0;
                     }
 
-                    changeCurrentResult();
+                    changeCurrentResultLocation();
                 }
             }
 
             $(document).on("keyup", function (e) {
                 if (e.key == "F7") {
-                    goToPreviousResult();
+                    goToPreviousResultLocation();
                 }
                 else if (e.key == "F8") {
-                    goToNextResult();
+                    goToNextResultLocation();
                 }
             });
 
             $prevResultButton.on("click", function () {
-                goToPreviousResult();
+                goToPreviousResultLocation();
             });
 
             $nextResultButton.on("click", function () {
-                goToNextResult();
+                goToNextResultLocation();
             });
 
             $downloadButton.on("click", function () {
