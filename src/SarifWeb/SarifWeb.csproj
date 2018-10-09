@@ -206,21 +206,20 @@
     <Content Include="Content\Home-Media-Tablet.css" />
     <Content Include="Content\ImageViewer.css" />
     <Content Include="Content\Home-Media-Mobile.css" />
+    <Content Include="Content\jquery.multiselect.css" />
+    <Content Include="Content\jquery.multiselect.filter.css" />
+    <Content Include="Content\Loader.css" />
     <Content Include="Content\Validator.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Home.css" />
-    <Content Include="Images\download.png" />
     <Content Include="Images\Logos\GrammaTech.png" />
     <Content Include="Images\Logos\KestrelTechnology.png" />
     <Content Include="Images\Logos\MicroFocus.png" />
     <Content Include="Images\Logos\Microsoft.png" />
     <Content Include="Images\Logos\Semmle.png" />
     <Content Include="Images\Logos\SWAMP.png" />
-    <Content Include="Images\next.png" />
     <Content Include="Images\Nuget.png" />
-    <Content Include="Images\prev.png" />
-    <Content Include="Images\reload.png" />
     <Content Include="Images\Screenshots\VSCodeViewer.png" />
     <Content Include="Images\Screenshots\VSCodeViewer.thumbnail.png" />
     <Content Include="Images\Screenshots\VSViewer.png" />
@@ -331,15 +330,21 @@
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.multiselect.filter.js" />
+    <Content Include="Scripts\jquery.multiselect.filter.min.js" />
+    <Content Include="Scripts\jquery.multiselect.js" />
+    <Content Include="Scripts\jquery.multiselect.min.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jqueryui\font\jquery-ui.svg" />
     <Content Include="Scripts\jqueryui\images\ui-icons_444444_256x240.png" />
     <Content Include="Scripts\jqueryui\images\ui-icons_555555_256x240.png" />
     <Content Include="Scripts\jqueryui\images\ui-icons_777620_256x240.png" />
     <Content Include="Scripts\jqueryui\images\ui-icons_777777_256x240.png" />
     <Content Include="Scripts\jqueryui\images\ui-icons_cc0000_256x240.png" />
     <Content Include="Scripts\jqueryui\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Scripts\jqueryui\jquery-ui-1.12.icon-font.min.css" />
     <Content Include="Scripts\jqueryui\jquery-ui.css" />
     <Content Include="Scripts\jqueryui\jquery-ui.js" />
     <Content Include="Scripts\jqueryui\jquery-ui.min.css" />
@@ -791,6 +796,10 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="UploadedFiles\Readme.md" />
+    <Content Include="Scripts\jqueryui\font\jquery-ui.eot" />
+    <Content Include="Scripts\jqueryui\font\jquery-ui.ttf" />
+    <Content Include="Scripts\jqueryui\font\jquery-ui.woff" />
+    <Content Include="Scripts\jqueryui\font\jquery-ui.woff2" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

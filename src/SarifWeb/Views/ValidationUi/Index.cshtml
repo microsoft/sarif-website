@@ -6,6 +6,9 @@
 <link href="~/Scripts/jqueryui/themes/redmond/jquery-ui.min.css" rel="stylesheet" />
 <link href="~/Scripts/jqueryui/themes/redmond/theme.min.css" rel="stylesheet" />
 <link href="~/Scripts/jqueryui/jquery-ui.structure.css" rel="stylesheet" />
+<link href="~/Scripts/jqueryui/jquery-ui-1.12.icon-font.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.multiselect.css" rel="stylesheet" />
+<link href="~/Content/Loader.css" rel="stylesheet" />
 <link href="~/Content/Validator.css" rel="stylesheet" />
 
 <section id="dropSection" class="content-section gray-section">
@@ -14,7 +17,16 @@
     <form id="dropForm" role="region" aria-dropeffect="execute" aria-label="Click to browse for your log file" tabindex="0" method="post" action="@Url.Action("ValidateFilesAsync")" class="drop-area">
         <input id="fileInput" name="postedFiles" type="file" style="display: none;">
         <div class="drop-area-text drop-area-text-input">Drop your SARIF file here or click to browse</div>
-        <div class="drop-area-text drop-area-text-busy">Validating&hellip;</div>
+        <div class="drop-area-text drop-area-text-busy">
+            <div class="drop-area-busy">
+                <div id="looper">
+                    <div class="loader">Loading...</div>
+                </div>
+                <div id="busyText">
+                    Validating&hellip;
+                </div>
+            </div>
+        </div>
         <div class="drop-area-text drop-area-text-complete">Validation complete!</div>
         <div class="drop-area-text drop-area-text-error">Error</div>
     </form>
@@ -23,79 +35,85 @@
 <section id="validatorSection" role="region" aria-labelledby="pageTitle" class="content-section gray-section">
     <div id="validatorContainer">
         <div id="validatorToolbar" data-disabled>
-            <div id="leftSide">
-                <select id="ruleList" role="combobox" aria-label="Rule list" disabled>
+            <div id="leftToolbarGroup">
+                <select id="ruleList" role="combobox" aria-label="Rule list" multiple size="1" disabled>
                     <option value=""></option>
                 </select>
-                <div id="ruleDescription"></div>
-            </div>
-            <div id="rightSide">
-                <button id="prevResult" aria-label="Previous result" disabled>
-                    <img src="~/Images/prev.png" alt="Previous result" />
+                <button id="prevResultButton" aria-label="Previous result" title="Previous result" class="toolbar-button" disabled>
+                    <span class="ui-icon ui-icon-caret-1-n">icon</span>
                 </button>
                 <div id="resultPosition">
                     <div id="resultPositionCurrent" aria-label="Result number">0</div>
                     <div id="resultPositionSeparator" aria-label="of">/</div>
                     <div id="resultPositionCount">0</div>
                 </div>
-                <button id="nextResult" aria-label="Next result" disabled>
-                    <img src="~/Images/next.png" alt="Next result" />
+                <button id="nextResultButton" aria-label="Next result" title="Next result" class="toolbar-button" disabled>
+                    <span class="ui-icon ui-icon-caret-1-s">icon</span>
                 </button>
-                <button id="downloadLog" aria-label="Download log file" disabled>
-                    <img src="~/Images/download.png" alt="Download icon" />
-                    <div>Download</div>
+                <div id="ruleDescription"></div>
+            </div>
+            <div id="rightToolbarGroup">
+                <button id="downloadLogButton" aria-label="Download log file" title="Download log file" class="toolbar-button" disabled>
+                    <span class="ui-icon ui-icon-download">icon</span>
                 </button>
-                <button id="revalidate" aria-label="Re-validate log file" disabled>
-                    <img src="~/Images/reload.png" alt="Reload icon" />
-                    <div>Re-validate</div>
+                <button id="revalidateButton" aria-label="Re-validate log file" title="Re-validate log file" class="toolbar-button" disabled>
+                    <span class="ui-icon ui-icon-arrowrefresh-1-e">icon</span>
+                </button>
+                <button id="utilitiesButton" aria-label="Utilities menu" title="Utilities menu" class="toolbar-button" disabled>
+                    <span class="ui-icon ui-icon-gear">icon</span>
                 </button>
             </div>
+            <ul id="utilitiesMenu">
+                <li id="downloadvalidationLog"><div>Download validation results</div></li>
+                <li>
+                    <div>Editor color themes</div>
+                    <ul id="utilitiesMenuThemesFlyout">
+                        <li class="ui-widget-header"><div>Light</div></li>
+                        <li data-value="ace/theme/chrome"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Chrome</div></li>
+                        <li data-value="ace/theme/clouds"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Clouds</div></li>
+                        <li data-value="ace/theme/crimson_editor"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Crimson Editor</div></li>
+                        <li data-value="ace/theme/dawn"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Dawn</div></li>
+                        <li data-value="ace/theme/dreamweaver"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Dreamweaver</div></li>
+                        <li data-value="ace/theme/eclipse"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Eclipse</div></li>
+                        <li data-value="ace/theme/github"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>GitHub</div></li>
+                        <li data-value="ace/theme/iplastic"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>IPlastic</div></li>
+                        <li data-value="ace/theme/katzenmilch"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>KatzenMilch</div></li>
+                        <li data-value="ace/theme/kuroir"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Kuroir</div></li>
+                        <li data-value="ace/theme/solarized_light"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Solarized Light</div></li>
+                        <li data-value="ace/theme/sqlserver"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>SQL Server</div></li>
+                        <li data-value="ace/theme/textmate"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>TextMate</div></li>
+                        <li data-value="ace/theme/tomorrow"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Tomorrow</div></li>
+                        <li data-value="ace/theme/xcode"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>XCode</div></li>
+                        <li class="ui-widget-header"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Dark</div></li>
+                        <li data-value="ace/theme/ambiance"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Ambiance</div></li>
+                        <li data-value="ace/theme/chaos"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Chaos</div></li>
+                        <li data-value="ace/theme/clouds_midnight"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Clouds Midnight</div></li>
+                        <li data-value="ace/theme/cobalt"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Cobalt</div></li>
+                        <li data-value="ace/theme/dracula"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Dracula</div></li>
+                        <li data-value="ace/theme/gob"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Green on Black</div></li>
+                        <li data-value="ace/theme/gruvbox"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Gruvbox</div></li>
+                        <li data-value="ace/theme/idle_fingers"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>idle Fingers</div></li>
+                        <li data-value="ace/theme/kr_theme"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>krTheme</div></li>
+                        <li data-value="ace/theme/merbivore"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Merbivore</div></li>
+                        <li data-value="ace/theme/merbivore_soft"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Merbivore Soft</div></li>
+                        <li data-value="ace/theme/mono_industrial"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Mono Industrial</div></li>
+                        <li data-value="ace/theme/monokai"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Monokai</div></li>
+                        <li data-value="ace/theme/pastel_on_dark"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Pastel on dark</div></li>
+                        <li data-value="ace/theme/solarized_dark"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Solarized Dark</div></li>
+                        <li data-value="ace/theme/terminal"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Terminal</div></li>
+                        <li data-value="ace/theme/tomorrow_night"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Tomorrow Night</div></li>
+                        <li data-value="ace/theme/tomorrow_night_blue"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Tomorrow Night Blue</div></li>
+                        <li data-value="ace/theme/tomorrow_night_bright"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Tomorrow Night Bright</div></li>
+                        <li data-value="ace/theme/tomorrow_night_eighties"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Tomorrow Night 80s</div></li>
+                        <li data-value="ace/theme/twilight"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Twilight</div></li>
+                        <li data-value="ace/theme/vibrant_ink"><div><span class="ui-icon ui-icon-check menu-check-hidden"></span>Vibrant Ink</div></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
         <div id="editor" role="textbox" aria-label="Log file editor"></div>
         <div id="validatorFooter">
-            <select id="themeList" role="combobox" aria-label="Editor color theme" disabled>
-                <optgroup label="Light">
-                    <option value="ace/theme/chrome">Chrome</option>
-                    <option value="ace/theme/clouds">Clouds</option>
-                    <option value="ace/theme/crimson_editor">Crimson Editor</option>
-                    <option value="ace/theme/dawn">Dawn</option>
-                    <option value="ace/theme/dreamweaver">Dreamweaver</option>
-                    <option value="ace/theme/eclipse">Eclipse</option>
-                    <option value="ace/theme/github">GitHub</option>
-                    <option value="ace/theme/iplastic">IPlastic</option>
-                    <option value="ace/theme/solarized_light">Solarized Light</option>
-                    <option value="ace/theme/textmate">TextMate</option>
-                    <option value="ace/theme/tomorrow">Tomorrow</option>
-                    <option value="ace/theme/xcode">XCode</option>
-                    <option value="ace/theme/kuroir">Kuroir</option>
-                    <option value="ace/theme/katzenmilch">KatzenMilch</option>
-                    <option value="ace/theme/sqlserver" selected>SQL Server</option>
-                </optgroup>
-                <optgroup label="Dark">
-                    <option value="ace/theme/ambiance">Ambiance</option>
-                    <option value="ace/theme/chaos">Chaos</option>
-                    <option value="ace/theme/clouds_midnight">Clouds Midnight</option>
-                    <option value="ace/theme/dracula">Dracula</option>
-                    <option value="ace/theme/cobalt">Cobalt</option>
-                    <option value="ace/theme/gruvbox">Gruvbox</option>
-                    <option value="ace/theme/gob">Green on Black</option>
-                    <option value="ace/theme/idle_fingers">idle Fingers</option>
-                    <option value="ace/theme/kr_theme">krTheme</option>
-                    <option value="ace/theme/merbivore">Merbivore</option>
-                    <option value="ace/theme/merbivore_soft">Merbivore Soft</option>
-                    <option value="ace/theme/mono_industrial">Mono Industrial</option>
-                    <option value="ace/theme/monokai">Monokai</option>
-                    <option value="ace/theme/pastel_on_dark">Pastel on dark</option>
-                    <option value="ace/theme/solarized_dark">Solarized Dark</option>
-                    <option value="ace/theme/terminal">Terminal</option>
-                    <option value="ace/theme/tomorrow_night">Tomorrow Night</option>
-                    <option value="ace/theme/tomorrow_night_blue">Tomorrow Night Blue</option>
-                    <option value="ace/theme/tomorrow_night_bright">Tomorrow Night Bright</option>
-                    <option value="ace/theme/tomorrow_night_eighties">Tomorrow Night 80s</option>
-                    <option value="ace/theme/twilight">Twilight</option>
-                    <option value="ace/theme/vibrant_ink">Vibrant Ink</option>
-                </optgroup>
-            </select>
+            <div id="resultDetails"></div>
         </div>
     </div>
 </section>
@@ -106,102 +124,193 @@
 @section Scripts {
     <script src="~/Scripts/ace/ace.js"></script>
     <script src="~/Scripts/jqueryui/jquery-ui.min.js"></script>
+    <script src="~/Scripts/jquery.multiselect.min.js"></script>
     <script type="text/javascript">
         $(function () {
             var fileName = "";
+            var targetLogText = null;
+            var validationLog = null;
+
+            var currentRules = [];
+            var currentResultLocations = [];
+            var currentResultLocationIndex = -1;
+
             var editor = null;
-            var markers = [];
-            var currentRule = null;
-            var currentResultIndex = -1;
-            var toolbar = $("#validatorToolbar");
-            var ruleList = $("#ruleList").selectmenu();
-            var resultPositionCurrentText = $("#resultPositionCurrent");
-            var resultPositionCountText = $("#resultPositionCount");
-            var prevResultButton = $("#prevResult").button();
-            var nextResultButton = $("#nextResult").button();
-            var downloadButton = $("#downloadLog").button();
-            var revalidateButton = $("#revalidate").button();
+
+            var ruleDescriptionTemplate = `<b><a href="{HELPURL}" target="_blank">{RULEID}</a>:</b> {RULEDESC}`;
+            var resultDetailTemplate = `<b><a href="{HELPURL}" target="_blank">{RULEID}</a>:</b> {RESULTMSG}`;
+
+            var $toolbar = $("#validatorToolbar");
+            var $ruleList = $("#ruleList").multiselect({
+                minWidth: 300,
+                header: "<input type='checkbox' id='ruleListSelectAll' checked class='ui-multiselect-header-item' /><label for='ruleListSelectAll'></label>",
+                noneSelectedText: "Select rules",
+                selectedText: "# rule(s) selected",
+                click: function (e) {
+                    var target = e.currentTarget;
+
+                    if (!$(target).hasClass("ui-multiselect-header-item")) {
+                        if (!target.checked) {
+                            ruleListSelectAll.checked = false;
+                        }
+                        else {
+                            var checked = $(this).multiselect("getChecked");
+                            ruleListSelectAll.checked = checked.length == rulesCount;
+                        }
+                    }
+                },
+                beforeclose: function () {
+                    currentRules = [];
+                    currentResultLocations = [];
+                    var count = 0;
+
+                    $.each($(this).multiselect("getChecked"), function (index, option) {
+                        // The "select all" checkbox will be included if it's checked, so skip it
+                        if (!$(option).hasClass("ui-multiselect-header-item")) {
+                            currentRules.push(option.value);
+                        }
+                    });
+
+                    clearLineMarkers();
+
+                    if (currentRules.length > 0) {
+                        $.each(currentRules, function (index, ruleId) {
+                            $.each(rulesDictionary[ruleId].results, function (index, result) {
+                                currentResultLocations.push({ ruleId: ruleId, result: result });
+                                setLineMarker(result.line);
+                                count++;
+                            });
+                        });
+
+                        // Sort the result by line number
+                        currentResultLocations.sort(function (r1, r2) {
+                            return r1.result.line - r2.result.line;
+                        });
+
+                        setResultPositionText(1, count);
+                        currentResultLocationIndex = 0;
+                        var firstResultLocation = currentResultLocations[0]
+                        setRuleDescription(firstResultLocation.ruleId);
+                        setResultLocationDetails(firstResultLocation)
+
+                        setTimeout(function () {
+                            editor.gotoLine(firstResultLocation.result.line, 0, true);
+                        }, 0);
+                    }
+                }
+            });
+            $("#ruleListSelectAll")
+                .on("click", function (e) {
+                    var checked = e.target.checked;
+
+                    if (checked) {
+                        $ruleList.multiselect("checkAll");
+                    }
+                    else {
+                        $ruleList.multiselect("uncheckAll");
+                    }
+                });
+            var $ruleDescription = $("#ruleDescription");
+            var $resultPositionCurrentText = $("#resultPositionCurrent");
+            var $resultPositionCountText = $("#resultPositionCount");
+            var $prevResultButton = $("#prevResultButton").button();
+            var $nextResultButton = $("#nextResultButton").button();
+            var $downloadButton = $("#downloadLogButton").button();
+            var $revalidateButton = $("#revalidateButton").button();
+            var $utilitiesButton = $("#utilitiesButton").button();
+            var $utilitiesMenu = $("#utilitiesMenu").menu({
+                items: "> :not(.ui-widget-header)"
+            }).hide();
+            var $resultDetails = $("#resultDetails");
+
+            $("#downloadvalidationLog").on("click", function () {
+                // BUGBUG: issue #83 calls for the file key to be the uploaded filename
+                // For now, find the file with the sarif content type
+                $.each(validationLog.runs[0].files, function (key, file) {
+                    if (file.mimeType == "application/sarif-json") {
+                        file.contents = {
+                            text: targetLogText
+                        }
+                        return false; // Break
+                    }
+                });
+                var text = JSON.stringify(validationLog, null, " ");
+                var index = fileName.lastIndexOf(".");
+                var extension = fileName.substring(index + 1);
+                var outputFileName = fileName.substring(0, index) + ".validation." + extension;
+                saveTextAsFile(text, outputFileName);
+            });
 
             var theme = getCookie("editorTheme");
             theme = theme ? theme : "ace/theme/sqlserver";
-            var themeList = $("#themeList")
-                .selectmenu()
-                .val(theme)
-                .selectmenu("refresh")
-                .selectmenu("option", "position", { my: "left bottom", at: "left top", collision: "fit" });
+            $("#utilitiesMenuThemesFlyout li[data-value='" + theme + "']").addClass("selected-theme");
 
-            // Rules dictionary: key = rule ID, value = { description, results[ { line } ] }
+            // Rules dictionary: key = rule ID, value = { results[{ line, message }] }
             var rulesDictionary = {};
+            var rulesCount = 0;
 
-            // Adds a bare rule to the dictionary
-            function addRule(ruleId, description) {
-                rulesDictionary[ruleId] = {
-                    description: description,
-                    results: []
-                };
-            }
+            function addResult(rule, result) {
+                if (!rulesDictionary[rule.id]) {
+                    rulesDictionary[rule.id] = {
+                        // We could just have the results array be the value, but
+                        // it reads more clearly as an object with a results property
+                        results: []
+                    };
+                    rulesCount++;
+                }
 
-            // Creates HTML for a result and adds it to the corresponding rule's results array
-            function addResult(ruleId, line) {
-                rulesDictionary[ruleId].results.push({ line: line });
+                // Get the messageString specified by this result
+                var message = rule.messageStrings[result.message.messageId];
+
+                // Replace tokens in the messageString with this result's arguments
+                $.each(result.message.arguments, function (index, arg) {
+                    message = message.replace("{" + index + "}", arg);
+                });
+
+                // Add each location for this result
+                $.each(result.locations, function (index, location) {
+                    var startLine = location.physicalLocation.region.startLine;
+                    rulesDictionary[result.ruleId].results.push({
+                        line: startLine,
+                        message: message
+                    });
+                });
             }
 
             // Creates a SARIF log object from JSON, then processes rules and results
             function processResults(sarif) {
                 rulesDictionary = {};
-                var sarifLog = JSON.parse(sarif);
+                validationLog= JSON.parse(sarif);
                 var hasResults = false;
+                var run = validationLog.runs[0];
 
-                for (var i = 0; i < sarifLog.runs.length; i++) {
-                    var run = sarifLog.runs[i];
+                if (run.results.length > 0) {
+                    hasResults = true;
 
-                    if (run.results.length > 0) {
-                        hasResults = true;
+                    if (run.resources && run.resources.rules) {
+                        $.each(run.results, function (index, result) {
+                            addResult(run.resources.rules[result.ruleId], result);
+                        });
 
-                        if (run.resources && run.resources.rules) {
-                            // Process rules
-                            var rules = run.resources.rules;
-
-                            for (var key in rules) {
-                                var rule = rules[key];
-                                var ruleId = rule.id;
-
-                                if (!rulesDictionary[ruleId]) {
-                                    var description = rule.shortDescription ? rule.shortDescription.text : rule.fullDescription.text;
-                                    addRule(ruleId, description);
-                                }
-                            }
-
-                            // Process results
-                            for (var j = 0; j < run.results.length; j++) {
-                                var result = run.results[j];
-
-                                for (var k = 0; k < result.locations.length; k++) {
-                                    // Get the startLine from the result location
-                                    var startLine = result.locations[k].physicalLocation.region.startLine;
-                                    addResult(result.ruleId, startLine);
-                                }
-                            }
-
-                            // Now we know how many results we have for each rule, so populate the rules dropdown
-                            var options = [];
-                            for (var key in rulesDictionary) {
-                                options.push("<option value='" + key + "'>" + key + " (" + rulesDictionary[key].results.length + ")</option>");
-                            }
-
-                            // Clear the dropdown, then add the rules and trigger a change event
-                            clearRuleList();
-                            $(ruleList).append(options.join("")).selectmenu("refresh").trigger("selectmenuchange");
+                        // Now we know how many result locations we have for each rule, so populate the rules dropdown
+                        var options = [];
+                        for (var key in rulesDictionary) {
+                            options.push("<option value='" + key + "'>" + key + " (" + rulesDictionary[key].results.length + ")</option>");
                         }
+
+                        // Clear the dropdown, then add the rules and trigger a close event
+                        clearRuleList();
+                        $ruleList.append(options.join("")).multiselect("refresh").multiselect("checkAll").multiselect("close");
                     }
-                }
+                };
 
                 if (!hasResults) {
                     rulesDictionary = {};
                     clearRuleList();
                     setResultPositionText(0, 0);
+                    setToolbarEnabled(false);
                     clearLineMarkers();
-                    currentResultIndex = -1;
+                    currentResultLocationIndex = -1;
 
                     setTimeout(function () {
                         // Push this to another thread to allow the above settings to take effect
@@ -211,8 +320,8 @@
             }
 
             // Downloads the complete text from the editor
-            function saveTextAsFile() {
-                var textToWrite = editor.getValue();
+            function saveTextAsFile(text, fileName) {
+                var textToWrite = text;
                 var textFileAsBlob = new Blob([textToWrite], { type: "text/json" });
 
                 var downloadLink = $("#downloadLink")[0];
@@ -229,16 +338,14 @@
                 range.start = editor.session.doc.createAnchor(range.start);
                 range.end = editor.session.doc.createAnchor(range.end);
                 range.id = editor.session.addMarker(range, "sarif-error", "text", false);
-                markers.push(range.id);
-                //editor.session.addGutterDecoration(line - 1, "sarif-error-gutter");
             }
 
             // Clears all line markers in the editor
             function clearLineMarkers() {
-                markers.forEach(function (id) {
+                var markers = editor.session.getMarkers();
+                $.each(markers, function (id) {
                     editor.session.removeMarker(id);
                 });
-                markers = [];
             }
 
             function isSarifFile(fileName) {
@@ -252,13 +359,14 @@
                     reader.onload = function () {
                         editor = ace.edit("editor", {
                             mode: "ace/mode/json",
-                            theme: $(themeList).val(),
+                            theme: $("#utilitiesMenuThemesFlyout li.selected-theme").attr("data-value"),
                             selectionStyle: "text",
                             showPrintMargin: false
                         });
 
                         // Get the target file text, excluding the header segment
-                        editor.setValue(atob(reader.result.substring(reader.result.indexOf(',') + 1)));
+                        targetLogText = atob(reader.result.substring(reader.result.indexOf(',') + 1));
+                        editor.setValue(targetLogText);
                         editor.selection.clearSelection();
 
                         // Enable controls
@@ -291,33 +399,32 @@
                 if (enable) {
                     verb = "enable";
                     selector = ":disabled";
-                    $(toolbar).removeAttr("data-disabled");
+                    $toolbar.removeAttr("data-disabled");
                 }
                 else {
                     verb = "disable";
-                    $(toolbar).attr("data-disabled");
+                    $toolbar.attr("data-disabled");
                 }
 
-                $("#validatorToolbar button" + selector).each(function (index, button) {
+                $("#validatorToolbar .toolbar-button" + selector).each(function (index, button) {
                     $(button).button(verb);
                 });
-                $(ruleList).selectmenu(verb);
-                $(themeList).selectmenu(verb);
+                $ruleList.multiselect(verb);
             }
 
             function clearRuleList() {
                 $("#ruleList option").each(function (index, option) {
                     $(option).remove();
                 })
-                $(ruleList).selectmenu("refresh");
-                $("#ruleDescription").text("");
+                $ruleList.multiselect("refresh");
+                setRuleDescription();
             }
 
             function setResultPositionText(current, count) {
-                $(resultPositionCurrentText).text(current);
+                $resultPositionCurrentText.text(current);
 
                 if (typeof count != "undefined") {
-                    $(resultPositionCountText).text(count);
+                    $resultPositionCountText.text(count);
                 }
             }
 
@@ -330,7 +437,7 @@
                 resetEditor();
 
                 // Confirm if the file is > 20 MB
-                if (file.size > 20971520) {
+                if (file.size > (20 * 1024 * 1024)) {
                     if (!confirm("The file you have selected is large, and validating this file could take a long time. Do you want to continue?")) {
                         resetFileInput();
                         return;
@@ -374,59 +481,88 @@
                 });
             }
 
-            $(ruleList).on("selectmenuchange", function () {
-                var ruleId = $(this).val();
-                currentRule = rulesDictionary[ruleId];
-                currentResultIndex = 0;
-                setResultPositionText(1, currentRule.results.length);
+            function setRuleDescription(ruleId) {
+                $ruleDescription.empty();
 
-                clearLineMarkers();
+                if (ruleId) {
+                    var rule = validationLog.runs[0].resources.rules[ruleId];
+                    var html = ruleDescriptionTemplate
+                        .replace("{RULEID}", rule.id)
+                        .replace("{RULEDESC}", rule.fullDescription.text ? rule.fullDescription.text : rule.shortDescription.text)
+                        .replace("{HELPURL}", rule.helpUri);
+                    $ruleDescription.html(html);
+                }
+            }
 
-                // Set line markers for each result corresponding to this rule
-                currentRule.results.forEach(function (result) {
-                    setLineMarker(result.line);
-                });
+            function setResultLocationDetails(resultLocation) {
+                $resultDetails.empty();
 
-                $("#ruleDescription").text(currentRule.description);
-                
-                setTimeout(function () {
-                    editor.gotoLine(currentRule.results[0].line, 0, true);
-                }, 0);
-            });
+                if (resultLocation) {
+                    var rule = validationLog.runs[0].resources.rules[resultLocation.ruleId];
+                    var html = resultDetailTemplate
+                        .replace("{RULEID}", rule.id)
+                        .replace("{RESULTMSG}", resultLocation.result.message)
+                        .replace("{HELPURL}", rule.helpUri);
+                    $resultDetails.html(html);
+                }
+            }
 
-            $(prevResultButton).on("click", function () {
-                if (currentResultIndex > -1) {
-                    if (currentResultIndex > 0) {
-                        currentResultIndex--;
+            function changeCurrentResultLocation() {
+                setResultPositionText(currentResultLocationIndex + 1);
+                var resultLocation = currentResultLocations[currentResultLocationIndex];
+                setRuleDescription(resultLocation.ruleId);
+                setResultLocationDetails(resultLocation);
+                editor.gotoLine(resultLocation.result.line, 0, true);
+            }
+
+            function goToPreviousResultLocation() {
+                if (currentResultLocationIndex > -1) {
+                    if (currentResultLocationIndex > 0) {
+                        currentResultLocationIndex--;
                     }
                     else {
-                        currentResultIndex = currentRule.results.length - 1;
+                        currentResultLocationIndex = currentResultLocations.length - 1;
                     }
 
-                    setResultPositionText(currentResultIndex + 1);
-                    editor.gotoLine(currentRule.results[currentResultIndex].line, 0, true);
+                    changeCurrentResultLocation();
+                }
+            }
+
+            function goToNextResultLocation() {
+                if (currentResultLocationIndex > -1) {
+                    if (currentResultLocationIndex < currentResultLocations.length - 1) {
+                        currentResultLocationIndex++;
+                    }
+                    else {
+                        currentResultLocationIndex = 0;
+                    }
+
+                    changeCurrentResultLocation();
+                }
+            }
+
+            $(document).on("keyup", function (e) {
+                if (e.key == "F7") {
+                    goToPreviousResultLocation();
+                }
+                else if (e.key == "F8") {
+                    goToNextResultLocation();
                 }
             });
 
-            $(nextResultButton).on("click", function () {
-                if (currentResultIndex > -1) {
-                    if (currentResultIndex < currentRule.results.length - 1) {
-                        currentResultIndex++;
-                    }
-                    else {
-                        currentResultIndex = 0;
-                    }
-
-                    setResultPositionText(currentResultIndex + 1);
-                    editor.gotoLine(currentRule.results[currentResultIndex].line, 0, true);
-                }
+            $prevResultButton.on("click", function () {
+                goToPreviousResultLocation();
             });
 
-            $(downloadButton).on("click", function () {
-                saveTextAsFile();
+            $nextResultButton.on("click", function () {
+                goToNextResultLocation();
             });
 
-            $(revalidateButton).on("click", function () {
+            $downloadButton.on("click", function () {
+                saveTextAsFile(editor.getValue(), fileName);
+            });
+
+            $revalidateButton.on("click", function () {
                 // Disable controls
                 setToolbarEnabled(false);
                 $dropForm.addClass("is-busy").removeClass("is-complete").removeClass("is-error");
@@ -462,10 +598,32 @@
                         alert(error);
                     }
                 });
-            })
+            });
 
-            $(themeList).on("selectmenuchange", function () {
-                var theme = $(this).val();
+            $utilitiesButton.button().on("click", function () {
+                $utilitiesMenu.show().position({
+                    my: "right top",
+                    at: "left bottom",
+                    of: this,
+                    collision: "flip flip",
+                    within: "#pageContainer"
+                });
+
+                $(document).on("click", function () {
+                    $utilitiesMenu.hide();
+                }).on("keyup", function (e) {
+                    if (e.key == "Escape") {
+                        $utilitiesMenu.hide();
+                    }
+                });
+
+                return false;
+            });
+
+            $utilitiesMenu.on("menuselect", function (e, ui) {
+                $("#utilitiesMenuThemesFlyout li.selected-theme").removeClass("selected-theme");
+                var theme = ui.item.attr("data-value");
+                ui.item.addClass("selected-theme");
                 editor.setTheme(theme);
                 setCookie("editorTheme", theme, 365 * 10);
             });
@@ -488,6 +646,7 @@
             });
 
             $dropForm.on("click", function (e) {
+                $dropForm.blur();
                 $fileInput[0].click();
             })
             .on("keypress", function (e) {
