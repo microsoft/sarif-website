@@ -30,6 +30,10 @@
         <div class="drop-area-text drop-area-text-complete">Validation complete!</div>
         <div class="drop-area-text drop-area-text-error">Error</div>
     </form>
+
+    <!-- This is a black cover layer that shows when the Browse dialog is up.
+         It prevents the user from dragging a file from the dialog to the drop target. -->
+    <div id="pageBlanket"></div>
 </section>
 
 <section id="validatorSection" role="region" aria-labelledby="pageTitle" class="content-section gray-section">
@@ -143,6 +147,7 @@
             var currentDecorationLine = 0;
 
             var editor = null;
+            var $pageBlanket = $("#pageBlanket");
             var isFileOpening = false;
 
             var ruleDescriptionTemplate = `<b><a href="{HELPURL}" target="_blank">{RULEID}</a>:</b> {RULEDESC}`;
@@ -692,6 +697,11 @@
             var $dropForm = $("#dropForm");
             var $fileInput = $("#fileInput");
 
+            $(window).on("focusin", function () {
+                $pageBlanket.hide();
+                $("#editor").removeClass("hidden");
+            });
+
             $fileInput.on("change", function (e) {
                 var val = $(this).val();
 
@@ -708,6 +718,8 @@
 
             $dropForm.on("click", function (e) {
                 $dropForm.blur();
+                $("#editor").addClass("hidden");
+                $pageBlanket.show();
                 $fileInput[0].click();
             })
             .on("keypress", function (e) {
