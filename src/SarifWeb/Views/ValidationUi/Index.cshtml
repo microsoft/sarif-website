@@ -131,11 +131,19 @@
             var targetLogText = null;
             var validationLog = null;
 
+            // Rules dictionary: key = rule ID, value = result key}
+            var rulesDictionary = {};
+            var rulesCount = 0;
+            // Results dictionary: key = int, value = { line, message }
+            var resultsDictionary = {};
+
             var currentRules = [];
             var currentResultLocations = [];
             var currentResultLocationIndex = -1;
+            var currentDecorationLine = 0;
 
             var editor = null;
+            var isFileOpening = false;
 
             var ruleDescriptionTemplate = `<b><a href="{HELPURL}" target="_blank">{RULEID}</a>:</b> {RULEDESC}`;
             var resultDetailTemplate = `<b><a href="{HELPURL}" target="_blank">{RULEID}</a>:</b> {RESULTMSG}`;
@@ -175,27 +183,21 @@
 
                     if (currentRules.length > 0) {
                         $.each(currentRules, function (index, ruleId) {
-                            $.each(rulesDictionary[ruleId].results, function (index, result) {
-                                currentResultLocations.push({ ruleId: ruleId, result: result });
-                                setLineMarker(result.line);
+                            $.each(rulesDictionary[ruleId].resultKeys, function (index, key) {
+                                currentResultLocations.push({ ruleId: ruleId, resultKey: key });
+                                setLineMarker(resultsDictionary[key].line);
                                 count++;
                             });
                         });
 
                         // Sort the result by line number
                         currentResultLocations.sort(function (r1, r2) {
-                            return r1.result.line - r2.result.line;
+                            return resultsDictionary[r1.resultKey].line - resultsDictionary[r2.resultKey].line;
                         });
 
                         setResultPositionText(1, count);
                         currentResultLocationIndex = 0;
-                        var firstResultLocation = currentResultLocations[0]
-                        setRuleDescription(firstResultLocation.ruleId);
-                        setResultLocationDetails(firstResultLocation)
-
-                        setTimeout(function () {
-                            editor.gotoLine(firstResultLocation.result.line, 0, true);
-                        }, 0);
+                        changeCurrentResultLocation();
                     }
                 }
             });
@@ -245,16 +247,13 @@
             theme = theme ? theme : "ace/theme/sqlserver";
             $("#utilitiesMenuThemesFlyout li[data-value='" + theme + "']").addClass("selected-theme");
 
-            // Rules dictionary: key = rule ID, value = { results[{ line, message }] }
-            var rulesDictionary = {};
-            var rulesCount = 0;
-
+            var resultKey = 0;
             function addResult(rule, result) {
                 if (!rulesDictionary[rule.id]) {
                     rulesDictionary[rule.id] = {
                         // We could just have the results array be the value, but
                         // it reads more clearly as an object with a results property
-                        results: []
+                        resultKeys: []
                     };
                     rulesCount++;
                 }
@@ -270,16 +269,19 @@
                 // Add each location for this result
                 $.each(result.locations, function (index, location) {
                     var startLine = location.physicalLocation.region.startLine;
-                    rulesDictionary[result.ruleId].results.push({
+                    var key = ++resultKey;
+                    rulesDictionary[result.ruleId].resultKeys.push(key);
+                    resultsDictionary[key] = {
                         line: startLine,
                         message: message
-                    });
+                    };
                 });
             }
 
             // Creates a SARIF log object from JSON, then processes rules and results
             function processResults(sarif) {
                 rulesDictionary = {};
+                resultsDictionary = {};
                 validationLog= JSON.parse(sarif);
                 var hasResults = false;
                 var run = validationLog.runs[0];
@@ -295,22 +297,27 @@
                         // Now we know how many result locations we have for each rule, so populate the rules dropdown
                         var options = [];
                         for (var key in rulesDictionary) {
-                            options.push("<option value='" + key + "'>" + key + " (" + rulesDictionary[key].results.length + ")</option>");
+                            options.push("<option value='" + key + "'>" + key + " (" + rulesDictionary[key].resultKeys.length + ")</option>");
                         }
 
                         // Clear the dropdown, then add the rules and trigger a close event
                         clearRuleList();
-                        $ruleList.append(options.join("")).multiselect("refresh").multiselect("checkAll").multiselect("close");
+                        $ruleList.append(options.join(""))
+                            .multiselect("refresh")
+                            .multiselect("checkAll")
+                            .multiselect("close");
                     }
                 };
 
                 if (!hasResults) {
                     rulesDictionary = {};
+                    resultsDictionary = {};
                     clearRuleList();
                     setResultPositionText(0, 0);
                     setToolbarEnabled(false);
                     clearLineMarkers();
                     currentResultLocationIndex = -1;
+                    currentDecorationLine = 0;
 
                     setTimeout(function () {
                         // Push this to another thread to allow the above settings to take effect
@@ -348,6 +355,13 @@
                 });
             }
 
+            // Sets a gutter marker at the specified line, and removes the current marker
+            function setGutterDecoration(newLine) {
+                editor.session.removeGutterDecoration(currentDecorationLine, "sarif-error-gutter");
+                currentDecorationLine = newLine;
+                editor.session.addGutterDecoration(currentDecorationLine, "sarif-error-gutter");
+            }
+
             function isSarifFile(fileName) {
                 var ext = fileName.substr(fileName.lastIndexOf(".") + 1).toLowerCase();
                 return ext == "sarif";
@@ -357,12 +371,52 @@
                 return new Promise(function (resolve, reject) {
                     var reader = new FileReader();
                     reader.onload = function () {
-                        editor = ace.edit("editor", {
-                            mode: "ace/mode/json",
-                            theme: $("#utilitiesMenuThemesFlyout li.selected-theme").attr("data-value"),
-                            selectionStyle: "text",
-                            showPrintMargin: false
-                        });
+                        if (!editor) {
+                            editor = ace.edit("editor", {
+                                mode: "ace/mode/json",
+                                theme: $("#utilitiesMenuThemesFlyout li.selected-theme").attr("data-value"),
+                                selectionStyle: "text",
+                                showPrintMargin: false
+                            });
+
+                            editor.session.on("change", function (delta) {
+                                if (isFileOpening) {
+                                    // If a log is already loaded, we'll get a remove event followed by an insert when a subsequent log is opened
+                                    // If it's an insert, we flip the flag
+                                    if (delta.action != "remove") {
+                                        isFileOpening = false;
+                                    }
+                                }
+                                else {
+                                    var end = delta.end.row;
+                                    var lines = delta.lines.length - 1;
+
+                                    if (delta.action == "remove") {
+                                        lines *= -1;
+                                    }
+
+                                    var log = null;
+
+                                    // Adjust line #s when the document changes
+                                    $.each(rulesDictionary, function (key, value) {
+                                        if (!log) {
+                                            log = JSON.stringify(value);
+                                        }
+
+                                        $.each(value.resultKeys, function (index, key) {
+                                            var result = resultsDictionary[key];
+                                            if (result.line >= end) {
+                                                result.line += lines;
+                                            }
+                                        });
+                                    });
+
+                                    if (currentDecorationLine >= end) {
+                                        setGutterDecoration(currentDecorationLine + lines);
+                                    }
+                                }
+                            });
+                        }
 
                         // Get the target file text, excluding the header segment
                         targetLogText = atob(reader.result.substring(reader.result.indexOf(',') + 1));
@@ -434,6 +488,7 @@
                     return false;
                 }
 
+                isFileOpening = true;
                 resetEditor();
 
                 // Confirm if the file is > 20 MB
@@ -501,7 +556,7 @@
                     var rule = validationLog.runs[0].resources.rules[resultLocation.ruleId];
                     var html = resultDetailTemplate
                         .replace("{RULEID}", rule.id)
-                        .replace("{RESULTMSG}", resultLocation.result.message)
+                        .replace("{RESULTMSG}", resultsDictionary[resultLocation.resultKey].message)
                         .replace("{HELPURL}", rule.helpUri);
                     $resultDetails.html(html);
                 }
@@ -512,7 +567,13 @@
                 var resultLocation = currentResultLocations[currentResultLocationIndex];
                 setRuleDescription(resultLocation.ruleId);
                 setResultLocationDetails(resultLocation);
-                editor.gotoLine(resultLocation.result.line, 0, true);
+                var key = resultLocation.resultKey;
+                var line = resultsDictionary[key].line;
+                setGutterDecoration(line - 1);
+
+                setTimeout(function () {
+                    editor.gotoLine(line, 0, true);
+                }, 0);
             }
 
             function goToPreviousResultLocation() {
