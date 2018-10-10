@@ -355,6 +355,13 @@
                 });
             }
 
+            // Sets a gutter marker at the specified line, and removes the current marker
+            function setGutterDecoration(newLine) {
+                editor.session.removeGutterDecoration(currentDecorationLine, "sarif-error-gutter");
+                currentDecorationLine = newLine;
+                editor.session.addGutterDecoration(currentDecorationLine, "sarif-error-gutter");
+            }
+
             function isSarifFile(fileName) {
                 var ext = fileName.substr(fileName.lastIndexOf(".") + 1).toLowerCase();
                 return ext == "sarif";
@@ -383,6 +390,11 @@
                                 else {
                                     var end = delta.end.row;
                                     var lines = delta.lines.length - 1;
+
+                                    if (delta.action == "remove") {
+                                        lines *= -1;
+                                    }
+
                                     var log = null;
 
                                     // Adjust line #s when the document changes
@@ -398,6 +410,10 @@
                                             }
                                         });
                                     });
+
+                                    if (currentDecorationLine >= end) {
+                                        setGutterDecoration(currentDecorationLine + lines);
+                                    }
                                 }
                             });
                         }
@@ -553,9 +569,7 @@
                 setResultLocationDetails(resultLocation);
                 var key = resultLocation.resultKey;
                 var line = resultsDictionary[key].line;
-                editor.session.removeGutterDecoration(currentDecorationLine, "sarif-error-gutter");
-                currentDecorationLine = line - 1;
-                editor.session.addGutterDecoration(currentDecorationLine, "sarif-error-gutter");
+                setGutterDecoration(line - 1);
 
                 setTimeout(function () {
                     editor.gotoLine(line, 0, true);
