@@ -7,6 +7,8 @@
         public string StandardOutput { get; set; }
         public string StandardError { get; set; }
         public string Arguments { get; set; }
-        public string LogContents { get; set; }
+        public bool IsTransformed { get; set; }
+        public string TransformedLogContents { get; set; }
+        public string ResultsLogContents { get; set; }
     }
 }
