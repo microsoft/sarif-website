@@ -77,6 +77,13 @@
     width: 100%;
 }
 
+#ruleDescription .no-errors {
+    color: #00aa00;
+    font-weight: bold;
+    font-size: 14px;
+    margin-left: 20px;
+}
+
 #prevResultButton span,
 #nextResultButton span {
     font-weight: bold;
@@ -114,11 +121,11 @@
     font-size: .8em;
 }
 
-#utilitiesMenu .menu-check-hidden {
+#utilitiesMenuThemesFlyout .ui-icon-check {
     visibility: hidden;
 }
 
-#utilitiesMenu .selected-theme .ui-icon {
+#utilitiesMenuThemesFlyout li.selected-theme .ui-icon-check {
     visibility: visible;
 }
 
@@ -135,6 +142,8 @@
 
 #resultDetails {
     font-family: var(--content-font-family);
+    max-height: 80px;
+    overflow-y: auto;
 }
 
 .ui-selectmenu-menu .ui-menu {

@@ -64,7 +64,7 @@ Write-Verbose "Copying $ToolPackageName binaries from $toolBinariesSourcePath to
 Copy-Item -Recurse -Path $toolBinariesSourcePath -Destination $DestinationPath
 
 $sdkPackagePath = Get-PackagePath $SdkPackageName
-$sarifSchemaPath = "$sdkPackagePath\Schemata\Sarif.schema.json"
+$sarifSchemaPath = "$sdkPackagePath\Schemata\sarif-schema.json"
 
 Write-Verbose "Copying SARIF schema file from $sarifSchemaPath to ${DestinationPath}..."
 Copy-Item -Path $sarifSchemaPath -Destination $DestinationPath

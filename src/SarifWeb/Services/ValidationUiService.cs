@@ -68,7 +68,6 @@ namespace SarifWeb.Services
             _fileSystem.WriteAllText(savedFilePath, json);
 
             return await ValidateSavedFileAsync(request, baseAddress, savedFileName, savedFilePath);
-
         }
 
         private async Task<ValidationResponse> ValidateSavedFileAsync(
