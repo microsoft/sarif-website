@@ -128,6 +128,11 @@ namespace SarifWeb.Services
                 {
                     _fileSystem.DeleteFile(outputFilePath);
                 }
+
+                if (_fileSystem.FileExists(transformedFilePath))
+                {
+                    _fileSystem.DeleteFile(transformedFilePath);
+                }
             }
 
             return validationResponse;
