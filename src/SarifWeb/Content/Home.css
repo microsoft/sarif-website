@@ -11,7 +11,7 @@
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#373737", endColorstr="#4D4D4D", GradientType=0);
     display: flex;
     height: 280px;
-    padding: 0px 20px;
+    padding: 0 20px;
 }
 
 #heroContentGrid {
@@ -59,7 +59,7 @@
 }
 
 .content-section {
-    padding: 80px 70px 0px 70px;
+    padding: 80px 70px 0 70px;
 }
 
 .content-section-title {
@@ -168,7 +168,7 @@
 }
 
 #toolsSection {
-    padding-bottom: 0px;
+    padding-bottom: 0;
 }
 
 #toolsSectionContent {
@@ -212,21 +212,21 @@
     stroke: #9F9F9F;
 }
 
-.path-line-container svg.stretch-horizonal {
+.path-line-container .stretch-horizonal {
     height: 20px;
     width: 100%;
 }
 
-.path-line-container svg.stretch-vertical {
+.path-line-container .stretch-vertical {
     height: 100%;
     width: 24px;
 }
 
-line.stroke-1x {
+.stroke-1x {
     stroke-width: 1px;
 }
 
-line.stroke-2x {
+.stroke-2x {
     stroke-width: 2px;
 }
 
@@ -242,7 +242,7 @@ line.stroke-2x {
 
 .tools-item-list > div:first-child,
 #toolsSectionContentOther > div:first-child {
-    margin-top: 0px;
+    margin-top: 0;
 }
 
 .tools-item-other-label {
@@ -252,7 +252,7 @@ line.stroke-2x {
 }
 
 .tools-item-other-label .path-line-container {
-    margin-right: 0px;
+    margin-right: 0;
 }
 
 .tools-item-description {

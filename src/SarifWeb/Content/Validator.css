@@ -125,7 +125,7 @@
     visibility: hidden;
 }
 
-#utilitiesMenuThemesFlyout li.selected-theme .ui-icon-check {
+#utilitiesMenuThemesFlyout .selected-theme .ui-icon-check {
     visibility: visible;
 }
 

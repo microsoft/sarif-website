@@ -91,10 +91,10 @@
             </div>
             <div class="path-line-container">
                 <svg class="stretch-vertical">
-                    <line x1="50%" x2="50%" y1="0" y2="100%" class="stroke-1x" />
-                    <line x1="0" x2="50%" y1="50%" y2="50%" class="stroke-1x" />
-                    <line x1="50%" x2="100%" y1="0" y2="0" class="stroke-2x" />
-                    <line x1="50%" x2="100%" y1="100%" y2="100%" class="stroke-2x" />
+                    <line x1="50%" x2="50%" y1="0" y2="100%" class="stroke-1x"></line>
+                    <line x1="0" x2="50%" y1="50%" y2="50%" class="stroke-1x"></line>
+                    <line x1="50%" x2="100%" y1="0" y2="0" class="stroke-2x"></line>
+                    <line x1="50%" x2="100%" y1="100%" y2="100%" class="stroke-2x"></line>
                 </svg>
             </div>
             <div role="list" aria-labelledby="toolsSectionPlatformLabelCSharp" class="tools-item-list">
@@ -257,8 +257,10 @@
     $(function () {
         // See if we should use the image viewer.
         // This property will be unset by a media style if the screen is too small.
+        // Edge doesn't like this property, so check window.StyleMedia to identify.
         var flag = $("body").css("content");
-        if (flag == "\"image-viewer-active\"") {
+
+        if (flag === "\"image-viewer-active\"" || !!window.StyleMedia) {
             useImageViewer = true;
 
             imageGallery = [
