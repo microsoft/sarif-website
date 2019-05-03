@@ -535,7 +535,7 @@
                         $dropForm.removeClass("is-busy");
                     },
                     success: function (data) {
-                        if (data.ExitCode <= 0) {
+                        if (data.StandardError === "") {
                             $dropForm.addClass("is-complete");
 
                             setTimeout(function () {
