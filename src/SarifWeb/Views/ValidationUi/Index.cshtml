@@ -580,7 +580,7 @@
                     const rule = validationLog.runs[0].tool.driver.rules[ruleIndex];
                     const html = ruleDescriptionTemplate
                         .replace("{RULEID}", rule.id)
-                        .replace("{RULEDESC}", rule.fullDescription.text ?? rule.shortDescription.text)
+                        .replace("{RULEDESC}", rule.fullDescription.text ? rule.fullDescription.text : rule.shortDescription.text)
                         .replace("{HELPURL}", rule.helpUri);
                     $ruleDescription.html(html);
                 }
