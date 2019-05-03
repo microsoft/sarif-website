@@ -168,7 +168,7 @@
                             ruleListSelectAll.checked = false;
                         } else {
                             const checked = $(this).multiselect("getChecked");
-                            ruleListSelectAll.checked = checked.length == rulesCount;
+                            ruleListSelectAll.checked = checked.length === rulesCount;
                         }
                     }
                 },
@@ -231,7 +231,7 @@
                 // BUGBUG: issue #83 calls for the file key to be the uploaded filename
                 // For now, find the file with the sarif content type
                 $.each(validationLog.runs[0].files, function (key, file) {
-                    if (file.mimeType == "application/sarif-json") {
+                    if (file.mimeType === "application/sarif-json") {
                         file.contents = {
                             text: targetLogText
                         }
@@ -246,7 +246,7 @@
             });
 
             let theme = getCookie("editorTheme");
-            theme = (theme && theme != "undefined") ? theme : "ace/theme/sqlserver";
+            theme = (theme && theme !== "undefined") ? theme : "ace/theme/sqlserver";
             $("#utilitiesMenuThemesFlyout li[data-value='" + theme + "']").addClass("selected-theme");
 
             let resultKey = 0;
@@ -388,7 +388,7 @@
 
             function isSarifFile(fileName) {
                 const ext = fileName.substr(fileName.lastIndexOf(".") + 1).toLowerCase();
-                return ext == "sarif";
+                return ext === "sarif";
             }
 
             function setUpEditor(transformedLogText) {
@@ -405,14 +405,14 @@
                             if (isFileOpening) {
                                 // If a log is already loaded, we'll get a remove event followed by an insert when a subsequent log is opened
                                 // If it's an insert, we flip the flag
-                                if (delta.action != "remove") {
+                                if (delta.action !== "remove") {
                                     isFileOpening = false;
                                 }
                             } else {
                                 const end = delta.end.row;
                                 let lines = delta.lines.length - 1;
 
-                                if (delta.action == "remove") {
+                                if (delta.action === "remove") {
                                     lines *= -1;
                                 }
 
@@ -439,8 +439,6 @@
                         });
                     }
 
-                    // Get the target file text, excluding the header segment
-                    //targetLogText = atob(reader.result.substring(reader.result.indexOf(',') + 1));
                     editor.setValue(transformedLogText);
                     editor.selection.clearSelection();
 
@@ -495,7 +493,7 @@
             function setResultPositionText(current, count) {
                 $resultPositionCurrentText.text(current);
 
-                if (typeof count != "undefined") {
+                if (typeof count !== "undefined") {
                     $resultPositionCountText.text(count);
                 }
             }
@@ -567,7 +565,7 @@
                     },
                     error: function (xmlhttprequest, textstatus, message) {
                         $dropForm.addClass("is-error");
-                        const error = textstatus == "timeout" ?
+                        const error = textstatus === "timeout" ?
                             "The validation request timed out." :
                             "An unknown error occurred.";
                         alert(error);
@@ -582,7 +580,7 @@
                     const rule = validationLog.runs[0].tool.driver.rules[ruleIndex];
                     const html = ruleDescriptionTemplate
                         .replace("{RULEID}", rule.id)
-                        .replace("{RULEDESC}", rule.fullDescription.text ? rule.fullDescription.text : rule.shortDescription.text)
+                        .replace("{RULEDESC}", rule.fullDescription.text ?? rule.shortDescription.text)
                         .replace("{HELPURL}", rule.helpUri);
                     $ruleDescription.html(html);
                 }
@@ -640,9 +638,9 @@
             }
 
             $(document).on("keyup", function (e) {
-                if (e.key == "F7") {
+                if (e.key === "F7") {
                     goToPreviousResultLocation();
-                } else if (e.key == "F8") {
+                } else if (e.key === "F8") {
                     goToNextResultLocation();
                 }
             });
@@ -689,7 +687,7 @@
                         setTimeout(function () {
                             $dropForm.removeClass("is-error");
                         }, 5000);
-                        const error = textstatus == "timeout" ?
+                        const error = textstatus === "timeout" ?
                             "The re-validation request timed out." :
                             "An unknown error occurred.";
                         alert(error);
@@ -709,7 +707,7 @@
                 $(document).on("click", function () {
                     $utilitiesMenu.hide();
                 }).on("keyup", function (e) {
-                    if (e.key == "Escape") {
+                    if (e.key === "Escape") {
                         $utilitiesMenu.hide();
                     }
                 });
@@ -736,7 +734,7 @@
             $fileInput.on("change", function (e) {
                 const val = $(this).val();
 
-                if (val != "") {
+                if (val !== "") {
                     if (!isSarifFile(val)) {
                         alert("Only .sarif files are supported.");
                         $(this).val("");
@@ -753,7 +751,7 @@
                 $fileInput[0].click();
             })
             .on("keypress", function (e) {
-                if (e.key == "Enter" || e.key == " ") {
+                if (e.key === "Enter" || e.key === " ") {
                     e.preventDefault();
                     e.stopPropagation();
                     $fileInput[0].click();
