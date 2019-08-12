@@ -17,6 +17,8 @@ $ErrorActionPreference = "Stop"
 
 $ToolPackageName = "Sarif.Multitool"
 $SdkPackageName = "Sarif.Sdk"
+$SourceSarifSchemaFileName = "sarif-2.1.0-rtm.4.json"
+$DestinationSarifSchemaFileName = "sarif-schema.json"
 
 $PackagesRoot = Join-Path -Resolve $PSScriptRoot ..\..\packages
 if (-not (Test-Path $PackagesRoot)) {
@@ -64,9 +66,10 @@ Write-Verbose "Copying $ToolPackageName binaries from $toolBinariesSourcePath to
 Copy-Item -Recurse -Path $toolBinariesSourcePath -Destination $DestinationPath
 
 $sdkPackagePath = Get-PackagePath $SdkPackageName
-$sarifSchemaPath = "$sdkPackagePath\Schemata\sarif-schema.json"
+$sourceSarifSchemaPath = "$sdkPackagePath\Schemata\$SourceSarifSchemaFileName"
+$destinationSarifSchemaPath = "$DestinationPath\$DestinationSarifSchemaFileName"
 
-Write-Verbose "Copying SARIF schema file from $sarifSchemaPath to ${DestinationPath}..."
-Copy-Item -Path $sarifSchemaPath -Destination $DestinationPath
+Write-Verbose "Copying SARIF schema file from $sourceSarifSchemaPath to ${destinationSarifSchemaPath}..."
+Copy-Item -Path $sourceSarifSchemaPath -Destination $destinationSarifSchemaPath
 
 Write-Verbose "Done."
