@@ -154,6 +154,8 @@
             const resultDetailTemplate = `<b><a href="{HELPURL}" target="_blank">{RULEID}</a>:</b> {RESULTMSG}`;
             const noErrorsText = "<span class=\"no-errors\">No errors were found during validation!</span>";
 
+            const sarifFileTypeMessage = 'Only .sarif and .sarif.json files are supported.'
+
             const $toolbar = $("#validatorToolbar");
             const $ruleList = $("#ruleList").multiselect({
                 minWidth: 300,
@@ -387,8 +389,8 @@
             }
 
             function isSarifFile(fileName) {
-                const ext = fileName.substr(fileName.lastIndexOf(".") + 1).toLowerCase();
-                return ext === "sarif";
+                const lowerFileName = fileName.toLowerCase();
+                return lowerFileName.endsWith('.sarif') || lowerFileName.endsWith('.sarif.json');
             }
 
             function setUpEditor(transformedLogText) {
@@ -736,7 +738,7 @@
 
                 if (val !== "") {
                     if (!isSarifFile(val)) {
-                        alert("Only .sarif files are supported.");
+                        alert(sarifFileTypeMessage);
                         $(this).val("");
                     } else {
                         submitValidationRequest($(this)[0].files[0]);
@@ -771,7 +773,7 @@
                 const file = e.originalEvent.dataTransfer.files[0];
 
                 if (!isSarifFile(file.name)) {
-                    alert("Only .sarif files are supported.");
+                    alert(sarifFileTypeMessage);
                 } else {
                     submitValidationRequest(file);
                 }
