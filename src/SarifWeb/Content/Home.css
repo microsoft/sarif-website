@@ -130,7 +130,12 @@
 }
 
 #specSectionButtonRead {
-    height: 120px;
+    height: 58px;
+    width: 300px;
+}
+
+#specSectionButtonTutorials {
+    height: 58px;
     width: 300px;
 }
 
