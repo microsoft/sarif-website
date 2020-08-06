@@ -17,7 +17,7 @@ $ErrorActionPreference = "Stop"
 
 $ToolPackageName = "Sarif.Multitool"
 $SdkPackageName = "Sarif.Sdk"
-$SourceSarifSchemaFileName = "sarif-2.1.0-rtm.4.json"
+$SourceSarifSchemaFileName = "sarif-2.1.0-rtm.5.json"
 $DestinationSarifSchemaFileName = "sarif-schema.json"
 
 $PackagesRoot = Join-Path -Resolve $PSScriptRoot ..\..\packages
