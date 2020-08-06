@@ -54,7 +54,7 @@ namespace SarifWeb.Services
             string outputFileName = Path.GetFileNameWithoutExtension(validationRequest.PostedFileName) + ValidationLogSuffix;
             string outputFilePath = Path.Combine(_postedFilesDirectory, outputFileName);
 
-            string arguments = $"validate --output \"{outputFilePath}\" --json-schema \"{_schemaFilePath}\" --force --pretty-print --rich-return-code \"{transformedFilePath}\"";
+            string arguments = $"validate --output \"{outputFilePath}\" --json-schema \"{_schemaFilePath}\" --force --pretty-print --verbose --rich-return-code \"{transformedFilePath}\"";
 
             ValidationResponse validationResponse;
             try
