@@ -28,6 +28,7 @@ namespace SarifWeb.Services
         private const string VersionRegexPattern = @"\""version\"":\s*\""(?<version>[\d.]+)\""";
 
         private readonly string _postedFilesDirectory;
+        private readonly string _multitoolDirectory;
         private readonly string _multitoolExePath;
         private readonly string _schemaFilePath;
         private readonly IFileSystem _fileSystem;
@@ -40,6 +41,7 @@ namespace SarifWeb.Services
             IProcessRunner processRunner)
         {
             _postedFilesDirectory = postedFilesDirectory;
+            _multitoolDirectory = multitoolDirectory;
             _multitoolExePath = Path.Combine(multitoolDirectory, ToolExeName);
             _schemaFilePath = Path.Combine(multitoolDirectory, SchemaFileName);
             _fileSystem = fileSystem;
@@ -53,8 +55,9 @@ namespace SarifWeb.Services
             string transformedFilePath = Path.Combine(_postedFilesDirectory, transformedFileName);
             string outputFileName = Path.GetFileNameWithoutExtension(validationRequest.PostedFileName) + ValidationLogSuffix;
             string outputFilePath = Path.Combine(_postedFilesDirectory, outputFileName);
+            string gitHubDspConfigFilePath = Path.Combine(_multitoolDirectory, "policies", "github-dsp.config.xml");
 
-            string arguments = $"validate --output \"{outputFilePath}\" --json-schema \"{_schemaFilePath}\" --force --pretty-print --verbose --rich-return-code \"{transformedFilePath}\"";
+            string arguments = $"validate --output \"{outputFilePath}\" --json-schema \"{_schemaFilePath}\" --force --pretty-print --verbose --config {gitHubDspConfigFilePath} --rich-return-code \"{transformedFilePath}\"";
 
             ValidationResponse validationResponse;
             try
