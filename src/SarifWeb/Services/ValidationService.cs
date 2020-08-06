@@ -1,9 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Microsoft.CodeAnalysis.Sarif.Writers;
-using Newtonsoft.Json;
 using SarifWeb.Models;
 using SarifWeb.Utilities;
 
@@ -51,57 +48,16 @@ namespace SarifWeb.Services
         public async Task<ValidationResponse> Validate(ValidationRequest validationRequest)
         {
             string inputFilePath = Path.Combine(_postedFilesDirectory, validationRequest.SavedFileName);
-            string transformedFileName = Path.GetFileNameWithoutExtension(inputFilePath) + ".transformed.sarif";
-            string transformedFilePath = Path.Combine(_postedFilesDirectory, transformedFileName);
             string outputFileName = Path.GetFileNameWithoutExtension(validationRequest.PostedFileName) + ValidationLogSuffix;
             string outputFilePath = Path.Combine(_postedFilesDirectory, outputFileName);
             string gitHubDspConfigFilePath = Path.Combine(_multitoolDirectory, "policies", "github-dsp.config.xml");
 
-            string arguments = $"validate --output \"{outputFilePath}\" --json-schema \"{_schemaFilePath}\" --force --pretty-print --verbose --config {gitHubDspConfigFilePath} --rich-return-code \"{transformedFilePath}\"";
+            string arguments = $"validate --output \"{outputFilePath}\" --json-schema \"{_schemaFilePath}\" --force --pretty-print --verbose --config \"{gitHubDspConfigFilePath}\" --rich-return-code \"{inputFilePath}\"";
 
             ValidationResponse validationResponse;
             try
             {
                 string inputText = File.ReadAllText(inputFilePath);
-                string inputVersion = null;
-
-                // Get the schema version of the unmodified input log
-                using (StringReader reader = new StringReader(inputText))
-                {
-                    // Read the first 100 characters. This avoids the problem of reading a huge line from a minified log.
-                    char[] buffer = new char[100];
-                    reader.ReadBlock(buffer, 0, buffer.Length);
-                    Match match = Regex.Match(inputText, VersionRegexPattern, RegexOptions.Compiled);
-
-                    if (match.Success)
-                    {
-                        inputVersion = match.Groups["version"].Value;
-                    }
-                }
-
-                string transformedText;
-                string transformedVersion = null;
-                PrereleaseCompatibilityTransformer.UpdateToCurrentVersion(inputText, Formatting.Indented, out transformedText);
-
-                // Get the schema version of the transformed log
-                using (StringReader reader = new StringReader(transformedText))
-                {
-                    // We know we have indent-formatted JSON, so read the third line which has the version property.
-                    string line = null;
-                    for (int i = 0; i < 3; i++)
-                    {
-                        line = reader.ReadLine();
-                    }
-
-                    Match match = Regex.Match(line, VersionRegexPattern, RegexOptions.Compiled);
-
-                    if (match.Success)
-                    {
-                        transformedVersion = match.Groups["version"].Value;
-                    }
-                }
-
-                File.WriteAllText(transformedFilePath, transformedText);
 
                 ProcessResult processResult = await _processRunner.RunProcess(_multitoolExePath, arguments);
 
@@ -112,8 +68,7 @@ namespace SarifWeb.Services
                     ExitCode = processResult.ExitCode,
                     StandardError = processResult.StandardError,
                     StandardOutput = processResult.StandardOutput,
-                    IsTransformed = inputVersion != transformedVersion,
-                    TransformedLogContents = transformedText,
+                    InputLogContents = inputText,
                     ResultsLogContents = _fileSystem.ReadAllText(outputFilePath)
                 };
             }
@@ -132,9 +87,9 @@ namespace SarifWeb.Services
                     _fileSystem.DeleteFile(outputFilePath);
                 }
 
-                if (_fileSystem.FileExists(transformedFilePath))
+                if (_fileSystem.FileExists(inputFilePath))
                 {
-                    _fileSystem.DeleteFile(transformedFilePath);
+                    _fileSystem.DeleteFile(inputFilePath);
                 }
             }
 

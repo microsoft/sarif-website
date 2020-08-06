@@ -57,9 +57,6 @@
                 <div id="ruleDescription"></div>
             </div>
             <div id="rightToolbarGroup">
-                <button id="downloadLogButton" aria-label="Download log file" title="Download log file" class="toolbar-button" disabled>
-                    <span class="ui-icon ui-icon-download">icon</span>
-                </button>
                 <button id="revalidateButton" aria-label="Re-validate log file" title="Re-validate log file" class="toolbar-button" disabled>
                     <span class="ui-icon ui-icon-arrowrefresh-1-e">icon</span>
                 </button>
@@ -221,7 +218,6 @@
             const $resultPositionCountText = $("#resultPositionCount");
             const $prevResultButton = $("#prevResultButton").button();
             const $nextResultButton = $("#nextResultButton").button();
-            const $downloadButton = $("#downloadLogButton").button();
             const $revalidateButton = $("#revalidateButton").button();
             const $utilitiesButton = $("#utilitiesButton").button();
             const $utilitiesMenu = $("#utilitiesMenu").menu({
@@ -393,7 +389,7 @@
                 return lowerFileName.endsWith('.sarif') || lowerFileName.endsWith('.sarif.json');
             }
 
-            function setUpEditor(transformedLogText) {
+            function setUpEditor(logText) {
                 return new Promise(function (resolve, reject) {
                     if (!editor) {
                         editor = ace.edit("editor", {
@@ -441,7 +437,7 @@
                         });
                     }
 
-                    editor.setValue(transformedLogText);
+                    editor.setValue(logText);
                     editor.selection.clearSelection();
 
                     // Enable controls
@@ -542,15 +538,9 @@
                                 $dropForm.removeClass("is-complete");
                             }, 5000);
 
-                            setUpEditor(data.TransformedLogContents)
+                            setUpEditor(data.InputLogContents)
                                 .then(function () {
-                                    processResults(data.ResultsLogContents)
-                                        .then(function () {
-                                            if (data.IsTransformed) {
-                                                alert("We automatically migrated your log file to the latest SARIF schema. You can use the Download button below to save it to your computer.");
-                                                $downloadButton.button("enable");
-                                            }
-                                        });
+                                    processResults(data.ResultsLogContents);
                                 });
                         } else {
                             $dropForm.addClass("is-error");
@@ -653,10 +643,6 @@
 
             $nextResultButton.on("click", function () {
                 goToNextResultLocation();
-            });
-
-            $downloadButton.on("click", function () {
-                saveTextAsFile(editor.getValue(), fileName);
             });
 
             $revalidateButton.on("click", function () {
