@@ -296,6 +296,7 @@
                 return new Promise(function (resolve, reject) {
                     validationLog = JSON.parse(sarif);
                     processValidationLog();
+                    resolve();
                 });
             }
 
@@ -360,7 +361,6 @@
                 }
 
                 setToolbarEnabled(true);
-                resolve();
             }
 
             function isGitHubDspRule(rule) {
