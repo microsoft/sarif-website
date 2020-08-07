@@ -149,6 +149,7 @@
             let editor = null;
             const $pageBlanket = $("#pageBlanket");
             const $gitHubDspRules = $("#gitHubDspRules");
+            $gitHubDspRules.change(revalidate);
             let isFileOpening = false;
 
             const ruleDescriptionTemplate = `<b><a href="{HELPURL}" target="_blank">{RULEID}</a>:</b> {RULEDESC}`;
@@ -644,23 +645,7 @@
                 }
             }
 
-            $(document).on("keyup", function (e) {
-                if (e.key === "F7") {
-                    goToPreviousResultLocation();
-                } else if (e.key === "F8") {
-                    goToNextResultLocation();
-                }
-            });
-
-            $prevResultButton.on("click", function () {
-                goToPreviousResultLocation();
-            });
-
-            $nextResultButton.on("click", function () {
-                goToNextResultLocation();
-            });
-
-            $revalidateButton.on("click", function () {
+            function revalidate() {
                 // Disable controls
                 setToolbarEnabled(false);
                 $dropForm.addClass("is-busy").removeClass("is-complete").removeClass("is-error");
@@ -696,7 +681,25 @@
                         alert(error);
                     }
                 });
+            }
+
+            $(document).on("keyup", function (e) {
+                if (e.key === "F7") {
+                    goToPreviousResultLocation();
+                } else if (e.key === "F8") {
+                    goToNextResultLocation();
+                }
             });
+
+            $prevResultButton.on("click", function () {
+                goToPreviousResultLocation();
+            });
+
+            $nextResultButton.on("click", function () {
+                goToNextResultLocation();
+            });
+
+            $revalidateButton.on("click", revalidate);
 
             $utilitiesButton.button().on("click", function () {
                 $utilitiesMenu.show().position({
