@@ -63,7 +63,13 @@
                 <button id="utilitiesButton" aria-label="Utilities menu" title="Utilities menu" class="toolbar-button" disabled>
                     <span class="ui-icon ui-icon-gear">icon</span>
                 </button>
-                <input type="checkbox" id="gitHubDspRules" class="ui-widget" aria-label="Requirements for SARIF files uploaded to the GitHub Developer Security Portal" title="Requirements for SARIF files uploaded to the GitHub Developer Security Portal" /><label for="gitHubDspRules">GitHub DSP rules</label>
+                <div id="ruleFilters">
+                    <input type="checkbox" id="noteRules" aria-label="Rules with level 'note'" title="Rules with level 'note'" disabled />
+                    <label for="gitHubDspRules" class="ui-widget">note-level rules</label>
+                    <br />
+                    <input type="checkbox" id="gitHubDspRules" aria-label="Requirements for SARIF files uploaded to the GitHub Developer Security Portal" title="Requirements for SARIF files uploaded to the GitHub Developer Security Portal" disabled />
+                    <label for="gitHubDspRules" class="ui-widget">GitHub DSP rules</label>
+                </div>
             </div>
             <ul id="utilitiesMenu">
                 <li id="downloadvalidationLog"><div>Download validation results</div></li>
@@ -492,6 +498,8 @@
                     $(button).button(verb);
                 });
                 $ruleList.multiselect(verb);
+                let ruleFilterControls = $("#ruleFilters > *");
+                ruleFilterControls.attr("disabled", !enable);
             }
 
             function clearRuleList() {

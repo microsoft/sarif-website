@@ -84,6 +84,11 @@
     margin-left: 20px;
 }
 
+#ruleFilters {
+    display: block;
+    padding-left: 100px;
+}
+
 #prevResultButton span,
 #nextResultButton span {
     font-weight: bold;
