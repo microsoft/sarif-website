@@ -321,7 +321,7 @@
                         $.each(run.results, function (index, result) {
                             const rule = run.tool.driver.rules[result.ruleIndex];
                             const isDsp = isGitHubDspRule(rule);
-                            const isNote = isNoteRule(rule);
+                            const isNote = isNoteResult(result);
                             if ((!isDsp && !isNote) ||
                                 (isDsp && gitHubDspRulesEnabled) ||
                                 (isNote && noteRulesEnabled)) {
@@ -331,7 +331,7 @@
                         });
 
                         if (hasResults) {
-                            // Now we know how many result locations we have for each rule, so populate the rules dropdown
+                            // Now we know how many result locations we have for each rule, so populate the rules dropdown.
                             const options = [];
                             for (let key in rulesDictionary) {
                                 options.push("<option value='" + key + "'>" + key + " (" + rulesDictionary[key].resultKeys.length + ")</option>");
@@ -370,9 +370,12 @@
                 return ruleNumber >= 2017 && ruleNumber <= 2025;
             }
 
-            function isNoteRule(rule) {
-                let level = rule.defaultConfiguration.level;
-                return level !== "warning" || level !== "error";
+            function isNoteResult(result) {
+                let level = "warning";
+                if (result.level) {
+                    level = result.level;
+                }
+                return level === "note";
             }
 
             // Downloads the complete text from the editor
