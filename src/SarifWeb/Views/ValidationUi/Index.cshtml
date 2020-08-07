@@ -64,11 +64,11 @@
                     <span class="ui-icon ui-icon-gear">icon</span>
                 </button>
                 <div id="ruleFilters">
-                    <input type="checkbox" id="noteRules" aria-label="Rules with level 'note'" title="Rules with level 'note'" disabled />
-                    <label for="gitHubDspRules" class="ui-widget">note-level rules</label>
+                    <input type="checkbox" id="noteRules" aria-labelledby="noteRulesLabel" title="Rules with level 'note'" disabled />
+                    <label id="noteRulesLabel" for="noteRules" class="ui-widget">note-level rules</label>
                     <br />
-                    <input type="checkbox" id="gitHubDspRules" aria-label="Requirements for SARIF files uploaded to the GitHub Developer Security Portal" title="Requirements for SARIF files uploaded to the GitHub Developer Security Portal" disabled />
-                    <label for="gitHubDspRules" class="ui-widget">GitHub DSP rules</label>
+                    <input type="checkbox" id="gitHubDspRules" aria-labelledby="gitHubDspRulesLabel" title="Requirements for SARIF files uploaded to the GitHub Developer Security Portal" disabled />
+                    <label id="gitHubDspRulesLabel" for="gitHubDspRules" class="ui-widget">GitHub DSP rules</label>
                 </div>
             </div>
             <ul id="utilitiesMenu">
@@ -348,7 +348,7 @@
                     const errorNote = run.invocations[0].toolExecutionNotifications[1];
 
                     if (errorNote.level === "error") {
-                        let toolError = errorNote.message.text;
+                        const toolError = errorNote.message.text;
                         if (toolError) {
                             setTimeout(function () {
                                 // Push this to another thread to allow the above settings to take effect
@@ -366,7 +366,7 @@
             function isGitHubDspRule(rule) {
                 // Rules in the range SARIF2017-SARIF2025 are used to validate SARIF files intended
                 // for upload to the GitHub Developer Security Portal (DSP).
-                let ruleNumber = rule.id.substring(5)
+                const ruleNumber = rule.id.substring(5)
                 return ruleNumber >= 2017 && ruleNumber <= 2025;
             }
 
