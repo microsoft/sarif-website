@@ -22,7 +22,6 @@ namespace SarifWeb.Services
         private const string ToolExeName = "Sarif.Multitool.exe";
         private const string ValidationLogSuffix = ".validation.sarif";
         private const string SchemaFileName = "sarif-schema.json";
-        private const string VersionRegexPattern = @"\""version\"":\s*\""(?<version>[\d.]+)\""";
 
         private readonly string _postedFilesDirectory;
         private readonly string _multitoolDirectory;
