@@ -294,69 +294,73 @@
             // Creates a SARIF log object from JSON, then processes rules and results
             function processResults(sarif) {
                 return new Promise(function (resolve, reject) {
-                    rulesDictionary = {};
-                    resultsDictionary = {};
-                    clearRuleList();
-                    setResultPositionText(0, 0);
-                    setResultLocationDetails();
-                    setToolbarEnabled(false);
-                    clearLineMarkers();
-                    clearGutterDecoration();
-                    currentResultLocationIndex = -1;
-
                     validationLog = JSON.parse(sarif);
-                    const run = validationLog.runs[0];
-                    const gitHubDspRulesEnabled = $gitHubDspRules.is(":checked");
-                    const noteRulesEnabled = $noteRules.is(":checked");
+                    processValidationLog();
+                });
+            }
 
-                    if (run.results && run.results.length > 0) {
-                        let hasResults = false;
-                        if (run.tool && run.tool.driver && run.tool.driver.rules) {
-                            $.each(run.results, function (index, result) {
-                                const rule = run.tool.driver.rules[result.ruleIndex];
-                                const isDsp = isGitHubDspRule(rule);
-                                const isNote = isNoteRule(rule);
-                                if ((!isDsp && !isNote) ||
-                                    (isDsp && gitHubDspRulesEnabled) ||
-                                    (isNote && noteRulesEnabled)) {
-                                    addResult(run.tool.driver.rules[result.ruleIndex], result);
-                                    hasResults = true;
-                                }
-                            });
+            function processValidationLog() {
+                rulesDictionary = {};
+                resultsDictionary = {};
+                clearRuleList();
+                setResultPositionText(0, 0);
+                setResultLocationDetails();
+                setToolbarEnabled(false);
+                clearLineMarkers();
+                clearGutterDecoration();
+                currentResultLocationIndex = -1;
 
-                            if (hasResults) {
-                                // Now we know how many result locations we have for each rule, so populate the rules dropdown
-                                const options = [];
-                                for (let key in rulesDictionary) {
-                                    options.push("<option value='" + key + "'>" + key + " (" + rulesDictionary[key].resultKeys.length + ")</option>");
-                                }
+                const run = validationLog.runs[0];
+                const gitHubDspRulesEnabled = $gitHubDspRules.is(":checked");
+                const noteRulesEnabled = $noteRules.is(":checked");
 
-                                // Add the rules to the drop-down and then trigger a close event.
-                                $ruleList.append(options.join(""))
-                                    .multiselect("refresh")
-                                    .multiselect("checkAll")
-                                    .multiselect("close");
+                if (run.results && run.results.length > 0) {
+                    let hasResults = false;
+                    if (run.tool && run.tool.driver && run.tool.driver.rules) {
+                        $.each(run.results, function (index, result) {
+                            const rule = run.tool.driver.rules[result.ruleIndex];
+                            const isDsp = isGitHubDspRule(rule);
+                            const isNote = isNoteRule(rule);
+                            if ((!isDsp && !isNote) ||
+                                (isDsp && gitHubDspRulesEnabled) ||
+                                (isNote && noteRulesEnabled)) {
+                                addResult(run.tool.driver.rules[result.ruleIndex], result);
+                                hasResults = true;
                             }
-                        }
-                    } else if (run.invocations[0].toolExecutionNotifications.length > 1) {
-                        const errorNote = run.invocations[0].toolExecutionNotifications[1];
+                        });
 
-                        if (errorNote.level === "error") {
-                            let toolError = errorNote.message.text;
-                            if (toolError) {
-                                setTimeout(function () {
-                                    // Push this to another thread to allow the above settings to take effect
-                                    alert(toolError);
-                                }, 0);
-                            } else {
-                                $ruleDescription.html(noErrorsText);
+                        if (hasResults) {
+                            // Now we know how many result locations we have for each rule, so populate the rules dropdown
+                            const options = [];
+                            for (let key in rulesDictionary) {
+                                options.push("<option value='" + key + "'>" + key + " (" + rulesDictionary[key].resultKeys.length + ")</option>");
                             }
+
+                            // Add the rules to the drop-down and then trigger a close event.
+                            $ruleList.append(options.join(""))
+                                .multiselect("refresh")
+                                .multiselect("checkAll")
+                                .multiselect("close");
                         }
                     }
+                } else if (run.invocations[0].toolExecutionNotifications.length > 1) {
+                    const errorNote = run.invocations[0].toolExecutionNotifications[1];
 
-                    setToolbarEnabled(true);
-                    resolve();
-                });
+                    if (errorNote.level === "error") {
+                        let toolError = errorNote.message.text;
+                        if (toolError) {
+                            setTimeout(function () {
+                                // Push this to another thread to allow the above settings to take effect
+                                alert(toolError);
+                            }, 0);
+                        } else {
+                            $ruleDescription.html(noErrorsText);
+                        }
+                    }
+                }
+
+                setToolbarEnabled(true);
+                resolve();
             }
 
             function isGitHubDspRule(rule) {
