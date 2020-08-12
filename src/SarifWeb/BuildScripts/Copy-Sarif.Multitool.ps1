@@ -17,8 +17,9 @@ $ErrorActionPreference = "Stop"
 
 $ToolPackageName = "Sarif.Multitool"
 $SdkPackageName = "Sarif.Sdk"
-$SourceSarifSchemaFileName = "sarif-2.1.0-rtm.4.json"
+$SourceSarifSchemaFileName = "sarif-2.1.0-rtm.5.json"
 $DestinationSarifSchemaFileName = "sarif-schema.json"
+$GitHubDspConfigurationFileName = "github-dsp.config.xml";
 
 $PackagesRoot = Join-Path -Resolve $PSScriptRoot ..\..\packages
 if (-not (Test-Path $PackagesRoot)) {
@@ -68,8 +69,14 @@ Copy-Item -Recurse -Path $toolBinariesSourcePath -Destination $DestinationPath
 $sdkPackagePath = Get-PackagePath $SdkPackageName
 $sourceSarifSchemaPath = "$sdkPackagePath\Schemata\$SourceSarifSchemaFileName"
 $destinationSarifSchemaPath = "$DestinationPath\$DestinationSarifSchemaFileName"
+$sourceGitHubDspConfigurationFilePath = "$toolPackagePath\policies\$GitHubDspConfigurationFileName"
+$policiesDestinationDirectory = "$DestinationPath\policies"
 
 Write-Verbose "Copying SARIF schema file from $sourceSarifSchemaPath to ${destinationSarifSchemaPath}..."
 Copy-Item -Path $sourceSarifSchemaPath -Destination $destinationSarifSchemaPath
+
+Write-Verbose "Copying GitHub DSP rule configuration from $sourceGitHubDspConfigurationFilePath to {$policiesDestinationDirectory}..."
+New-Item -Type Directory $policiesDestinationDirectory | Out-Null
+Copy-Item $sourceGitHubDspConfigurationFilePath  $policiesDestinationDirectory
 
 Write-Verbose "Done."

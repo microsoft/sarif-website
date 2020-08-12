@@ -57,15 +57,19 @@
                 <div id="ruleDescription"></div>
             </div>
             <div id="rightToolbarGroup">
-                <button id="downloadLogButton" aria-label="Download log file" title="Download log file" class="toolbar-button" disabled>
-                    <span class="ui-icon ui-icon-download">icon</span>
-                </button>
                 <button id="revalidateButton" aria-label="Re-validate log file" title="Re-validate log file" class="toolbar-button" disabled>
                     <span class="ui-icon ui-icon-arrowrefresh-1-e">icon</span>
                 </button>
                 <button id="utilitiesButton" aria-label="Utilities menu" title="Utilities menu" class="toolbar-button" disabled>
                     <span class="ui-icon ui-icon-gear">icon</span>
                 </button>
+                <div id="ruleFilters">
+                    <input type="checkbox" id="noteRules" aria-labelledby="noteRulesLabel" title="Rules with level 'note'" disabled />
+                    <label id="noteRulesLabel" for="noteRules" class="ui-widget">note-level rules</label>
+                    <br />
+                    <input type="checkbox" id="gitHubDspRules" aria-labelledby="gitHubDspRulesLabel" title="Requirements for SARIF files uploaded to the GitHub Developer Security Portal" disabled />
+                    <label id="gitHubDspRulesLabel" for="gitHubDspRules" class="ui-widget">GitHub DSP rules</label>
+                </div>
             </div>
             <ul id="utilitiesMenu">
                 <li id="downloadvalidationLog"><div>Download validation results</div></li>
@@ -148,6 +152,10 @@
 
             let editor = null;
             const $pageBlanket = $("#pageBlanket");
+            const $gitHubDspRules = $("#gitHubDspRules");
+            $gitHubDspRules.change(processValidationLog);
+            const $noteRules = $("#noteRules");
+            $noteRules.change(processValidationLog);
             let isFileOpening = false;
 
             const ruleDescriptionTemplate = `<b><a href="{HELPURL}" target="_blank">{RULEID}</a>:</b> {RULEDESC}`;
@@ -221,7 +229,6 @@
             const $resultPositionCountText = $("#resultPositionCount");
             const $prevResultButton = $("#prevResultButton").button();
             const $nextResultButton = $("#nextResultButton").button();
-            const $downloadButton = $("#downloadLogButton").button();
             const $revalidateButton = $("#revalidateButton").button();
             const $utilitiesButton = $("#utilitiesButton").button();
             const $utilitiesMenu = $("#utilitiesMenu").menu({
@@ -287,53 +294,61 @@
             // Creates a SARIF log object from JSON, then processes rules and results
             function processResults(sarif) {
                 return new Promise(function (resolve, reject) {
-                    rulesDictionary = {};
-                    resultsDictionary = {};
                     validationLog = JSON.parse(sarif);
+                    processValidationLog();
+                    resolve();
+                });
+            }
+
+            function processValidationLog() {
+                rulesDictionary = {};
+                resultsDictionary = {};
+                clearRuleList();
+                setResultPositionText(0, 0);
+                setResultLocationDetails();
+                setToolbarEnabled(false);
+                clearLineMarkers();
+                clearGutterDecoration();
+                currentResultLocationIndex = -1;
+
+                const run = validationLog.runs[0];
+                const gitHubDspRulesEnabled = $gitHubDspRules.is(":checked");
+                const noteRulesEnabled = $noteRules.is(":checked");
+
+                if (run.results && run.results.length > 0) {
                     let hasResults = false;
-                    let toolError;
-                    const run = validationLog.runs[0];
-
-                    if (run.results && run.results.length > 0) {
-                        hasResults = true;
-
-                        if (run.tool && run.tool.driver && run.tool.driver.rules) {
-                            $.each(run.results, function (index, result) {
+                    if (run.tool && run.tool.driver && run.tool.driver.rules) {
+                        $.each(run.results, function (index, result) {
+                            const rule = run.tool.driver.rules[result.ruleIndex];
+                            const isDsp = isGitHubDspRule(rule);
+                            const isNote = isNoteResult(result);
+                            if ((!isDsp && !isNote) ||
+                                (isDsp && gitHubDspRulesEnabled) ||
+                                (isNote && noteRulesEnabled)) {
                                 addResult(run.tool.driver.rules[result.ruleIndex], result);
-                            });
+                                hasResults = true;
+                            }
+                        });
 
-                            // Now we know how many result locations we have for each rule, so populate the rules dropdown
+                        if (hasResults) {
+                            // Now we know how many result locations we have for each rule, so populate the rules dropdown.
                             const options = [];
                             for (let key in rulesDictionary) {
                                 options.push("<option value='" + key + "'>" + key + " (" + rulesDictionary[key].resultKeys.length + ")</option>");
                             }
 
-                            // Clear the dropdown, then add the rules and trigger a close event
-                            clearRuleList();
+                            // Add the rules to the drop-down and then trigger a close event.
                             $ruleList.append(options.join(""))
                                 .multiselect("refresh")
                                 .multiselect("checkAll")
                                 .multiselect("close");
                         }
-                    } else if (run.invocations[0].toolExecutionNotifications.length > 1) {
-                        const errorNote = run.invocations[0].toolExecutionNotifications[1];
-
-                        if (errorNote.level === "error") {
-                            toolError = errorNote.message.text;
-                        }
                     }
+                } else if (run.invocations[0].toolExecutionNotifications.length > 1) {
+                    const errorNote = run.invocations[0].toolExecutionNotifications[1];
 
-                    if (!hasResults) {
-                        rulesDictionary = {};
-                        resultsDictionary = {};
-                        clearRuleList();
-                        setResultPositionText(0, 0);
-                        setResultLocationDetails();
-                        setToolbarEnabled(false);
-                        clearLineMarkers();
-                        clearGutterDecoration();
-                        currentResultLocationIndex = -1;
-
+                    if (errorNote.level === "error") {
+                        const toolError = errorNote.message.text;
                         if (toolError) {
                             setTimeout(function () {
                                 // Push this to another thread to allow the above settings to take effect
@@ -343,8 +358,24 @@
                             $ruleDescription.html(noErrorsText);
                         }
                     }
-                    resolve();
-                });
+                }
+
+                setToolbarEnabled(true);
+            }
+
+            function isGitHubDspRule(rule) {
+                // Rules in the range SARIF2017-SARIF2025 are used to validate SARIF files intended
+                // for upload to the GitHub Developer Security Portal (DSP).
+                const ruleNumber = rule.id.substring(5)
+                return ruleNumber >= 2017 && ruleNumber <= 2025;
+            }
+
+            function isNoteResult(result) {
+                let level = "warning";
+                if (result.level) {
+                    level = result.level;
+                }
+                return level === "note";
             }
 
             // Downloads the complete text from the editor
@@ -393,7 +424,7 @@
                 return lowerFileName.endsWith('.sarif') || lowerFileName.endsWith('.sarif.json');
             }
 
-            function setUpEditor(transformedLogText) {
+            function setUpEditor(logText) {
                 return new Promise(function (resolve, reject) {
                     if (!editor) {
                         editor = ace.edit("editor", {
@@ -441,7 +472,7 @@
                         });
                     }
 
-                    editor.setValue(transformedLogText);
+                    editor.setValue(logText);
                     editor.selection.clearSelection();
 
                     // Enable controls
@@ -482,6 +513,8 @@
                     $(button).button(verb);
                 });
                 $ruleList.multiselect(verb);
+                let ruleFilterControls = $("#ruleFilters > *");
+                ruleFilterControls.attr("disabled", !enable);
             }
 
             function clearRuleList() {
@@ -542,15 +575,9 @@
                                 $dropForm.removeClass("is-complete");
                             }, 5000);
 
-                            setUpEditor(data.TransformedLogContents)
+                            setUpEditor(data.InputLogContents)
                                 .then(function () {
-                                    processResults(data.ResultsLogContents)
-                                        .then(function () {
-                                            if (data.IsTransformed) {
-                                                alert("We automatically migrated your log file to the latest SARIF schema. You can use the Download button below to save it to your computer.");
-                                                $downloadButton.button("enable");
-                                            }
-                                        });
+                                    processResults(data.ResultsLogContents);
                                 });
                         } else {
                             $dropForm.addClass("is-error");
@@ -653,10 +680,6 @@
 
             $nextResultButton.on("click", function () {
                 goToNextResultLocation();
-            });
-
-            $downloadButton.on("click", function () {
-                saveTextAsFile(editor.getValue(), fileName);
             });
 
             $revalidateButton.on("click", function () {
