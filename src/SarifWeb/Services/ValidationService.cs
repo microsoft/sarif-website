@@ -49,9 +49,9 @@ namespace SarifWeb.Services
             string inputFilePath = Path.Combine(_postedFilesDirectory, validationRequest.SavedFileName);
             string outputFileName = Path.GetFileNameWithoutExtension(validationRequest.PostedFileName) + ValidationLogSuffix;
             string outputFilePath = Path.Combine(_postedFilesDirectory, outputFileName);
-            string gitHubDspConfigFilePath = Path.Combine(_multitoolDirectory, "policies", "github-dsp.config.xml");
+            string gitHubConfigFilePath = Path.Combine(_multitoolDirectory, "policies", "github.config.xml");
 
-            string arguments = $"validate --output \"{outputFilePath}\" --json-schema \"{_schemaFilePath}\" --force --pretty-print --verbose --config \"{gitHubDspConfigFilePath}\" --rich-return-code \"{inputFilePath}\"";
+            string arguments = $"validate --output \"{outputFilePath}\" --json-schema \"{_schemaFilePath}\" --force --pretty-print --verbose --config \"{gitHubConfigFilePath}\" --rich-return-code \"{inputFilePath}\"";
 
             ValidationResponse validationResponse;
             try

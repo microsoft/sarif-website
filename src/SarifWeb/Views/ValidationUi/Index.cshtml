@@ -64,11 +64,11 @@
                     <span class="ui-icon ui-icon-gear">icon</span>
                 </button>
                 <div id="ruleFilters">
-                    <input type="checkbox" id="noteRules" aria-labelledby="noteRulesLabel" title="Rules with level 'note'" disabled />
-                    <label id="noteRulesLabel" for="noteRules" class="ui-widget">note-level rules</label>
+                    <input type="checkbox" id="noteRules" aria-labelledby="noteRulesLabel" title="More ways to improve your SARIF files." disabled />
+                    <label id="noteRulesLabel" for="noteRules" class="ui-widget">Additional suggestions</label>
                     <br />
-                    <input type="checkbox" id="gitHubDspRules" aria-labelledby="gitHubDspRulesLabel" title="Requirements for SARIF files uploaded to the GitHub Developer Security Portal" disabled />
-                    <label id="gitHubDspRulesLabel" for="gitHubDspRules" class="ui-widget">GitHub DSP rules</label>
+                    <input type="checkbox" id="gitHubRules" aria-labelledby="gitHubRulesLabel" title="Requirements for SARIF files uploaded to GitHub Advanced Security code scanning." disabled />
+                    <label id="gitHubRulesLabel" for="gitHubRules" class="ui-widget">GitHub ingestion rules</label>
                 </div>
             </div>
             <ul id="utilitiesMenu">
@@ -152,8 +152,8 @@
 
             let editor = null;
             const $pageBlanket = $("#pageBlanket");
-            const $gitHubDspRules = $("#gitHubDspRules");
-            $gitHubDspRules.change(processValidationLog);
+            const $gitHubRules = $("#gitHubRules");
+            $gitHubRules.change(processValidationLog);
             const $noteRules = $("#noteRules");
             $noteRules.change(processValidationLog);
             let isFileOpening = false;
@@ -312,7 +312,7 @@
                 currentResultLocationIndex = -1;
 
                 const run = validationLog.runs[0];
-                const gitHubDspRulesEnabled = $gitHubDspRules.is(":checked");
+                const gitHubRulesEnabled = $gitHubRules.is(":checked");
                 const noteRulesEnabled = $noteRules.is(":checked");
 
                 if (run.results && run.results.length > 0) {
@@ -320,10 +320,10 @@
                     if (run.tool && run.tool.driver && run.tool.driver.rules) {
                         $.each(run.results, function (index, result) {
                             const rule = run.tool.driver.rules[result.ruleIndex];
-                            const isDsp = isGitHubDspRule(rule);
+                            const isGitHub = isGitHubRule(rule);
                             const isNote = isNoteResult(result);
-                            if ((!isDsp && !isNote) ||
-                                (isDsp && gitHubDspRulesEnabled) ||
+                            if ((!isGitHub && !isNote) ||
+                                (isGitHub && gitHubRulesEnabled) ||
                                 (isNote && noteRulesEnabled)) {
                                 addResult(run.tool.driver.rules[result.ruleIndex], result);
                                 hasResults = true;
@@ -363,11 +363,10 @@
                 setToolbarEnabled(true);
             }
 
-            function isGitHubDspRule(rule) {
-                // Rules in the range SARIF2017-SARIF2025 are used to validate SARIF files intended
-                // for upload to the GitHub Developer Security Portal (DSP).
-                const ruleNumber = rule.id.substring(5)
-                return ruleNumber >= 2017 && ruleNumber <= 2025;
+            function isGitHubRule(rule) {
+                // Rules whose ids begin with "GH" are used to validate SARIF files intended
+                // for upload to GitHub Advanced Security code scanning.
+                return rule.id.startsWith('GH');
             }
 
             function isNoteResult(result) {

@@ -16,10 +16,11 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 $ToolPackageName = "Sarif.Multitool"
+$LibraryPackageName = "Sarif.Multitool.Library"
 $SdkPackageName = "Sarif.Sdk"
 $SourceSarifSchemaFileName = "sarif-2.1.0-rtm.5.json"
 $DestinationSarifSchemaFileName = "sarif-schema.json"
-$GitHubDspConfigurationFileName = "github-dsp.config.xml";
+$GitHubConfigurationFileName = "github.config.xml";
 
 $PackagesRoot = Join-Path -Resolve $PSScriptRoot ..\..\packages
 if (-not (Test-Path $PackagesRoot)) {
@@ -69,14 +70,15 @@ Copy-Item -Recurse -Path $toolBinariesSourcePath -Destination $DestinationPath
 $sdkPackagePath = Get-PackagePath $SdkPackageName
 $sourceSarifSchemaPath = "$sdkPackagePath\Schemata\$SourceSarifSchemaFileName"
 $destinationSarifSchemaPath = "$DestinationPath\$DestinationSarifSchemaFileName"
-$sourceGitHubDspConfigurationFilePath = "$toolPackagePath\policies\$GitHubDspConfigurationFileName"
+$libraryPackagePath = Get-PackagePath $LibraryPackageName
+$sourceGitHubConfigurationFilePath = "$libraryPackagePath\policies\$GitHubConfigurationFileName"
 $policiesDestinationDirectory = "$DestinationPath\policies"
 
 Write-Verbose "Copying SARIF schema file from $sourceSarifSchemaPath to ${destinationSarifSchemaPath}..."
 Copy-Item -Path $sourceSarifSchemaPath -Destination $destinationSarifSchemaPath
 
-Write-Verbose "Copying GitHub DSP rule configuration from $sourceGitHubDspConfigurationFilePath to {$policiesDestinationDirectory}..."
+Write-Verbose "Copying GitHub rule configuration from $sourceGitHubConfigurationFilePath to {$policiesDestinationDirectory}..."
 New-Item -Type Directory $policiesDestinationDirectory | Out-Null
-Copy-Item $sourceGitHubDspConfigurationFilePath  $policiesDestinationDirectory
+Copy-Item $sourceGitHubConfigurationFilePath  $policiesDestinationDirectory
 
 Write-Verbose "Done."
