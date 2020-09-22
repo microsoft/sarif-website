@@ -217,7 +217,7 @@
     <Content Include="Images\Logos\KestrelTechnology.png" />
     <Content Include="Images\Logos\MicroFocus.png" />
     <Content Include="Images\Logos\Microsoft.png" />
-    <Content Include="Images\Logos\Semmle.png" />
+    <Content Include="Images\Logos\GitHub.png" />
     <Content Include="Images\Logos\SWAMP.png" />
     <Content Include="Images\Nuget.png" />
     <Content Include="Images\Screenshots\VSCodeViewer.png" />
