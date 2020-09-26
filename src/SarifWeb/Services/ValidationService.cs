@@ -22,10 +22,11 @@ namespace SarifWeb.Services
         private const string ToolExeName = "Sarif.Multitool.exe";
         private const string ValidationLogSuffix = ".validation.sarif";
         private const string SchemaFileName = "sarif-schema.json";
+        private const string PolicyFileName = "allRules.config.xml";
 
         private readonly string _postedFilesDirectory;
-        private readonly string _multitoolDirectory;
         private readonly string _multitoolExePath;
+        private readonly string _policyFilesDirectory;
         private readonly string _schemaFilePath;
         private readonly IFileSystem _fileSystem;
         private readonly IProcessRunner _processRunner;
@@ -33,13 +34,14 @@ namespace SarifWeb.Services
         public ValidationService(
             string postedFilesDirectory,
             string multitoolDirectory,
+            string policyFilesDirectory,
             IFileSystem fileSystem,
             IProcessRunner processRunner)
         {
             _postedFilesDirectory = postedFilesDirectory;
-            _multitoolDirectory = multitoolDirectory;
             _multitoolExePath = Path.Combine(multitoolDirectory, ToolExeName);
             _schemaFilePath = Path.Combine(multitoolDirectory, SchemaFileName);
+            _policyFilesDirectory = policyFilesDirectory;
             _fileSystem = fileSystem;
             _processRunner = processRunner;
         }
@@ -49,9 +51,9 @@ namespace SarifWeb.Services
             string inputFilePath = Path.Combine(_postedFilesDirectory, validationRequest.SavedFileName);
             string outputFileName = Path.GetFileNameWithoutExtension(validationRequest.PostedFileName) + ValidationLogSuffix;
             string outputFilePath = Path.Combine(_postedFilesDirectory, outputFileName);
-            string gitHubConfigFilePath = Path.Combine(_multitoolDirectory, "policies", "github.config.xml");
+            string configFilePath = Path.Combine(_policyFilesDirectory, PolicyFileName);
 
-            string arguments = $"validate --output \"{outputFilePath}\" --json-schema \"{_schemaFilePath}\" --force --pretty-print --verbose --config \"{gitHubConfigFilePath}\" --rich-return-code \"{inputFilePath}\"";
+            string arguments = $"validate --output \"{outputFilePath}\" --json-schema \"{_schemaFilePath}\" --force --pretty-print --verbose --config \"{configFilePath}\" --rich-return-code \"{inputFilePath}\"";
 
             ValidationResponse validationResponse;
             try
