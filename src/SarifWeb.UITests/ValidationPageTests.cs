@@ -29,22 +29,22 @@ namespace SarifWeb.UITests
 
             // The following explicit counts should be obtained by running the Multitool library's
             // ValidateCommand against the test file.
-            page.NumResults.Should().Be(2);
+            page.NumResults.Should().Be(3);
             page.CurrentResultIndex.Should().Be(1);
 
             page.ClickAdditionalSuggestions();
 
-            page.NumResults.Should().Be(6);
+            page.NumResults.Should().Be(7);
             page.CurrentResultIndex.Should().Be(1);
 
             page.ClickGitHubRules();
 
-            page.NumResults.Should().Be(8);
+            page.NumResults.Should().Be(9);
             page.CurrentResultIndex.Should().Be(1);
 
             page.ClickAdditionalSuggestions();
 
-            page.NumResults.Should().Be(4);
+            page.NumResults.Should().Be(5);
             page.CurrentResultIndex.Should().Be(1);
         }
     }

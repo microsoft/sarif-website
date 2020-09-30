@@ -14,6 +14,14 @@
           ]
         }
       },
+      "versionControlProvenance": [
+        {
+          "repositoryUri": "https://example.com/repos/my-repo/",
+          "mappedTo": {
+            "uriBaseId": "REPO_ROOT"
+          }
+        }
+      ],
       "results": [
         {
           "ruleId": "TEST1001",
@@ -25,7 +33,16 @@
           "ruleId": "TEST1002",
           "message": {
             "text": "Second result"
-          }
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "not-repo-relative.c"
+                }
+              }
+            }
+          ]
         }
       ]
     }
