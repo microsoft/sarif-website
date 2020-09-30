@@ -318,6 +318,7 @@
                 if (run.results && run.results.length > 0) {
                     let hasResults = false;
                     if (run.tool && run.tool.driver && run.tool.driver.rules) {
+                        adjustRuleLevelsForGitHub(run.results, gitHubRulesEnabled);
                         $.each(run.results, function (index, result) {
                             const rule = run.tool.driver.rules[result.ruleIndex];
                             const isGitHub = isGitHubRule(rule);
@@ -361,6 +362,25 @@
                 }
 
                 setToolbarEnabled(true);
+            }
+
+            // This function is a temporary workaround for the fact that we don't yet
+            // have an API that adjusts and filters results by a policy. We happen to
+            // know that when the "GitHub" checkbox is checked, results for rule
+            // SARIF2007.ExpressPathsRelativeToRepoRoot should be treated as errors
+            // rather than warnings, and results for rule SARIF2012.ProvideHelpUris
+            // should be treated as warnings rather than notes.
+            function adjustRuleLevelsForGitHub(results, gitHubRulesEnabled) {
+                $.each(results, function (index, result) {
+                    switch (result.ruleId) {
+                        case 'SARIF2007':
+                            result.level = gitHubRulesEnabled ? "error" : "warning";
+                            break;
+                        case 'SARIF2012':
+                            result.level = gitHubRulesEnabled ? "warning" : "note";
+                            break;
+                    }
+                });
             }
 
             function isGitHubRule(rule) {

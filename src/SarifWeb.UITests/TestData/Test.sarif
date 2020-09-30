@@ -16,7 +16,7 @@
       },
       "versionControlProvenance": [
         {
-          "repositoryUri": "https://example.com/repos/my-repo/",
+          "repositoryUri": "https://github.com/microsoft/sarif-sdk/",
           "mappedTo": {
             "uriBaseId": "REPO_ROOT"
           }
