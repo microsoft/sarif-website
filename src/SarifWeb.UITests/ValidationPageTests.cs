@@ -34,12 +34,12 @@ namespace SarifWeb.UITests
 
             page.ClickAdditionalSuggestions();
 
-            page.NumResults.Should().Be(5);
+            page.NumResults.Should().Be(6);
             page.CurrentResultIndex.Should().Be(1);
 
             page.ClickGitHubRules();
 
-            page.NumResults.Should().Be(7);
+            page.NumResults.Should().Be(8);
             page.CurrentResultIndex.Should().Be(1);
 
             page.ClickAdditionalSuggestions();

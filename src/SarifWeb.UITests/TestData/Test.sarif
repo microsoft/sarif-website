@@ -5,7 +5,13 @@
     {
       "tool": {
         "driver": {
-          "name": "SarifWeb UI Tests"
+          "name": "SarifWeb UI Tests",
+          "rules": [
+            {
+              "id": "TEST1001",
+              "name": "FriendlyName1"
+            }
+          ]
         }
       },
       "results": [
