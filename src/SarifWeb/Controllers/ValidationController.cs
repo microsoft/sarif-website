@@ -22,13 +22,12 @@ namespace SarifWeb.Controllers
 
         public ValidationController()
         {
-            string validationToolDirectory = HostingHelper.ValidationToolDirectory;
-            string postedFilesDirectory = HostingHelper.PostedFilesDirectory;
-
-            IFileSystem fileSystem = new FileSystem();
-            IProcessRunner processRunner = new ProcessRunner();
-
-            _validationService = new ValidationService(postedFilesDirectory, validationToolDirectory, fileSystem, processRunner);
+            _validationService = new ValidationService(
+                HostingHelper.PostedFilesDirectory,
+                HostingHelper.ValidationToolDirectory,
+                HostingHelper.PolicyFilesDirectory,
+                new FileSystem(),
+                new ProcessRunner());
         }
 
         public async Task<ValidationResponse> Post([FromBody] ValidationRequest validationRequest)

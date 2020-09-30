@@ -29,26 +29,22 @@ namespace SarifWeb.UITests
 
             // The following explicit counts should be obtained by running the Multitool library's
             // ValidateCommand against the test file.
-            //
-            // The counts are also wrong, because of https://github.com/microsoft/sarif-website/issues/119,
-            // "Online validator doesn't report all results". When we fix that bug, this test will
-            // "break" and we'll need to fix it.
-            page.NumResults.Should().Be(0);
-            page.CurrentResultIndex.Should().Be(0);
-
-            page.ClickAdditionalSuggestions();
-
-            page.NumResults.Should().Be(0);
-            page.CurrentResultIndex.Should().Be(0);
-
-            page.ClickGitHubRules();
-
             page.NumResults.Should().Be(2);
             page.CurrentResultIndex.Should().Be(1);
 
             page.ClickAdditionalSuggestions();
 
-            page.NumResults.Should().Be(2);
+            page.NumResults.Should().Be(5);
+            page.CurrentResultIndex.Should().Be(1);
+
+            page.ClickGitHubRules();
+
+            page.NumResults.Should().Be(7);
+            page.CurrentResultIndex.Should().Be(1);
+
+            page.ClickAdditionalSuggestions();
+
+            page.NumResults.Should().Be(4);
             page.CurrentResultIndex.Should().Be(1);
         }
     }
