@@ -5,9 +5,23 @@
     {
       "tool": {
         "driver": {
-          "name": "SarifWeb UI Tests"
+          "name": "SarifWeb UI Tests",
+          "rules": [
+            {
+              "id": "TEST1001",
+              "name": "FriendlyName1"
+            }
+          ]
         }
       },
+      "versionControlProvenance": [
+        {
+          "repositoryUri": "https://github.com/microsoft/sarif-sdk/",
+          "mappedTo": {
+            "uriBaseId": "REPO_ROOT"
+          }
+        }
+      ],
       "results": [
         {
           "ruleId": "TEST1001",
@@ -19,7 +33,16 @@
           "ruleId": "TEST1002",
           "message": {
             "text": "Second result"
-          }
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "not-repo-relative.c"
+                }
+              }
+            }
+          ]
         }
       ]
     }

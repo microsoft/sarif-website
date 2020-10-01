@@ -229,6 +229,9 @@
     <Content Include="Images\Screenshots\WebViewerB.png" />
     <Content Include="Images\Screenshots\WebViewerB.thumbnail.png" />
     <Content Include="Images\triskelion.png" />
+    <Content Include="policies\allRules.config.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\ace\ace.js" />
     <Content Include="Scripts\ace\ext-beautify.js" />
     <Content Include="Scripts\ace\ext-elastic_tabstops_lite.js" />
