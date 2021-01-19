@@ -440,9 +440,6 @@
     <Compile Include="Utilities\HttpClientProxy.cs" />
     <Compile Include="Utilities\IFileSystem.cs" />
     <Compile Include="Utilities\IHttpClientProxy.cs" />
-    <Compile Include="Utilities\IProcessRunner.cs" />
-    <Compile Include="Utilities\ProcessResult.cs" />
-    <Compile Include="Utilities\ProcessRunner.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />

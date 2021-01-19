@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Web.Http;
+﻿using System.Web.Http;
 using SarifWeb.Models;
 using SarifWeb.Services;
 using SarifWeb.Utilities;
@@ -24,15 +23,13 @@ namespace SarifWeb.Controllers
         {
             _validationService = new ValidationService(
                 HostingHelper.PostedFilesDirectory,
-                HostingHelper.ValidationToolDirectory,
                 HostingHelper.PolicyFilesDirectory,
-                new FileSystem(),
-                new ProcessRunner());
+                new FileSystem());
         }
 
-        public async Task<ValidationResponse> Post([FromBody] ValidationRequest validationRequest)
+        public ValidationResponse Post([FromBody] ValidationRequest validationRequest)
         {
-            return await _validationService.Validate(validationRequest);
+            return _validationService.Validate(validationRequest);
         }
     }
 }
