@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.Sarif.Multitool;
 using SarifWeb.Models;
 using SarifWeb.Utilities;
 
@@ -61,6 +62,18 @@ namespace SarifWeb.Services
                 string inputText = File.ReadAllText(inputFilePath);
 
                 ProcessResult processResult = await _processRunner.RunProcess(_multitoolExePath, arguments);
+
+                var validateOptions = new ValidateOptions
+                {
+                    OutputFilePath = outputFilePath,
+                    Force = true,
+                    PrettyPrint = true,
+                    Verbose = true,
+                    ConfigurationFilePath = configFilePath,
+                    //RichReturnCode = inputFilePath
+                };
+
+                var validateResponse = new ValidateCommand().Run(validateOptions);
 
                 validationResponse = new ValidationResponse
                 {
