@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.Sarif.Multitool;
 using SarifWeb.Models;
 using SarifWeb.Utilities;
 
@@ -19,56 +20,53 @@ namespace SarifWeb.Services
     /// </remarks>
     public class ValidationService
     {
-        private const string ToolExeName = "Sarif.Multitool.exe";
         private const string ValidationLogSuffix = ".validation.sarif";
-        private const string SchemaFileName = "sarif-schema.json";
         private const string PolicyFileName = "allRules.config.xml";
 
         private readonly string _postedFilesDirectory;
-        private readonly string _multitoolExePath;
         private readonly string _policyFilesDirectory;
-        private readonly string _schemaFilePath;
         private readonly IFileSystem _fileSystem;
-        private readonly IProcessRunner _processRunner;
 
         public ValidationService(
             string postedFilesDirectory,
-            string multitoolDirectory,
             string policyFilesDirectory,
-            IFileSystem fileSystem,
-            IProcessRunner processRunner)
+            IFileSystem fileSystem)
         {
             _postedFilesDirectory = postedFilesDirectory;
-            _multitoolExePath = Path.Combine(multitoolDirectory, ToolExeName);
-            _schemaFilePath = Path.Combine(multitoolDirectory, SchemaFileName);
             _policyFilesDirectory = policyFilesDirectory;
             _fileSystem = fileSystem;
-            _processRunner = processRunner;
         }
 
-        public async Task<ValidationResponse> Validate(ValidationRequest validationRequest)
+        public ValidationResponse Validate(ValidationRequest validationRequest)
         {
             string inputFilePath = Path.Combine(_postedFilesDirectory, validationRequest.SavedFileName);
             string outputFileName = Path.GetFileNameWithoutExtension(validationRequest.PostedFileName) + ValidationLogSuffix;
             string outputFilePath = Path.Combine(_postedFilesDirectory, outputFileName);
             string configFilePath = Path.Combine(_policyFilesDirectory, PolicyFileName);
 
-            string arguments = $"validate --output \"{outputFilePath}\" --json-schema \"{_schemaFilePath}\" --force --pretty-print --verbose --config \"{configFilePath}\" --rich-return-code \"{inputFilePath}\"";
-
             ValidationResponse validationResponse;
             try
             {
                 string inputText = File.ReadAllText(inputFilePath);
+                var validateOptions = new ValidateOptions
+                {
+                    OutputFilePath = outputFilePath,
+                    Force = true,
+                    PrettyPrint = true,
+                    Verbose = true,
+                    ConfigurationFilePath = configFilePath,
+                    TargetFileSpecifiers = new string[] { inputFilePath }
+                };
 
-                ProcessResult processResult = await _processRunner.RunProcess(_multitoolExePath, arguments);
+                var validateResponse = new ValidateCommand().Run(validateOptions);
 
                 validationResponse = new ValidationResponse
                 {
                     Message = $"The SARIF validation service received a request to validate \"{validationRequest.PostedFileName}\".",
-                    Arguments = arguments,
-                    ExitCode = processResult.ExitCode,
-                    StandardError = processResult.StandardError,
-                    StandardOutput = processResult.StandardOutput,
+                    ExitCode = validateResponse,
+                    Arguments = string.Empty,
+                    StandardError = string.Empty,
+                    StandardOutput = string.Empty,
                     InputLogContents = inputText,
                     ResultsLogContents = _fileSystem.ReadAllText(outputFilePath)
                 };
