@@ -1,11 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 using SarifWeb.Models;
 using SarifWeb.Utilities;
 
@@ -24,22 +19,21 @@ namespace SarifWeb.Services
     /// </remarks>
     public class ValidationUiService
     {
+        private readonly ValidationService _validationService;
         private readonly IFileSystem _fileSystem;
-        private readonly IHttpClientProxy _httpClientProxy;
 
-        public ValidationUiService(
-            IFileSystem fileSystem,
-            IHttpClientProxy httpClientProxy)
+        public ValidationUiService(IFileSystem fileSystem)
         {
             _fileSystem = fileSystem;
-            _httpClientProxy = httpClientProxy;
+            _validationService = new ValidationService(
+                HostingHelper.PostedFilesDirectory,
+                HostingHelper.PolicyFilesDirectory,
+                fileSystem);
         }
 
-        public async Task<ValidationResponse> ValidateFileAsync(
-            HttpPostedFileBase postedFile,
-            HttpRequestBase request,
-            string postedFilesPath,
-            string baseAddress)
+        public ValidationResponse ValidateFile(
+            IFormFile postedFile,
+            string postedFilesPath)
         {
             ValidationResponse validationResponse = null;
 
@@ -48,37 +42,35 @@ namespace SarifWeb.Services
                 string postedFileName = postedFile.FileName;
                 string savedFileName = Guid.NewGuid() + Path.GetExtension(postedFileName);
                 string savedFilePath = Path.Combine(postedFilesPath, savedFileName);
-                postedFile.SaveAs(savedFilePath);
 
-                validationResponse = await ValidateSavedFileAsync(request, baseAddress, postedFileName, savedFilePath);
+                using (Stream fileStream = new FileStream(savedFilePath, FileMode.Create))
+                {
+                    postedFile.CopyTo(fileStream);
+                }
+
+                validationResponse = ValidateSavedFile(postedFileName, savedFilePath);
             }
 
             return validationResponse;
         }
 
-        public async Task<ValidationResponse> ValidateJSonAsync(
+        public ValidationResponse ValidateJson(
             string json,
-            HttpRequestBase request,
-            string postedFilesPath,
-            string baseAddress)
+            string postedFilesPath)
         {
             string savedFileName = $"{Guid.NewGuid()}.sarif";
             string savedFilePath = Path.Combine(postedFilesPath, savedFileName);
 
             _fileSystem.WriteAllText(savedFilePath, json);
 
-            return await ValidateSavedFileAsync(request, baseAddress, savedFileName, savedFilePath);
+            return ValidateSavedFile(savedFileName, savedFilePath);
         }
 
-        private async Task<ValidationResponse> ValidateSavedFileAsync(
-            HttpRequestBase request,
-            string baseAddress,
+        private ValidationResponse ValidateSavedFile(
             string originalFileName,
             string savedFilePath)
         {
             ValidationResponse validationResponse = null;
-
-            request.ContentType = "application/json";
 
             // Send request to Validation service
             ValidationRequest validationRequest = new ValidationRequest
@@ -89,7 +81,7 @@ namespace SarifWeb.Services
 
             try
             {
-                validationResponse = await GetValidationResponse(validationRequest, baseAddress);
+                validationResponse = _validationService.Validate(validationRequest);
             }
             finally
             {
@@ -100,25 +92,6 @@ namespace SarifWeb.Services
             }
 
             return validationResponse;
-        }
-
-        private async Task<ValidationResponse> GetValidationResponse(
-            ValidationRequest validationRequest,
-            string baseAddress)
-        {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(baseAddress, UriKind.Absolute);
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                string requestBody = JsonConvert.SerializeObject(validationRequest);
-                HttpContent requestContent = new StringContent(requestBody, Encoding.UTF8, "application/json");
-
-                HttpResponseMessage response = await _httpClientProxy.PostAsync(client, "api/Validation", requestContent);
-                string responseContent = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<ValidationResponse>(responseContent);
-            }
         }
     }
 }
