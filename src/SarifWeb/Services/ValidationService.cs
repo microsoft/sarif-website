@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.Sarif.Multitool;
 using SarifWeb.Models;
 using SarifWeb.Utilities;
@@ -47,7 +46,6 @@ namespace SarifWeb.Services
             ValidationResponse validationResponse;
             try
             {
-                string inputText = File.ReadAllText(inputFilePath);
                 var validateOptions = new ValidateOptions
                 {
                     OutputFilePath = outputFilePath,
@@ -67,7 +65,6 @@ namespace SarifWeb.Services
                     Arguments = string.Empty,
                     StandardError = string.Empty,
                     StandardOutput = string.Empty,
-                    InputLogContents = inputText,
                     ResultsLogContents = _fileSystem.ReadAllText(outputFilePath)
                 };
             }
