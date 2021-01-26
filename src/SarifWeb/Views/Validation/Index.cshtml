@@ -819,7 +819,7 @@
             })
             .on("drop", function (e) {
                 const file = e.originalEvent.dataTransfer.files[0];
-
+                fileInput.files = e.originalEvent.dataTransfer.files;
                 if (!isSarifFile(file.name)) {
                     alert(sarifFileTypeMessage);
                 } else {
