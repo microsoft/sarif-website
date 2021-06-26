@@ -39,7 +39,7 @@ namespace SarifWeb.Services
         public ValidationResponse Validate(ValidationRequest validationRequest)
         {
             string inputFilePath = Path.Combine(_postedFilesDirectory, validationRequest.SavedFileName);
-            string outputFileName = Path.GetFileNameWithoutExtension(validationRequest.PostedFileName) + ValidationLogSuffix;
+            string outputFileName = Path.GetFileNameWithoutExtension(validationRequest.SavedFileName) + ValidationLogSuffix;
             string outputFilePath = Path.Combine(_postedFilesDirectory, outputFileName);
             string configFilePath = Path.Combine(_policyFilesDirectory, PolicyFileName);
 

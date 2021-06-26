@@ -9,7 +9,22 @@ namespace SarifWeb.Utilities
     {
         public void DeleteFile(string path)
         {
-            File.Delete(path);
+            int retry = 5;
+
+            while (true)
+            {
+                try
+                {
+                    File.Delete(path);
+                    return;
+                }
+                catch (IOException ex)
+                {
+                    retry--;
+                    if (retry < 0) throw ex;
+                    System.Threading.Thread.Sleep(1000);
+                }
+            }
         }
 
         public bool FileExists(string path)
