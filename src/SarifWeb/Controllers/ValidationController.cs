@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Sarif;
 using Newtonsoft.Json;
 using SarifWeb.Models;
 using SarifWeb.Services;
@@ -29,7 +30,7 @@ namespace SarifWeb.Controllers
         {
             // CONSIDER: Use the Unity DI container to inject dependencies, rather than
             // instantiating them by hand.
-            IFileSystem fileSystem = new FileSystem();
+            IFileSystem fileSystem = FileSystem.Instance;
 
             _validationUiService = new ValidationUiService(fileSystem);
             _validationService = new ValidationService(
