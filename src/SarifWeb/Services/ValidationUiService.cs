@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.CodeAnalysis.Sarif;
 using SarifWeb.Models;
 using SarifWeb.Utilities;
 
@@ -61,7 +62,7 @@ namespace SarifWeb.Services
             string savedFileName = $"{Guid.NewGuid()}.sarif";
             string savedFilePath = Path.Combine(postedFilesPath, savedFileName);
 
-            _fileSystem.WriteAllText(savedFilePath, json);
+            _fileSystem.FileWriteAllText(savedFilePath, json);
 
             return ValidateSavedFile(savedFileName, savedFilePath);
         }
@@ -87,7 +88,7 @@ namespace SarifWeb.Services
             {
                 if (_fileSystem.FileExists(savedFilePath))
                 {
-                    _fileSystem.DeleteFile(savedFilePath);
+                    _fileSystem.FileDelete(savedFilePath);
                 }
             }
 

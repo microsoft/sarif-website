@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Multitool;
 using SarifWeb.Models;
 using SarifWeb.Utilities;
@@ -51,7 +52,12 @@ namespace SarifWeb.Services
                     OutputFilePath = outputFilePath,
                     Force = true,
                     PrettyPrint = true,
-                    Verbose = true,
+                    Level = new FailureLevel[] {
+                        FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note
+                    },
+                    Kind = new ResultKind[] {
+                        ResultKind.Fail, ResultKind.Informational, ResultKind.NotApplicable, ResultKind.Open, ResultKind.Open, ResultKind.Pass, ResultKind.Review
+                    },
                     ConfigurationFilePath = configFilePath,
                     TargetFileSpecifiers = new string[] { inputFilePath }
                 };
@@ -65,7 +71,7 @@ namespace SarifWeb.Services
                     Arguments = string.Empty,
                     StandardError = string.Empty,
                     StandardOutput = string.Empty,
-                    ResultsLogContents = _fileSystem.ReadAllText(outputFilePath)
+                    ResultsLogContents = _fileSystem.FileReadAllText(outputFilePath)
                 };
             }
             catch (Exception ex)
@@ -80,12 +86,12 @@ namespace SarifWeb.Services
             {
                 if (_fileSystem.FileExists(outputFilePath))
                 {
-                    _fileSystem.DeleteFile(outputFilePath);
+                    _fileSystem.FileDelete(outputFilePath);
                 }
 
                 if (_fileSystem.FileExists(inputFilePath))
                 {
-                    _fileSystem.DeleteFile(inputFilePath);
+                    _fileSystem.FileDelete(inputFilePath);
                 }
             }
 
