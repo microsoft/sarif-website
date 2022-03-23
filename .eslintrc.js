@@ -3,7 +3,7 @@ const OFF = 0, ERROR = 2
 module.exports = {
     overrides: [
         {
-            files: ["src/**/*.ts{,x}"],
+            files: ["src/**/*.js"],
             extends: [
                 "eslint:recommended",
             ],
