@@ -13,13 +13,7 @@ module.exports = {
                 "no-throw-literal": ERROR,
                 "no-var": ERROR,
                 "prefer-const": ERROR,
-
                 "eqeqeq": ERROR,
-                "filenames/match-regex": [ERROR, "^([a-z0-9]+)([A-Z][a-z0-9]+)*(\.(config|d|layouts|spec))?$"],
-                "header/header": [ERROR, "line", [
-                    " Copyright (c) Microsoft Corporation. All rights reserved.",
-                    " Licensed under the MIT License.",
-                ]],
                 "indent": [ERROR, 4, { "SwitchCase": 1 }],
                 "no-trailing-spaces": ERROR,
                 "quotes": [ERROR, "single", {"allowTemplateLiterals": true}],
@@ -37,8 +31,4 @@ module.exports = {
             "jsx": true
         },
     },
-    plugins: [
-        "filenames",
-        "header",
-    ],
 }
