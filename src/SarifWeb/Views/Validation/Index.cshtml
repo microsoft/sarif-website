@@ -38,12 +38,12 @@
 
 <section id="validatorSection" role="region" aria-labelledby="pageTitle" class="content-section gray-section">
     <div id="validatorContainer">
-        <div id="validatorToolbar" data-disabled>
+        <div id="validatorToolbar">
             <div id="leftToolbarGroup">
-                <select id="ruleList" role="combobox" aria-label="Rule list" multiple size="1" disabled>
+                <select id="ruleList" role="combobox" aria-label="Rule list" multiple size="1">
                     <option value=""></option>
                 </select>
-                <button id="prevResultButton" aria-label="Previous result" title="Previous result" class="toolbar-button" disabled>
+                <button id="prevResultButton" aria-label="Previous result" title="Previous result" class="toolbar-button">
                     <span class="ui-icon ui-icon-caret-1-n">icon</span>
                 </button>
                 <div id="resultPosition">
@@ -51,23 +51,23 @@
                     <div id="resultPositionSeparator" aria-label="of">/</div>
                     <div id="resultPositionCount">0</div>
                 </div>
-                <button id="nextResultButton" aria-label="Next result" title="Next result" class="toolbar-button" disabled>
+                <button id="nextResultButton" aria-label="Next result" title="Next result" class="toolbar-button">
                     <span class="ui-icon ui-icon-caret-1-s">icon</span>
                 </button>
                 <div id="ruleDescription"></div>
             </div>
             <div id="rightToolbarGroup">
-                <button id="revalidateButton" aria-label="Re-validate log file" title="Re-validate log file" class="toolbar-button" disabled>
+                <button id="revalidateButton" aria-label="Re-validate log file" title="Re-validate log file" class="toolbar-button">
                     <span class="ui-icon ui-icon-arrowrefresh-1-e">icon</span>
                 </button>
-                <button id="utilitiesButton" aria-label="Utilities menu" title="Utilities menu" class="toolbar-button" disabled>
+                <button id="utilitiesButton" aria-label="Utilities menu" title="Utilities menu" class="toolbar-button">
                     <span class="ui-icon ui-icon-gear">icon</span>
                 </button>
                 <div id="ruleFilters">
-                    <input type="checkbox" id="noteRules" aria-labelledby="noteRulesLabel" checked="checked" title="More ways to improve your SARIF files." disabled />
+                    <input type="checkbox" id="noteRules" aria-labelledby="noteRulesLabel" title="More ways to improve your SARIF files." />
                     <label id="noteRulesLabel" for="noteRules" class="ui-widget">Additional suggestions</label>
                     <br />
-                    <input type="checkbox" id="gitHubRules" aria-labelledby="gitHubRulesLabel" checked="checked" title="Requirements for SARIF files uploaded to GitHub Advanced Security code scanning." disabled />
+                    <input type="checkbox" id="gitHubRules" aria-labelledby="gitHubRulesLabel" title="Requirements for SARIF files uploaded to GitHub Advanced Security code scanning." />
                     <label id="gitHubRulesLabel" for="gitHubRules" class="ui-widget">GitHub ingestion rules</label>
                 </div>
             </div>
@@ -306,7 +306,6 @@
                 clearRuleList();
                 setResultPositionText(0, 0);
                 setResultLocationDetails();
-                setToolbarEnabled(false);
                 clearLineMarkers();
                 clearGutterDecoration();
                 currentResultLocationIndex = -1;
@@ -360,8 +359,6 @@
                         }
                     }
                 }
-
-                setToolbarEnabled(true);
             }
 
             // This function is a temporary workaround for the fact that we don't yet
@@ -495,7 +492,6 @@
                     editor.selection.clearSelection();
 
                     // Enable controls
-                    setToolbarEnabled(true);
                     resolve();
                 });
             }
@@ -510,30 +506,8 @@
                 }
 
                 clearRuleList();
-                setToolbarEnabled(false);
                 setResultPositionText(0, 0);
                 setResultLocationDetails();
-            }
-
-            function setToolbarEnabled(enable) {
-                let verb;
-                let selector = "";
-
-                if (enable) {
-                    verb = "enable";
-                    selector = ":disabled";
-                    $toolbar.removeAttr("data-disabled");
-                } else {
-                    verb = "disable";
-                    $toolbar.attr("data-disabled");
-                }
-
-                $("#validatorToolbar .toolbar-button" + selector).each(function (index, button) {
-                    $(button).button(verb);
-                });
-                $ruleList.multiselect(verb);
-                let ruleFilterControls = $("#ruleFilters > *");
-                ruleFilterControls.attr("disabled", !enable);
             }
 
             function clearRuleList() {
