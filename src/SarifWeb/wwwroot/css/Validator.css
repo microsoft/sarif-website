@@ -31,7 +31,7 @@
     font-size: 20px;
 }
 
-#validatorToolbar *[no-disable] {
+#validatorToolbar *[no-data-disabled] {
     color: initial;
 }
 
