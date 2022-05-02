@@ -11,6 +11,7 @@ The [Microsoft SARIF website](https://sarifweb.azurewebsites.net) provides resou
 - Tools and libraries for developers
   - Microsoft's open source SARIF SDK for .NET applications
   - NuGet package for third-party Visual Studio extension interop
+  - JavaScript SDK
   - Python module
 - Microsoft's open source viewers
   - Extensions for Visual Studio and VS Code
