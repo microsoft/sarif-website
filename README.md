@@ -1,4 +1,4 @@
-# Microsoft SARIF Website
+# [Microsoft SARIF website](https://sarifweb.azurewebsites.net)
 
 The [Microsoft SARIF website](https://sarifweb.azurewebsites.net) provides resources for the Static Analysis Results Interchange Format
 (SARIF), an open standard log file specification for storing data produced by static analysis tools.
@@ -16,5 +16,3 @@ The [Microsoft SARIF website](https://sarifweb.azurewebsites.net) provides resou
   - Extensions for Visual Studio and VS Code
   - React component
 - Web-based utility for viewing and validating SARIF log files
-
-## [Microsoft SARIF website](https://sarifweb.azurewebsites.net)
