@@ -1,14 +1,19 @@
+# [Microsoft SARIF website](https://sarifweb.azurewebsites.net)
 
-# Contributing
+The [Microsoft SARIF website](https://sarifweb.azurewebsites.net) provides resources for the Static Analysis Results Interchange Format
+(SARIF), an open standard log file specification for storing data produced by static analysis tools.
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.microsoft.com.
-
-When you submit a pull request, a CLA-bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., label, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+## Find Links to Resources
+- SARIF's OASIS open standard
+  - Specification
+  - Tutorials
+  - GitHub project
+- Tools and libraries for developers
+  - Microsoft's open source SARIF SDK for .NET applications
+  - NuGet package for third-party Visual Studio extension interop
+  - JavaScript SDK
+  - Python module
+- Microsoft's open source viewers
+  - Extensions for Visual Studio and VS Code
+  - React component
+- Web-based utility for viewing and validating SARIF log files
