@@ -44,7 +44,7 @@ namespace SarifWeb
             {
                 OnPrepareResponse = ctx =>
                 {
-                    const int durationInSeconds = 60 * 60 * 24 * 365;
+                    const int durationInSeconds = 60 * 60 * 24 * 30;
                     ctx.Context.Response.Headers[HeaderNames.CacheControl] =
                         "public,max-age=" + durationInSeconds;
                 }
