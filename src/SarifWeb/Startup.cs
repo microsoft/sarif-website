@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 using SarifWeb.Utilities;
+using System;
 
 namespace SarifWeb
 {
@@ -44,7 +45,7 @@ namespace SarifWeb
             {
                 OnPrepareResponse = ctx =>
                 {
-                    const int durationInSeconds = 60 * 60 * 24 * 30;
+                    double durationInSeconds = TimeSpan.FromDays(30).TotalSeconds;
                     ctx.Context.Response.Headers[HeaderNames.CacheControl] =
                         "public,max-age=" + durationInSeconds;
                 }
