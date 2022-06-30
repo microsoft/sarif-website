@@ -32,8 +32,8 @@
 </div>
     <div id="specSectionButtons">
         <div id="specSectionButtons1">
-            <button id="specSectionButtonTutorials" role="button" href="https://github.com/microsoft/sarif-tutorials" target="_blank" class="content-button sarifweb-button gray-section">Study the tutorials</button>
             <button id="specSectionButtonRead" role="button" href="https://docs.oasis-open.org/sarif/sarif/v2.1.0/" target="_blank" class="content-button sarifweb-button gray-section">Read the specification</button>
+            <button id="specSectionButtonTutorials" role="button" href="https://github.com/microsoft/sarif-tutorials" target="_blank" class="content-button sarifweb-button gray-section">Study the tutorials</button>
             <button id="specSectionButtonAsk" role="button" href="https://github.com/oasis-tcs/sarif-spec/issues/new" target="_blank" class="content-button sarifweb-button gray-section">Ask a question</button>
         </div>
         <div id="specSectionButtons2">
@@ -56,8 +56,8 @@
         The SARIF project is supported by a group of industry contributors.
     </div>
     <div id="collabSectionButtons" role="list" aria-labelledby="collabSectionTitle">
-        <a href="http://www.kestreltechnology.com" target="_blank">
-            <img role="listitem" aria-label="Kestrel Technology" src="~/Images/Logos/KestrelTechnology.png" alt="Kestrel Technology" />
+        <a href="https://forallsecure.com/" target="_blank">
+            <img role="listitem" aria-label="For All Secure" src="~/Images/Logos/ForAllSecure.png" alt="For All Secure" />
         </a>
         <a href="https://www.grammatech.com/" target="_blank">
             <img role="listitem" aria-label="GrammaTech" src="~/Images/Logos/GrammaTech.png" alt="GrammaTech" />
@@ -71,8 +71,8 @@
         <a href="https://github.com/features/security" target="_blank">
             <img role="listitem" aria-label="GitHub, Inc." src="~/Images/Logos/GitHub.png" alt="GitHub, Inc." />
         </a>
-        <a href="https://continuousassurance.org/" target="_blank">
-            <img role="listitem" aria-label="SWAMP" src="~/Images/Logos/SWAMP.png" alt="SWAMP" />
+        <a href="https://www.sonarsource.com/" target="_blank">
+            <img role="listitem" aria-label="Sonar" src="~/Images/Logos/Sonar.png" alt="Sonar" />
         </a>
     </div>
 </section>
@@ -118,15 +118,6 @@
                     </button>
                 </div>
                 <div role="listitem">
-                    <div class="tools-item-description"><b>Converters</b> - classes for converting the output of various static analysis tools to the SARIF format.</div>
-                    <button id="toolsItemConvertersLink" role="button" aria-label="View SARIF Converters NuGet package" href="https://www.nuget.org/packages/Sarif.Converters/" target="_blank" class="tools-item-button sarifweb-button">
-                        <div class="tools-item-button-icon">
-                            <img src="~/Images/Nuget.png" alt="NuGet" />
-                        </div>
-                        <div>View Package</div>
-                    </button>
-                </div>
-                <div role="listitem">
                     <div class="tools-item-description"><b>Multitool</b> - Multi-purpose command line tool for analyzing and manipulating SARIF files.</div>
                     <button id="toolsItemMultitoolLink" role="button" aria-label="View SARIF Multitool NuGet package" href="https://www.nuget.org/packages/Sarif.Multitool/" target="_blank" class="tools-item-button sarifweb-button">
                         <div class="tools-item-button-icon">
@@ -138,6 +129,15 @@
                 <div role="listitem">
                     <div class="tools-item-description"><b>Interop</b> - Library that enables Visual Studio extensions to easily consume services exposed by the SARIF Viewer for VS.</div>                  
                     <button id="toolsItemInteropLink" role="button" aria-label="View SARIF Viewer interop library NuGet package" href="https://www.nuget.org/packages/Sarif.Viewer.VisualStudio.Interop/" target="_blank" class="tools-item-button sarifweb-button">
+                        <div class="tools-item-button-icon">
+                            <img src="~/Images/Nuget.png" alt="NuGet" />
+                        </div>
+                        <div>View Package</div>
+                    </button>
+                </div>
+                <div role="listitem">
+                    <div class="tools-item-description"><b>Converters</b> - classes for converting the output of various static analysis tools to the SARIF format.</div>
+                    <button id="toolsItemConvertersLink" role="button" aria-label="View SARIF Converters NuGet package" href="https://www.nuget.org/packages/Sarif.Converters/" target="_blank" class="tools-item-button sarifweb-button">
                         <div class="tools-item-button-icon">
                             <img src="~/Images/Nuget.png" alt="NuGet" />
                         </div>
@@ -159,7 +159,9 @@
                         </svg>
                     </div>
                 </div>
-                <div class="tools-item-description tools-other-item-description"><a href="https://github.com/microsoft/sarif-js-sdk">Code and supporting files</a> for working with SARIF in JavaScript applications.</div>
+                <div class="tools-item-description tools-other-item-description">
+                    <a href="https://github.com/microsoft/sarif-js-sdk">Code and supporting files</a> for working with SARIF in JavaScript applications.
+                    </div>
             </div>
             <div role="listitem" aria-labelledby="toolsSectionPlatformLabelTypeScript">
                 <div class="tools-item-other-label">
@@ -187,7 +189,9 @@
                         </svg>
                     </div>
                 </div>
-                <div class="tools-item-description tools-other-item-description">Coming soon.</div>
+                <div class="tools-item-description tools-other-item-description">
+                    <a href="https://github.com/Contrast-Security-OSS/java-sarif">POJOs</a> generated from the Static Analysis Results Interchange Format (SARIF) JSON schema for Java applications.
+                </div>
             </div>
             <div role="listitem" aria-labelledby="toolsSectionPlatformLabelPython">
                 <div class="tools-item-other-label">
