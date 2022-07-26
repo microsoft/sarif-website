@@ -1,5 +1,8 @@
 # SARIF Website Release History
 
+## **v1.0.1**
+- Updating contributors list/images, bump Sarif.Multitool.Library from 2.4.14 to 2.4.16, add link to java-sarif documentation. [#142](https://github.com/microsoft/sarif-website/pull/142)
+
 ## **v1.0.0**
 
 - Add README and CONTRIBUTING files
