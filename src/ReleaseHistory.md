@@ -1,5 +1,9 @@
 # SARIF Website Release History
 
+## **v1.1.0**
+- Upgrade Sarif.Multitool.Library to v3.0.0
+- Add reference to Newtonsoft.Json v13.0.1 to mitigate vulnerability GHSA-5crp-9r3c-p9vr
+
 ## **v1.0.1**
 - Updating contributors list/images, bump Sarif.Multitool.Library from 2.4.14 to 2.4.16, add link to java-sarif documentation. [#142](https://github.com/microsoft/sarif-website/pull/142)
 
