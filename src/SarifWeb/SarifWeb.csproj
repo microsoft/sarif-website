@@ -43,7 +43,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
-    <PackageReference Include="Sarif.Multitool.Library" Version="3.0.0-beta1" />
+    <PackageReference Include="Sarif.Multitool.Library" Version="3.0.0" />
   </ItemGroup>
 
 </Project>
