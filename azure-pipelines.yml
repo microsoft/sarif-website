@@ -18,7 +18,10 @@ extends:
         os: windows
       containers:
         default_windows_container:
-          image: mcr.microsoft.com/windows/servercore:ltsc2022
+          image: 1espipelinesdevpme.azurecr.io/windows/ltsc2022/vse2022:latest
+          registry: 1espipelinesdevpme.azurecr.io
+          tenantId: PME
+          identityType: 1ESPipelineIdentity
         
       stages:
       - stage: build
@@ -27,11 +30,7 @@ extends:
 
 
           steps:
-          - task: UseDotNet@2
-            displayName: 'Use .NET Core sdk'
-            inputs:
-              packageType: sdk
-              version: 5.0.x
+          
           - task: DotNetCoreCLI@2
             inputs:
               command: 'build'
