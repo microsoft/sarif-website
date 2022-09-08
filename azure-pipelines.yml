@@ -27,7 +27,14 @@ extends:
       - stage: build
         jobs:
         - job: build
-
+        templateContext:
+          inputs:
+          - input: checkout
+            repository: self
+            submodules: true
+          outputs:
+          - output: pipelineArtifact
+            targetPath: $(System.DefaultWorkingDirectory)
 
           steps:
           - task: UseDotNet@2
