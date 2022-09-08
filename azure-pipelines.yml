@@ -31,7 +31,7 @@ extends:
           inputs:
           - input: checkout
             repository: self
-            submodules: true
+            displayName: build
           outputs:
           - output: pipelineArtifact
             targetPath: $(System.DefaultWorkingDirectory)
