@@ -47,5 +47,3 @@ extends:
                   command: 'build'
                   projects: src/SarifWeb.sln
                   configuration: 'Release'
-
-              - task: ComponentGovernanceComponentDetection@0
