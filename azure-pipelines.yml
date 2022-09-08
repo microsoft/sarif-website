@@ -37,15 +37,15 @@ extends:
                 targetPath: $(System.DefaultWorkingDirectory)
 
               steps:
-              - task: UseDotNet@2
-                displayName: 'Use .NET Core sdk'
-                inputs:
-                  packageType: sdk
-                  version: 5.0.x
-              - task: DotNetCoreCLI@2
-                inputs:
-                  command: 'build'
-                  projects: src/SarifWeb.sln
-                  configuration: 'Release'
+                - task: UseDotNet@2
+                  displayName: 'Use .NET Core sdk'
+                  inputs:
+                    packageType: sdk
+                    version: 5.0.x
+                - task: DotNetCoreCLI@2
+                  inputs:
+                    command: 'build'
+                    projects: src/SarifWeb.sln
+                    configuration: 'Release'
 
-              - task: ComponentGovernanceComponentDetection@0
+                - task: ComponentGovernanceComponentDetection@0
