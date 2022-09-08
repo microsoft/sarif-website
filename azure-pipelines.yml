@@ -27,15 +27,7 @@ extends:
       - stage: build
         jobs:
         - job: build
-          templateContext:
-            inputs:
-            - input: checkout
-              repository: self
-              submodules: true
-            outputs:
-            - output: pipelineArtifact
-              targetPath: $(System.DefaultWorkingDirectory)/drop_sdl_sources
-              artifactName: CodeAnalysisLogs
+
 
           steps:
           - task: UseDotNet@2
