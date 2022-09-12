@@ -28,9 +28,6 @@ extends:
         jobs:
           - job: build
             templateContext:
-              inputs:
-              - input: checkout
-                repository: self
               outputs:
               - output: pipelineArtifact
                 targetPath: $(System.DefaultWorkingDirectory)
