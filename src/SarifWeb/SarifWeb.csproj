@@ -27,7 +27,6 @@
     <None Include="wwwroot\images\logos\MicroFocus.png" />
     <None Include="wwwroot\images\logos\Microsoft.png" />
     <None Include="wwwroot\images\Nuget.png" />
-    <None Include="wwwroot\images\Sonar.png" />
     <None Include="wwwroot\images\screenshots\VSCodeViewer.png" />
     <None Include="wwwroot\images\screenshots\VSCodeViewer.thumbnail.png" />
     <None Include="wwwroot\images\screenshots\VSViewer.png" />
