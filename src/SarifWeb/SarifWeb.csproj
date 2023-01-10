@@ -39,6 +39,7 @@
     <None Include="wwwroot\images\screenshots\WebViewerB.png" />
     <None Include="wwwroot\images\screenshots\WebViewerB.thumbnail.png" />
     <None Include="wwwroot\images\triskelion.png" />
+    <None Include="wwwroot\TestData\ghazdo.codeql.sarif" />
   </ItemGroup>
 
   <ItemGroup>
