@@ -2,8 +2,9 @@
 using System.IO;
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Multitool;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SarifWeb.Models;
-using SarifWeb.Utilities;
 
 namespace SarifWeb.Services
 {
@@ -59,8 +60,14 @@ namespace SarifWeb.Services
                         ResultKind.Fail, ResultKind.Informational, ResultKind.NotApplicable, ResultKind.Open, ResultKind.Open, ResultKind.Pass, ResultKind.Review
                     },
                     ConfigurationFilePath = configFilePath,
-                    TargetFileSpecifiers = new string[] { inputFilePath }
+                    TargetFileSpecifiers = new string[] { inputFilePath },
+                    MaxFileSizeInKilobytes = 1024 * 1024 // 1 GB
                 };
+
+                // Ensure that the input file is formatted as pretty-printed JSON.
+                JObject jObject = JObject.Parse(File.ReadAllText(inputFilePath));
+                string prettyJson = jObject.ToString(Formatting.Indented);
+                File.WriteAllText(inputFilePath, prettyJson);
 
                 var validateResponse = new ValidateCommand().Run(validateOptions);
 
@@ -71,6 +78,7 @@ namespace SarifWeb.Services
                     Arguments = string.Empty,
                     StandardError = string.Empty,
                     StandardOutput = string.Empty,
+                    InputLogContents = prettyJson,
                     ResultsLogContents = _fileSystem.FileReadAllText(outputFilePath)
                 };
             }

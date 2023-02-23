@@ -64,8 +64,8 @@ namespace SarifWeb.Controllers
         /// An serialized object that describes the results of the validation.
         /// </returns>
         /// <remarks>
-        /// This method is invoked from Javascript by the JQuery filedrop API. See
-        /// Views/ValidationUi/Index.cshtml. For this reason, we must return the
+        /// This method is invoked from Javascript by the jQuery filedrop API. See
+        /// Views/Validation/Index.cshtml. For this reason, we must return the
         /// JSON serialization of the <see cref="ValidationResponse"/> object,
         /// rather than returning the object itself.
         /// </remarks>
