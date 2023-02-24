@@ -40,19 +40,8 @@ namespace SarifWeb.Services
 
         public ValidationResponse Validate(ValidationRequest validationRequest)
         {
-            string safeFileName = GetSanitizedFileName(validationRequest.SavedFileName);
-            string inputFilePath = Path.Combine(_postedFilesDirectory, safeFileName);
-
-            if (!File.Exists(inputFilePath))
-            {
-                return new ValidationResponse
-                {
-                    ExitCode = int.MaxValue,
-                    Message = $"Sanitized input file '{safeFileName}' not found"
-                };
-            }
-
-            string outputFileName = Path.GetFileNameWithoutExtension(safeFileName) + ValidationLogSuffix;
+            string inputFilePath = Path.Combine(_postedFilesDirectory, validationRequest.SavedFileName);
+            string outputFileName = Path.GetFileNameWithoutExtension(validationRequest.SavedFileName) + ValidationLogSuffix;
             string outputFilePath = Path.Combine(_postedFilesDirectory, outputFileName);
             string configFilePath = Path.Combine(_policyFilesDirectory, PolicyFileName);
 
@@ -115,12 +104,6 @@ namespace SarifWeb.Services
             }
 
             return validationResponse;
-        }
-
-        private static string GetSanitizedFileName(string input)
-        {
-            char[] invalids = Path.GetInvalidFileNameChars();
-            return string.Join("_", input.Split(invalids, StringSplitOptions.RemoveEmptyEntries)).TrimEnd('.');
         }
     }
 }
