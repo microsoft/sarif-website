@@ -106,13 +106,11 @@
                         <li data-value="ace/theme/merbivore_soft"><div><span class="ui-icon ui-icon-check"></span>Merbivore Soft</div></li>
                         <li data-value="ace/theme/mono_industrial"><div><span class="ui-icon ui-icon-check"></span>Mono Industrial</div></li>
                         <li data-value="ace/theme/monokai"><div><span class="ui-icon ui-icon-check"></span>Monokai</div></li>
-                        <li data-value="ace/theme/pastel_on_dark"><div><span class="ui-icon ui-icon-check"></span>Pastel on dark</div></li>
                         <li data-value="ace/theme/solarized_dark"><div><span class="ui-icon ui-icon-check"></span>Solarized Dark</div></li>
                         <li data-value="ace/theme/terminal"><div><span class="ui-icon ui-icon-check"></span>Terminal</div></li>
                         <li data-value="ace/theme/tomorrow_night"><div><span class="ui-icon ui-icon-check"></span>Tomorrow Night</div></li>
                         <li data-value="ace/theme/tomorrow_night_blue"><div><span class="ui-icon ui-icon-check"></span>Tomorrow Night Blue</div></li>
                         <li data-value="ace/theme/tomorrow_night_bright"><div><span class="ui-icon ui-icon-check"></span>Tomorrow Night Bright</div></li>
-                        <li data-value="ace/theme/tomorrow_night_eighties"><div><span class="ui-icon ui-icon-check"></span>Tomorrow Night 80s</div></li>
                         <li data-value="ace/theme/twilight"><div><span class="ui-icon ui-icon-check"></span>Twilight</div></li>
                         <li data-value="ace/theme/vibrant_ink"><div><span class="ui-icon ui-icon-check"></span>Vibrant Ink</div></li>
                     </ul>
@@ -335,7 +333,7 @@
                             // Now we know how many result locations we have for each rule, so populate the rules dropdown.
                             const options = [];
                             for (let key in rulesDictionary) {
-                                options.push("<option value='" + key + "'>" + key + " (" + rulesDictionary[key].resultKeys.length + ")</option>");
+                                options.push(`<option value='${key}'>${key}" (${rulesDictionary[key].resultKeys.length})</option>`);
                             }
 
                             // Add the rules to the drop-down and then trigger a close event.
@@ -592,16 +590,11 @@
                                 $dropForm.removeClass("is-complete");
                             }, 5000);
 
-                            var fileReader = new FileReader();
-                            fileReader.onload = function () {
-                                var inputLogContents = fileReader.result;
-
-                                setUpEditor(inputLogContents)
-                                    .then(function () {
-                                        processResults(data.resultsLogContents);
-                                    });
-                            };
-                            fileReader.readAsText($('#fileInput').prop('files')[0]);
+                            // Load the JSON as it was formatted by the validator before analysis.
+                            setUpEditor(data.inputLogContents)
+                                .then(function () {
+                                    processResults(data.resultsLogContents);
+                                });
                         } else {
                             $dropForm.addClass("is-error");
 
@@ -611,7 +604,6 @@
 
                             setTimeout(function () {
                                 // Wait a tick to let the style change take effect. Don't know why this is needed.
-                                alert(data.message);
                             }, 100);
                         }
                     },

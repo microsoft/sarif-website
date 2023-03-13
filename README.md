@@ -1,6 +1,6 @@
-# [Microsoft SARIF website](https://sarifweb.azurewebsites.net)
+# [Microsoft SARIF website](https://sarif.info)
 
-The [Microsoft SARIF website](https://sarifweb.azurewebsites.net) provides resources for the Static Analysis Results Interchange Format
+The [Microsoft SARIF website](https://sarif.info) provides resources for the Static Analysis Results Interchange Format
 (SARIF), an open standard log file specification for storing data produced by static analysis tools.
 
 ## Find Links to Resources
