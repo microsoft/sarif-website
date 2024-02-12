@@ -1,4 +1,4 @@
-﻿#validatorSection {
+#validatorSection {
     padding: 0px 70px 30px 70px;
 }
 
@@ -39,6 +39,10 @@
     align-items: flex-start;
     flex: 1;
     padding-right: 30px;
+}
+
+#rightToolbarGroup {
+    align-items: flex-start;
 }
 
 #ruleList_ms {
@@ -91,6 +95,7 @@
 #ruleFilters {
     display: block;
     padding-left: 20px;
+    padding-right: 10px;
 }
 
 #prevResultButton span,

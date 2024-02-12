@@ -1,9 +1,12 @@
 ﻿using System;
 using System.IO;
+
 using Microsoft.CodeAnalysis.Sarif;
 using Microsoft.CodeAnalysis.Sarif.Multitool;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
 using SarifWeb.Models;
 
 namespace SarifWeb.Services
@@ -51,8 +54,6 @@ namespace SarifWeb.Services
                 var validateOptions = new ValidateOptions
                 {
                     OutputFilePath = outputFilePath,
-                    Force = true,
-                    PrettyPrint = true,
                     Level = new FailureLevel[] {
                         FailureLevel.Error, FailureLevel.Warning, FailureLevel.Note
                     },
@@ -60,6 +61,7 @@ namespace SarifWeb.Services
                         ResultKind.Fail, ResultKind.Informational, ResultKind.NotApplicable, ResultKind.Open, ResultKind.Open, ResultKind.Pass, ResultKind.Review
                     },
                     ConfigurationFilePath = configFilePath,
+                    RuleKindOption = validationRequest.RuleKinds,
                     TargetFileSpecifiers = new string[] { inputFilePath },
                     MaxFileSizeInKilobytes = 1024 * 1024 // 1 GB
                 };

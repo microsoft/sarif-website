@@ -67,12 +67,15 @@
                     <input type="checkbox" id="noteRules" aria-labelledby="noteRulesLabel" title="More ways to improve your SARIF files." />
                     <label id="noteRulesLabel" for="noteRules" class="ui-widget">Additional suggestions</label>
                     <br />
-                    <input type="checkbox" id="gitHubRules" aria-labelledby="gitHubRulesLabel" title="Requirements for SARIF files uploaded to GitHub Advanced Security code scanning." />
+                    <input type="checkbox" id="gitHubRules" aria-labelledby="gitHubRulesLabel" title="Requirements for SARIF files uploaded to GitHub Advanced Security code scanning." value="Ghas" />
                     <label id="gitHubRulesLabel" for="gitHubRules" class="ui-widget">GitHub ingestion rules</label>
+                    <br />
+                    <input type="checkbox" id="advSecRules" aria-labelledby="advSecRulesLabel" title="Requirements for SARIF files uploaded to Azure DevOps Advanced Security code scanning." value="Ado" />
+                    <label id="advSecRulesLabel" for="advSecRules" class="ui-widget">ADO ingestion rules</label>
                 </div>
             </div>
             <ul id="utilitiesMenu">
-                <li id="downloadvalidationLog"><div>Download validation results</div></li>
+                <li id="downloadValidationLog"><div>Download validation results</div></li>
                 <li>
                     <div>Editor color themes</div>
                     <ul id="utilitiesMenuThemesFlyout">
@@ -143,6 +146,7 @@
             // Results dictionary: key = int, value = { line, message }
             let resultsDictionary = {};
 
+            let currentFile = '';
             let currentRules = [];
             let currentResultLocations = [];
             let currentResultLocationIndex = -1;
@@ -151,9 +155,11 @@
             let editor = null;
             const $pageBlanket = $("#pageBlanket");
             const $gitHubRules = $("#gitHubRules");
-            $gitHubRules.change(processValidationLog);
+            $gitHubRules.change(function() { submitValidationRequest(currentFile); });
+            const $advSecRules = $("#advSecRules");
+            $advSecRules.change(function() { submitValidationRequest(currentFile); });
             const $noteRules = $("#noteRules");
-            $noteRules.change(processValidationLog);
+            $noteRules.change(function() { submitValidationRequest(currentFile); });
             let isFileOpening = false;
 
             const ruleDescriptionTemplate = `<b><a href="{HELPURL}" target="_blank">{RULEID}</a>:</b> {RULEDESC}`;
@@ -234,7 +240,7 @@
             }).hide();
             const $resultDetails = $("#resultDetails");
 
-            $("#downloadvalidationLog").on("click", function () {
+            $("#downloadValidationLog").on("click", function () {
                 // BUGBUG: issue #83 calls for the file key to be the uploaded filename
                 // For now, find the file with the sarif content type
                 $.each(validationLog.runs[0].files, function (key, file) {
@@ -311,6 +317,7 @@
 
                 const run = validationLog.runs[0];
                 const gitHubRulesEnabled = $gitHubRules.is(":checked");
+                const advSecRulesEnabled = $advSecRules.is(":checked");
                 const noteRulesEnabled = $noteRules.is(":checked");
 
                 if (run.results && run.results.length > 0) {
@@ -554,6 +561,9 @@
                     return false;
                 }
 
+                currentFile = file;
+                const gitHubRulesEnabled = $gitHubRules.is(":checked");
+                const advSecRulesEnabled = $advSecRules.is(":checked");
                 isFileOpening = true;
                 resetEditor();
 
@@ -567,8 +577,17 @@
 
                 $dropForm.addClass("is-busy").removeClass("is-complete").removeClass("is-error");
 
+                const ruleKinds = new Array();
+                ruleKinds.push('Sarif');
+                if (gitHubRulesEnabled) {
+                    ruleKinds.push($gitHubRules.value);
+                }
+                if (advSecRulesEnabled) {
+                    ruleKinds.push($advSecRules.value);
+                }
                 const formData = new FormData();
                 formData.append($fileInput.attr("name"), file);
+                formData.append("ruleKinds", ruleKinds);
 
                 $.ajax({
                     url: $dropForm.attr("action"),

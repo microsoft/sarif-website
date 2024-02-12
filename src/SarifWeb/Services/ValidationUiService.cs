@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.CodeAnalysis.Sarif;
+
 using SarifWeb.Models;
 using SarifWeb.Utilities;
 
@@ -34,7 +37,8 @@ namespace SarifWeb.Services
 
         public ValidationResponse ValidateFile(
             IFormFile postedFile,
-            string postedFilesPath)
+            string postedFilesPath,
+            List<RuleKind> ruleKinds)
         {
             ValidationResponse validationResponse = null;
 
@@ -49,7 +53,7 @@ namespace SarifWeb.Services
                     postedFile.CopyTo(fileStream);
                 }
 
-                validationResponse = ValidateSavedFile(postedFileName, savedFilePath);
+                validationResponse = ValidateSavedFile(postedFileName, savedFilePath, ruleKinds);
             }
 
             return validationResponse;
@@ -57,19 +61,21 @@ namespace SarifWeb.Services
 
         public ValidationResponse ValidateJson(
             string json,
-            string postedFilesPath)
+            string postedFilesPath,
+            List<RuleKind> ruleKinds)
         {
             string savedFileName = $"{Guid.NewGuid()}.sarif";
             string savedFilePath = Path.Combine(postedFilesPath, savedFileName);
 
             _fileSystem.FileWriteAllText(savedFilePath, json);
 
-            return ValidateSavedFile(savedFileName, savedFilePath);
+            return ValidateSavedFile(savedFileName, savedFilePath, ruleKinds);
         }
 
         private ValidationResponse ValidateSavedFile(
             string originalFileName,
-            string savedFilePath)
+            string savedFilePath,
+            List<RuleKind> ruleKinds)
         {
             ValidationResponse validationResponse = null;
 
@@ -77,7 +83,8 @@ namespace SarifWeb.Services
             ValidationRequest validationRequest = new ValidationRequest
             {
                 PostedFileName = originalFileName,
-                SavedFileName = Path.GetFileName(savedFilePath)
+                SavedFileName = Path.GetFileName(savedFilePath),
+                RuleKinds = ruleKinds
             };
 
             try
