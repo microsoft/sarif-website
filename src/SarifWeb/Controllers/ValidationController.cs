@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.AspNetCore.Http;
@@ -72,12 +73,26 @@ namespace SarifWeb.Controllers
         [HttpPost("ValidateFiles")]
         [DisableRequestSizeLimit]
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue, ValueLengthLimit = int.MaxValue)]
-        public IActionResult ValidateFiles(IEnumerable<IFormFile> postedFiles, List<RuleKind> ruleKinds)
+        public IActionResult ValidateFiles(IEnumerable<IFormFile> postedFiles, string kinds) //List<RuleKind> ruleKinds)
         {
             string postedFilesDirectory = HostingHelper.PostedFilesDirectory;
 
             // The ValidationUi Index view enforces a limit of one file at a time.
             IFormFile postedFile = postedFiles.FirstOrDefault();
+
+            List<RuleKind> ruleKinds = new List<RuleKind>();
+
+            if (kinds != null)
+            {
+                var parts = kinds.Split(';');
+                foreach (string s in parts)
+                {
+                    if (Enum.TryParse(typeof(RuleKind), s, out object ruleKind))
+                    {
+                        ruleKinds.Add((RuleKind)ruleKind);
+                    }
+                }
+            }
 
             ValidationResponse response = _validationUiService.ValidateFile(postedFile, postedFilesDirectory, ruleKinds);
             return Json(response);
@@ -86,7 +101,7 @@ namespace SarifWeb.Controllers
         [HttpPost("ValidateJson")]
         [DisableRequestSizeLimit]
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue, ValueLengthLimit = int.MaxValue)]
-        public IActionResult ValidateJson([FromBody] string json, List<RuleKind> ruleKinds)
+        public IActionResult ValidateJson([FromBody] string json, [FromBody] List<RuleKind> ruleKinds)
         {
             string postedFilesDirectory = HostingHelper.PostedFilesDirectory;
 

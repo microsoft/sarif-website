@@ -67,7 +67,7 @@
                     <input type="checkbox" id="noteRules" aria-labelledby="noteRulesLabel" title="More ways to improve your SARIF files." />
                     <label id="noteRulesLabel" for="noteRules" class="ui-widget">Additional suggestions</label>
                     <br />
-                    <input type="checkbox" id="gitHubRules" aria-labelledby="gitHubRulesLabel" title="Requirements for SARIF files uploaded to GitHub Advanced Security code scanning." value="Ghas" />
+                    <input type="checkbox" id="gitHubRules" aria-labelledby="gitHubRulesLabel" title="Requirements for SARIF files uploaded to GitHub Advanced Security code scanning." value="Gh;Ghas" />
                     <label id="gitHubRulesLabel" for="gitHubRules" class="ui-widget">GitHub ingestion rules</label>
                     <br />
                     <input type="checkbox" id="advSecRules" aria-labelledby="advSecRulesLabel" title="Requirements for SARIF files uploaded to Azure DevOps Advanced Security code scanning." value="Ado" />
@@ -557,7 +557,7 @@
 
             function submitValidationRequest(file) {
                 // Prevent duplicate submissions
-                if ($dropForm.hasClass("is-busy")) {
+                if (file === '' || $dropForm.hasClass("is-busy")) {
                     return false;
                 }
 
@@ -580,14 +580,14 @@
                 const ruleKinds = new Array();
                 ruleKinds.push('Sarif');
                 if (gitHubRulesEnabled) {
-                    ruleKinds.push($gitHubRules.value);
+                    ruleKinds.push($gitHubRules[0].value);
                 }
                 if (advSecRulesEnabled) {
-                    ruleKinds.push($advSecRules.value);
+                    ruleKinds.push($advSecRules[0].value);
                 }
                 const formData = new FormData();
                 formData.append($fileInput.attr("name"), file);
-                formData.append("ruleKinds", ruleKinds);
+                formData.append("kinds", ruleKinds.join(';'));
 
                 $.ajax({
                     url: $dropForm.attr("action"),
@@ -643,9 +643,21 @@
                     const rule = validationLog.runs[0].tool.driver.rules[ruleIndex];
                     const html = ruleDescriptionTemplate
                         .replace("{RULEID}", rule.id)
-                        .replace("{RULEDESC}", rule.fullDescription.text ? rule.fullDescription.text : rule.shortDescription.text)
+                        .replace("{RULEDESC}", (rule))
                         .replace("{HELPURL}", rule.helpUri);
                     $ruleDescription.html(html);
+                }
+            }
+
+            function getRuleDescription(rule) {
+                if (rule) {
+                    if (rule.fullDescription) {
+                        return rule.fullDescription.text;
+                    } else if (rule.shortDescription) {
+                        return rule.shortDescription.text;
+                    }
+
+                    return '';
                 }
             }
 
