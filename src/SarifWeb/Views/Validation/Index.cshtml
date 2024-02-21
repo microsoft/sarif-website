@@ -340,7 +340,7 @@
                             // Now we know how many result locations we have for each rule, so populate the rules dropdown.
                             const options = [];
                             for (let key in rulesDictionary) {
-                                options.push(`<option value='${key}'>${key}" (${rulesDictionary[key].resultKeys.length})</option>`);
+                                options.push(`<option value='${key}'>${key} (${rulesDictionary[key].resultKeys.length})</option>`);
                             }
 
                             // Add the rules to the drop-down and then trigger a close event.
@@ -643,7 +643,7 @@
                     const rule = validationLog.runs[0].tool.driver.rules[ruleIndex];
                     const html = ruleDescriptionTemplate
                         .replace("{RULEID}", rule.id)
-                        .replace("{RULEDESC}", (rule))
+                        .replace("{RULEDESC}", getRuleDescription(rule))
                         .replace("{HELPURL}", rule.helpUri);
                     $ruleDescription.html(html);
                 }
