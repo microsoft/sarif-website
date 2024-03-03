@@ -73,7 +73,7 @@ namespace SarifWeb.Controllers
         [HttpPost("ValidateFiles")]
         [DisableRequestSizeLimit]
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue, ValueLengthLimit = int.MaxValue)]
-        public IActionResult ValidateFiles(IEnumerable<IFormFile> postedFiles, string kinds) //List<RuleKind> ruleKinds)
+        public IActionResult ValidateFiles(IEnumerable<IFormFile> postedFiles, string kinds)
         {
             string postedFilesDirectory = HostingHelper.PostedFilesDirectory;
 
