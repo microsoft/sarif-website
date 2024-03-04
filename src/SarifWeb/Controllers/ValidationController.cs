@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Sarif;
-using Newtonsoft.Json;
+
 using SarifWeb.Models;
 using SarifWeb.Services;
 using SarifWeb.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SarifWeb.Controllers
 {
@@ -72,25 +73,39 @@ namespace SarifWeb.Controllers
         [HttpPost("ValidateFiles")]
         [DisableRequestSizeLimit]
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue, ValueLengthLimit = int.MaxValue)]
-        public IActionResult ValidateFiles(IEnumerable<IFormFile> postedFiles)
+        public IActionResult ValidateFiles(IEnumerable<IFormFile> postedFiles, string kinds)
         {
             string postedFilesDirectory = HostingHelper.PostedFilesDirectory;
 
             // The ValidationUi Index view enforces a limit of one file at a time.
             IFormFile postedFile = postedFiles.FirstOrDefault();
 
-            ValidationResponse response = _validationUiService.ValidateFile(postedFile, postedFilesDirectory);
+            List<RuleKind> ruleKinds = new List<RuleKind>();
+
+            if (kinds != null)
+            {
+                var parts = kinds.Split(';');
+                foreach (string s in parts)
+                {
+                    if (Enum.TryParse(typeof(RuleKind), s, out object ruleKind))
+                    {
+                        ruleKinds.Add((RuleKind)ruleKind);
+                    }
+                }
+            }
+
+            ValidationResponse response = _validationUiService.ValidateFile(postedFile, postedFilesDirectory, ruleKinds);
             return Json(response);
         }
 
         [HttpPost("ValidateJson")]
         [DisableRequestSizeLimit]
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue, ValueLengthLimit = int.MaxValue)]
-        public IActionResult ValidateJson([FromBody] string json)
+        public IActionResult ValidateJson([FromBody] string json, [FromBody] List<RuleKind> ruleKinds)
         {
             string postedFilesDirectory = HostingHelper.PostedFilesDirectory;
 
-            ValidationResponse response = _validationUiService.ValidateJson(json, postedFilesDirectory);
+            ValidationResponse response = _validationUiService.ValidateJson(json, postedFilesDirectory, ruleKinds);
             return Json(response);
         }
     }
